@@ -8,7 +8,29 @@ The baseline does not perform autonomous planning, replanning,
 tool selection, or iterative decision-making.
 """
 
+from .tools import search_openalex
+def build_search_query(research_question: str) -> str:
+    """
+    Convert a research question into a simple fixed search query.
 
+    This baseline uses deterministic text processing only.
+    It does not use an LLM or autonomous query planning.
+    """
+
+    stop_words = {
+        "how", "are", "is", "the", "a", "an", "in", "on",
+        "of", "for", "to", "used", "using", "what", "which",
+        "why", "when", "where", "do", "does"
+    }
+
+    words = research_question.lower().replace("?", "").split()
+
+    keywords = [
+        word for word in words
+        if word not in stop_words
+    ]
+
+    return " ".join(keywords)
 def run_baseline(research_question: str) -> dict:
     """
     Run the initial non-agentic baseline workflow.
@@ -27,12 +49,18 @@ def run_baseline(research_question: str) -> dict:
             "message": "A research question is required.",
         }
 
+    search_query = build_search_query(research_question.strip())
+    papers = search_openalex(search_query, max_results=5)
+
     return {
-        "status": "COMPLETED",
-        "research_question": research_question.strip(),
-        "workflow": "non_agentic_baseline",
-        "message": "Baseline request accepted.",
-    }
+    "search_query": search_query,
+    "status": "COMPLETED",
+    "research_question": research_question.strip(),
+    "workflow": "non_agentic_baseline",
+    "papers_found": len(papers),
+    "papers": papers,
+    "message": "Baseline academic search completed.",
+}
 
 
 if __name__ == "__main__":
