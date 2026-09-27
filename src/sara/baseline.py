@@ -9,6 +9,7 @@ tool selection, or iterative decision-making.
 """
 
 from .tools import search_openalex
+from .screening import screen_papers
 def build_search_query(research_question: str) -> str:
     """
     Convert a research question into a simple fixed search query.
@@ -51,15 +52,21 @@ def run_baseline(research_question: str) -> dict:
 
     search_query = build_search_query(research_question.strip())
     papers = search_openalex(search_query, max_results=5)
-
+    included_papers, excluded_papers = screen_papers(
+    papers,
+    search_query,
+)
     return {
-    "search_query": search_query,
     "status": "COMPLETED",
     "research_question": research_question.strip(),
+    "search_query": search_query,
     "workflow": "non_agentic_baseline",
     "papers_found": len(papers),
-    "papers": papers,
-    "message": "Baseline academic search completed.",
+    "papers_included": len(included_papers),
+    "papers_excluded": len(excluded_papers),
+    "included_papers": included_papers,
+    "excluded_papers": excluded_papers,
+    "message": "Baseline academic search and screening completed.",
 }
 
 
