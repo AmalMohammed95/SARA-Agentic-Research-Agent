@@ -5,7 +5,8 @@ The agent operates within explicit execution limits and must
 terminate in a defined state rather than running indefinitely.
 """
 
-
+from .state import AgentState
+from .tracing import create_run_id, create_trace_event
 TERMINAL_STATES = {
     "COMPLETED",
     "BLOCKED",
@@ -42,17 +43,39 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             "turns": 0,
             "reason": "max_turns must be a positive integer.",
         }
+    run_id = create_run_id()
 
+    state = AgentState(
+        research_question=research_question.strip(),
+        run_id=run_id,
+    )
+    trace = []
     turn = 0
 
     while turn < max_turns:
         turn += 1
+        state.iteration = turn
+        trace_event = create_trace_event(
+            
+    run_id=run_id,
+    turn=turn,
+    action="agent_turn",
+    status="RUNNING",
+    details={"iteration": state.iteration},
+)
+        trace.append(trace_event)
 
         # Decision-making and tool execution will be added
         # incrementally in later steps.
 
+    
+    state.status = "BUDGET_EXHAUSTED"
+    state.stopping_reason = "Maximum number of agent turns reached."
+
     return {
-        "status": "BUDGET_EXHAUSTED",
-        "turns": turn,
-        "reason": "Maximum number of agent turns reached.",
-    }
+    "status": state.status,
+    "run_id": state.run_id,
+    "turns": state.iteration,
+    "reason": state.stopping_reason,
+    "trace": trace,
+}
