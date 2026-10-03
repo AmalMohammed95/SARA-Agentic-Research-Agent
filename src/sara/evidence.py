@@ -20,6 +20,9 @@ REQUIRED_EVIDENCE_FIELDS = (
     "findings",
     "limitations",
 )
+REQUIRED_PROVENANCE_FIELDS = (
+    "paper_id",
+)
 def get_paper_identifier(paper: dict) -> str | None:
     """
     Return the best available persistent identifier for a paper.
@@ -58,6 +61,21 @@ def evaluate_evidence_sufficiency(
 )
     evidence = evidence or []
 
+    missing_provenance_count = sum(
+    1
+    for record in evidence
+    if any(
+        not record.get(field)
+        for field in REQUIRED_PROVENANCE_FIELDS
+    )
+)
+
+    invalid_provenance_count = sum(
+    1
+    for record in evidence
+    if record.get("paper_id")
+    and record.get("paper_id") not in unique_identifiers
+)
     total_required_fields = len(evidence) * len(REQUIRED_EVIDENCE_FIELDS)
 
     missing_fields = sum(
@@ -123,6 +141,36 @@ def evaluate_evidence_sufficiency(
                 f"maximum allowed is {MAX_MISSING_FIELD_RATE:.0%}."
             ],
         }
+    if missing_provenance_count > 0:
+        return {
+            "sufficient": False,
+            "relevant_studies": relevant_count,
+            "unique_relevant_studies": unique_relevant_count,
+            "unidentified_papers": unidentified_papers_count,
+            "required_studies": MIN_RELEVANT_STUDIES,
+            "subquestion_coverage": subquestion_coverage,
+            "missing_field_rate": missing_field_rate,
+            "missing_provenance_count": missing_provenance_count,
+            "gaps": [
+                f"{missing_provenance_count} evidence record(s) are missing provenance."
+            ],
+        }
+    if invalid_provenance_count > 0:
+            return {
+            "sufficient": False,
+            "relevant_studies": relevant_count,
+            "unique_relevant_studies": unique_relevant_count,
+            "unidentified_papers": unidentified_papers_count,
+            "required_studies": MIN_RELEVANT_STUDIES,
+            "subquestion_coverage": subquestion_coverage,
+            "missing_field_rate": missing_field_rate,
+            "missing_provenance_count": missing_provenance_count,
+            "invalid_provenance_count": invalid_provenance_count,
+            "gaps": [
+                f"{invalid_provenance_count} evidence record(s) reference "
+                "papers that are not in the selected evidence set."
+            ],
+        }
     return {
         "sufficient": True,
         "relevant_studies": relevant_count,
@@ -131,5 +179,7 @@ def evaluate_evidence_sufficiency(
         "required_studies": MIN_RELEVANT_STUDIES,
         "subquestion_coverage": subquestion_coverage,
         "missing_field_rate": missing_field_rate,
+        "missing_provenance_count": missing_provenance_count,
+        "invalid_provenance_count": invalid_provenance_count,
         "gaps": [],
     }
