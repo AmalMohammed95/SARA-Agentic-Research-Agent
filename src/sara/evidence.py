@@ -23,6 +23,10 @@ REQUIRED_EVIDENCE_FIELDS = (
 REQUIRED_PROVENANCE_FIELDS = (
     "paper_id",
 )
+VALID_CONFLICT_STATUSES = (
+    "none",
+    "identified",
+)
 def get_paper_identifier(paper: dict) -> str | None:
     """
     Return the best available persistent identifier for a paper.
@@ -60,6 +64,12 @@ def evaluate_evidence_sufficiency(
     if get_paper_identifier(paper) is None
 )
     evidence = evidence or []
+
+    invalid_conflict_status_count = sum(
+    1
+    for record in evidence
+    if record.get("conflict_status") not in VALID_CONFLICT_STATUSES
+)
 
     missing_provenance_count = sum(
     1
@@ -171,6 +181,23 @@ def evaluate_evidence_sufficiency(
                 "papers that are not in the selected evidence set."
             ],
         }
+    if invalid_conflict_status_count > 0:
+        return {
+            "sufficient": False,
+            "relevant_studies": relevant_count,
+            "unique_relevant_studies": unique_relevant_count,
+            "unidentified_papers": unidentified_papers_count,
+            "required_studies": MIN_RELEVANT_STUDIES,
+            "subquestion_coverage": subquestion_coverage,
+            "missing_field_rate": missing_field_rate,
+            "missing_provenance_count": missing_provenance_count,
+            "invalid_provenance_count": invalid_provenance_count,
+            "invalid_conflict_status_count": invalid_conflict_status_count,
+            "gaps": [
+                f"{invalid_conflict_status_count} evidence record(s) have "
+                "a missing or invalid conflict status."
+            ],
+        }
     return {
         "sufficient": True,
         "relevant_studies": relevant_count,
@@ -181,5 +208,6 @@ def evaluate_evidence_sufficiency(
         "missing_field_rate": missing_field_rate,
         "missing_provenance_count": missing_provenance_count,
         "invalid_provenance_count": invalid_provenance_count,
+        "invalid_conflict_status_count": invalid_conflict_status_count,
         "gaps": [],
     }
