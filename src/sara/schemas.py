@@ -49,6 +49,50 @@ def validate_research_plan(response: str) -> dict:
         "missing_sections": [],
         "reason": "Research plan structure is valid.",
     }
+
+def parse_research_plan(response: str) -> dict:
+    """
+    Extract structured fields from a validated research plan.
+    """
+    if not all(
+        section in response
+        for section in REQUIRED_PLANNING_SECTIONS
+    ):
+        return {
+            "objective": "",
+            "subquestions": [],
+            "keywords": [],
+        }
+
+    objective_section = response.split("OBJECTIVE:", 1)[1].split(
+        "SUBQUESTIONS:", 1
+    )[0]
+
+    subquestion_section = response.split("SUBQUESTIONS:", 1)[1].split(
+        "KEYWORDS:", 1
+    )[0]
+
+    keyword_section = response.split("KEYWORDS:", 1)[1]
+
+    objective = objective_section.strip()
+
+    subquestions = [
+        line[1:].strip().strip('"').strip("'")
+        for line in subquestion_section.splitlines()
+        if line.strip().startswith("-")
+    ]
+
+    keywords = [
+        line[1:].strip().strip('"').strip("'")
+        for line in keyword_section.splitlines()
+        if line.strip().startswith("-")
+    ]
+
+    return {
+        "objective": objective,
+        "subquestions": subquestions,
+        "keywords": keywords,
+    }
 def validate_replanning_response(response: str) -> dict:
     """
     Validate the structure of a replanning model response.

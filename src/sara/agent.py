@@ -8,7 +8,15 @@ terminate in a defined state rather than running indefinitely.
 from .state import AgentState
 from .tracing import create_run_id, create_trace_event
 from .evidence import evaluate_evidence_sufficiency
-from .replanning import can_replan
+from .replanning import can_replan, build_replanning_context
+from .model import OllamaModelClient
+from .prompts import RESEARCH_PLANNING_PROMPT, REPLANNING_PROMPT
+from .schemas import (
+    validate_research_plan,
+    parse_research_plan,
+    validate_replanning_response,
+    parse_revised_keywords,
+)
 TERMINAL_STATES = {
     "COMPLETED",
     "BLOCKED",
@@ -52,11 +60,34 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         run_id=run_id,
     )
     trace = []
+    model_client = OllamaModelClient()
     turn = 0
 
     while turn < max_turns:
         turn += 1
         state.iteration = turn
+
+        planning_prompt = RESEARCH_PLANNING_PROMPT.format(
+            research_question=state.research_question,
+        )
+
+        planning_response = model_client.generate(planning_prompt)
+        planning_validation = validate_research_plan(planning_response)
+
+        trace.append(
+            create_trace_event(
+                run_id=run_id,
+                turn=turn,
+                action="validate_research_plan",
+                status="VALID" if planning_validation["valid"] else "INVALID",
+                details=planning_validation,
+            )
+        )
+
+        if planning_validation["valid"]:
+            parsed_plan = parse_research_plan(planning_response)
+            state.subquestions = parsed_plan["subquestions"]
+            state.keywords = parsed_plan["keywords"]
 
         trace_event = create_trace_event(
             run_id=run_id,
@@ -90,18 +121,65 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         if not evidence_check["sufficient"]:
             if can_replan(state.replanning_attempts):
                 state.replanning_attempts += 1
+
+                replanning_context = build_replanning_context(
+                    current_keywords=state.keywords,
+                    gaps=state.gaps,
+                )
+                replanning_prompt = REPLANNING_PROMPT.format(
+                    research_question=state.research_question,
+                    current_keywords=replanning_context["current_keywords"],
+                    evidence_gaps=replanning_context["evidence_gaps"],
+                )
+                replanning_response = model_client.generate(
+                    replanning_prompt
+                )
+
+                replanning_validation = validate_replanning_response(
+                    replanning_response
+                )
                 trace.append(
-    create_trace_event(
-        run_id=run_id,
-        turn=turn,
-        action="replanning_requested",
-        status="ALLOWED",
-        details={
-            "attempt": state.replanning_attempts,
-            "gaps": state.gaps,
-        },
-    )
-)
+                    create_trace_event(
+                        run_id=run_id,
+                        turn=turn,
+                        action="validate_replanning_response",
+                        status="VALID"
+                        if replanning_validation["valid"]
+                        else "INVALID",
+                        details=replanning_validation,
+                    )
+                )
+                if replanning_validation["valid"]:
+                    revised_keywords = parse_revised_keywords(
+                        replanning_response
+                    )
+                    state.keywords = revised_keywords
+                    trace.append(
+                        create_trace_event(
+                            run_id=run_id,
+                            turn=turn,
+                            action="apply_revised_keywords",
+                            status="COMPLETED",
+                            details={
+                                "revised_keywords": revised_keywords,
+                            },
+                        )
+                    )
+
+                trace.append(
+                    create_trace_event(
+                        run_id=run_id,
+                        turn=turn,
+                        action="replanning_requested",
+                        status="ALLOWED",
+                        details={
+                            "attempt": state.replanning_attempts,
+                            "gaps": state.gaps,
+                            "context": replanning_context,
+                        },
+                    )
+                )
+
                 state.status = "INSUFFICIENT_EVIDENCE"
                 state.stopping_reason = (
                     "Evidence is insufficient and another replanning attempt is allowed."
@@ -111,7 +189,8 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                 state.stopping_reason = (
                     "Evidence is insufficient and the replanning limit has been reached."
                 )
-            break  
+
+            break
 
         # Decision-making and tool execution will be added
         # incrementally in later steps.
