@@ -19,6 +19,7 @@ class AgentState:
     run_id: str
 
     iteration: int = 0
+    replanning_attempts: int = 0
 
     subquestions: list[str] = field(default_factory=list)
     keywords: list[str] = field(default_factory=list)

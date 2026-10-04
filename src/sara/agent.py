@@ -8,6 +8,7 @@ terminate in a defined state rather than running indefinitely.
 from .state import AgentState
 from .tracing import create_run_id, create_trace_event
 from .evidence import evaluate_evidence_sufficiency
+from .replanning import can_replan
 TERMINAL_STATES = {
     "COMPLETED",
     "BLOCKED",
@@ -87,9 +88,30 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         state.gaps = evidence_check["gaps"]
 
         if not evidence_check["sufficient"]:
-            state.status = "INSUFFICIENT_EVIDENCE"
-            state.stopping_reason = "Evidence is insufficient and replanning is not yet implemented."
-            break
+            if can_replan(state.replanning_attempts):
+                state.replanning_attempts += 1
+                trace.append(
+    create_trace_event(
+        run_id=run_id,
+        turn=turn,
+        action="replanning_requested",
+        status="ALLOWED",
+        details={
+            "attempt": state.replanning_attempts,
+            "gaps": state.gaps,
+        },
+    )
+)
+                state.status = "INSUFFICIENT_EVIDENCE"
+                state.stopping_reason = (
+                    "Evidence is insufficient and another replanning attempt is allowed."
+                )
+            else:
+                state.status = "INSUFFICIENT_EVIDENCE"
+                state.stopping_reason = (
+                    "Evidence is insufficient and the replanning limit has been reached."
+                )
+            break  
 
         # Decision-making and tool execution will be added
         # incrementally in later steps.
@@ -103,6 +125,8 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         "run_id": state.run_id,
         "turns": state.iteration,
         "reason": state.stopping_reason,
+        "replanning_attempts": state.replanning_attempts,
         "trace": trace,
         "gaps": state.gaps,
+        
     }
