@@ -4,7 +4,8 @@ Bounded agent loop for SARA.
 The agent operates within explicit execution limits and must
 terminate in a defined state rather than running indefinitely.
 """
-
+from .screening import screen_papers
+from .executor import execute_tool
 from .state import AgentState
 from .tracing import create_run_id, create_trace_event
 from .evidence import evaluate_evidence_sufficiency
@@ -88,6 +89,50 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             parsed_plan = parse_research_plan(planning_response)
             state.subquestions = parsed_plan["subquestions"]
             state.keywords = parsed_plan["keywords"]
+            if state.keywords:
+                search_result = execute_tool(
+                    "search_openalex",
+                    {
+                        "query": state.keywords[0],
+                        "max_results": 5,
+                    },
+                )
+                trace.append(
+                    create_trace_event(
+                        run_id=run_id,
+                        turn=turn,
+                        action="search_openalex",
+                        status=search_result["status"],
+                        details={
+                            "query": state.keywords[0],
+                            "results_count": len(
+                                search_result["result"] or []
+                            ),
+                        },
+                    )
+                )
+            if search_result["status"] == "COMPLETED":
+                    state.retrieved_papers = search_result["result"] or []
+                    included_papers, excluded_papers = screen_papers(
+                        state.retrieved_papers,
+                        state.keywords[0],
+                    )
+
+                    state.selected_papers = included_papers
+                    state.excluded_papers = excluded_papers
+                    trace.append(
+                        create_trace_event(
+                            run_id=run_id,
+                            turn=turn,
+                            action="screen_papers",
+                            status="COMPLETED",
+                            details={
+                                "retrieved": len(state.retrieved_papers),
+                                "selected": len(state.selected_papers),
+                                "excluded": len(state.excluded_papers),
+                            },
+                        )
+                    )
 
         trace_event = create_trace_event(
             run_id=run_id,
