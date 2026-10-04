@@ -7,6 +7,7 @@ terminate in a defined state rather than running indefinitely.
 
 from .state import AgentState
 from .tracing import create_run_id, create_trace_event
+from .evidence import evaluate_evidence_sufficiency
 TERMINAL_STATES = {
     "COMPLETED",
     "BLOCKED",
@@ -55,27 +56,50 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
     while turn < max_turns:
         turn += 1
         state.iteration = turn
+
         trace_event = create_trace_event(
-            
-    run_id=run_id,
-    turn=turn,
-    action="agent_turn",
-    status="RUNNING",
-    details={"iteration": state.iteration},
-)
+            run_id=run_id,
+            turn=turn,
+            action="agent_turn",
+            status="RUNNING",
+            details={"iteration": state.iteration},
+        )
         trace.append(trace_event)
+
+        evidence_check = evaluate_evidence_sufficiency(
+            selected_papers=state.selected_papers,
+            subquestions=state.subquestions,
+            evidence=state.evidence,
+        )
+
+        trace.append(
+            create_trace_event(
+                run_id=run_id,
+                turn=turn,
+                action="evaluate_evidence",
+                status="SUFFICIENT"
+                if evidence_check["sufficient"]
+                else "INSUFFICIENT",
+                details=evidence_check,
+            )
+        )
+
+        state.gaps = evidence_check["gaps"]
+
+        if not evidence_check["sufficient"]:
+            state.status = "INSUFFICIENT_EVIDENCE"
 
         # Decision-making and tool execution will be added
         # incrementally in later steps.
 
-    
     state.status = "BUDGET_EXHAUSTED"
     state.stopping_reason = "Maximum number of agent turns reached."
 
     return {
-    "status": state.status,
-    "run_id": state.run_id,
-    "turns": state.iteration,
-    "reason": state.stopping_reason,
-    "trace": trace,
-}
+        "status": state.status,
+        "run_id": state.run_id,
+        "turns": state.iteration,
+        "reason": state.stopping_reason,
+        "trace": trace,
+        "gaps": state.gaps,
+    }
