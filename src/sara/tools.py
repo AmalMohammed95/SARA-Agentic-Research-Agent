@@ -13,6 +13,27 @@ import urllib.request
 
 OPENALEX_API_URL = "https://api.openalex.org/works"
 
+def reconstruct_abstract(
+    inverted_index: dict | None,
+) -> str:
+    """
+    Reconstruct plain abstract text from an OpenAlex inverted index.
+    """
+    if not inverted_index:
+        return ""
+
+    positioned_words = []
+
+    for word, positions in inverted_index.items():
+        for position in positions:
+            positioned_words.append((position, word))
+
+    positioned_words.sort(key=lambda item: item[0])
+
+    return " ".join(
+        word for _, word in positioned_words
+    )
+
 
 def search_openalex(query: str, max_results: int = 5) -> list[dict]:
     """
@@ -58,6 +79,9 @@ def search_openalex(query: str, max_results: int = 5) -> list[dict]:
                 "title": work.get("title"),
                 "year": work.get("publication_year"),
                 "doi": work.get("doi"),
+                "abstract": reconstruct_abstract(
+                    work.get("abstract_inverted_index")
+                ),
             }
         )
 
