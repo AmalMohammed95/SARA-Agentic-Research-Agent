@@ -4,6 +4,7 @@ Bounded agent loop for SARA.
 The agent operates within explicit execution limits and must
 terminate in a defined state rather than running indefinitely.
 """
+from .extraction import create_empty_evidence_record
 from .screening import screen_papers
 from .executor import execute_tool
 from .state import AgentState
@@ -120,6 +121,10 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
 
                     state.selected_papers = included_papers
                     state.excluded_papers = excluded_papers
+                    state.evidence = [
+                        create_empty_evidence_record(paper)
+                        for paper in state.selected_papers
+                    ]
                     trace.append(
                         create_trace_event(
                             run_id=run_id,
