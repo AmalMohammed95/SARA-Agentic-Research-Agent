@@ -27,6 +27,10 @@ VALID_CONFLICT_STATUSES = (
     "none",
     "identified",
 )
+VALID_CLAIM_SUPPORT_STATUSES = (
+    "supported",
+    "unsupported",
+)
 def get_paper_identifier(paper: dict) -> str | None:
     """
     Return the best available persistent identifier for a paper.
@@ -65,10 +69,21 @@ def evaluate_evidence_sufficiency(
 )
     evidence = evidence or []
 
+    invalid_claim_support_status_count = sum(
+    1
+    for record in evidence
+    if record.get("claim_support_status") not in VALID_CLAIM_SUPPORT_STATUSES
+)
+
     invalid_conflict_status_count = sum(
     1
     for record in evidence
     if record.get("conflict_status") not in VALID_CONFLICT_STATUSES
+)
+    unsupported_claim_count = sum(
+    1
+    for record in evidence
+    if record.get("claim_support_status") == "unsupported"
 )
 
     missing_provenance_count = sum(
@@ -198,6 +213,43 @@ def evaluate_evidence_sufficiency(
                 "a missing or invalid conflict status."
             ],
         }
+    if invalid_claim_support_status_count > 0:
+        return {
+            "sufficient": False,
+            "relevant_studies": relevant_count,
+            "unique_relevant_studies": unique_relevant_count,
+            "unidentified_papers": unidentified_papers_count,
+            "required_studies": MIN_RELEVANT_STUDIES,
+            "subquestion_coverage": subquestion_coverage,
+            "missing_field_rate": missing_field_rate,
+            "missing_provenance_count": missing_provenance_count,
+            "invalid_provenance_count": invalid_provenance_count,
+            "invalid_conflict_status_count": invalid_conflict_status_count,
+            "invalid_claim_support_status_count": invalid_claim_support_status_count,
+            "gaps": [
+                f"{invalid_claim_support_status_count} evidence record(s) have "
+                "a missing or invalid claim support status."
+            ],
+        }
+    if unsupported_claim_count > 0:
+        return {
+            "sufficient": False,
+            "relevant_studies": relevant_count,
+            "unique_relevant_studies": unique_relevant_count,
+            "unidentified_papers": unidentified_papers_count,
+            "required_studies": MIN_RELEVANT_STUDIES,
+            "subquestion_coverage": subquestion_coverage,
+            "missing_field_rate": missing_field_rate,
+            "missing_provenance_count": missing_provenance_count,
+            "invalid_provenance_count": invalid_provenance_count,
+            "invalid_conflict_status_count": invalid_conflict_status_count,
+            "invalid_claim_support_status_count": invalid_claim_support_status_count,
+            "unsupported_claim_count": unsupported_claim_count,
+            "gaps": [
+                f"{unsupported_claim_count} evidence record(s) contain "
+                "unsupported claims."
+            ],
+        }
     return {
         "sufficient": True,
         "relevant_studies": relevant_count,
@@ -209,5 +261,7 @@ def evaluate_evidence_sufficiency(
         "missing_provenance_count": missing_provenance_count,
         "invalid_provenance_count": invalid_provenance_count,
         "invalid_conflict_status_count": invalid_conflict_status_count,
+        "invalid_claim_support_status_count": invalid_claim_support_status_count,
+        "unsupported_claim_count": unsupported_claim_count,
         "gaps": [],
     }
