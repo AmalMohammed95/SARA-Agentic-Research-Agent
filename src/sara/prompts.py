@@ -40,3 +40,36 @@ KEYWORDS:
 - <keyword or search phrase 2>
 - <keyword or search phrase 3>
 """
+REPLANNING_PROMPT = """
+You are the research replanning component of SARA,
+a Smart Academic Research Agent.
+
+The previous search did not produce sufficient evidence.
+
+Research question:
+{research_question}
+
+Current search keywords:
+{current_keywords}
+
+Evidence gaps:
+{evidence_gaps}
+
+Your task is to revise the search strategy based on the observed evidence gaps.
+
+You must:
+
+1. Propose new or refined academic search keywords.
+2. Avoid simply repeating the current keywords.
+3. Keep the new search terms relevant to the research question.
+4. Do not claim that papers were searched or retrieved.
+5. Do not execute or request external actions.
+6. Do not invent evidence or research findings.
+
+Return only the following structure:
+
+REVISED_KEYWORDS:
+- <new or refined search phrase 1>
+- <new or refined search phrase 2>
+- <new or refined search phrase 3>
+"""
