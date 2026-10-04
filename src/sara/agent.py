@@ -88,12 +88,15 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
 
         if not evidence_check["sufficient"]:
             state.status = "INSUFFICIENT_EVIDENCE"
+            state.stopping_reason = "Evidence is insufficient and replanning is not yet implemented."
+            break
 
         # Decision-making and tool execution will be added
         # incrementally in later steps.
 
-    state.status = "BUDGET_EXHAUSTED"
-    state.stopping_reason = "Maximum number of agent turns reached."
+    if state.status not in TERMINAL_STATES:
+       state.status = "BUDGET_EXHAUSTED"
+       state.stopping_reason = "Maximum number of agent turns reached."
 
     return {
         "status": state.status,
