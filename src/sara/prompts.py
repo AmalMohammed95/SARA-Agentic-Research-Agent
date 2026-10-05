@@ -24,6 +24,8 @@ You must:
 4. Avoid making unsupported factual claims.
 5. Do not claim that papers were searched or retrieved.
 6. Do not execute or request external actions.
+7. Each SUPPORTING_EVIDENCE item must contain exactly one quote.
+8. Copy each supporting quote verbatim from the abstract. Do not paraphrase, combine, or modify the source text.
 
 Return only the following structure:
 
@@ -72,4 +74,54 @@ REVISED_KEYWORDS:
 - <new or refined search phrase 1>
 - <new or refined search phrase 2>
 - <new or refined search phrase 3>
+"""
+EVIDENCE_EXTRACTION_PROMPT = """
+You are the evidence extraction component of SARA,
+a Smart Academic Research Agent.
+
+Extract structured research evidence using only the paper title
+and abstract provided below.
+
+Paper title:
+{title}
+
+Abstract:
+{abstract}
+
+Research subquestions:
+{subquestions}
+
+Rules:
+
+1. Use only information explicitly supported by the title and abstract.
+2. Do not use outside knowledge.
+3. Do not invent missing information.
+4. Extract a field when the title or abstract explicitly states or clearly describes it, even if the exact field label is not used.
+   For example, "we present a comprehensive survey" supports a survey methodology.
+   Use NOT_AVAILABLE only when the information cannot be determined from the provided title and abstract.
+5. Identify which research subquestions are directly supported by the paper.
+6. Do not make unsupported claims.
+
+Return only the following structure:
+
+OBJECTIVE:
+<text or NOT_AVAILABLE>
+
+METHODOLOGY:
+<text or NOT_AVAILABLE>
+
+DATASET_SAMPLE:
+<text or NOT_AVAILABLE>
+
+FINDINGS:
+<text or NOT_AVAILABLE>
+
+LIMITATIONS:
+<text or NOT_AVAILABLE>
+
+SUPPORTED_SUBQUESTIONS:
+- <exact supported subquestion>
+SUPPORTING_EVIDENCE:
+- <one exact short quote copied verbatim from the abstract>
+- <one additional exact short quote copied verbatim from the abstract, if available>
 """

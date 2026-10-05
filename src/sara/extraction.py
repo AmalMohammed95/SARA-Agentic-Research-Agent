@@ -31,3 +31,34 @@ def create_empty_evidence_record(paper: dict) -> dict:
         "conflict_status": "none",
         "claim_support_status": "unsupported",
     }
+def verify_supporting_evidence(
+    abstract: str,
+    supporting_evidence: list[str],
+) -> dict:
+    """Verify that extracted evidence quotes occur in the source abstract."""
+
+    if not abstract or not supporting_evidence:
+        return {
+            "verified": False,
+            "verified_quotes": [],
+            "unverified_quotes": supporting_evidence,
+        }
+
+    normalized_abstract = " ".join(abstract.lower().split())
+
+    verified_quotes = []
+    unverified_quotes = []
+
+    for quote in supporting_evidence:
+        normalized_quote = " ".join(quote.lower().split())
+
+        if normalized_quote and normalized_quote in normalized_abstract:
+            verified_quotes.append(quote)
+        else:
+            unverified_quotes.append(quote)
+
+    return {
+        "verified": bool(verified_quotes) and not unverified_quotes,
+        "verified_quotes": verified_quotes,
+        "unverified_quotes": unverified_quotes,
+    }

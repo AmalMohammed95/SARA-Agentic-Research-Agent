@@ -132,3 +132,97 @@ def parse_revised_keywords(response: str) -> list[str]:
                 keywords.append(keyword)
 
     return keywords
+REQUIRED_EXTRACTION_SECTIONS = (
+    "OBJECTIVE:",
+    "METHODOLOGY:",
+    "DATASET_SAMPLE:",
+    "FINDINGS:",
+    "LIMITATIONS:",
+    "SUPPORTED_SUBQUESTIONS:",
+    "SUPPORTING_EVIDENCE:",
+)
+
+def validate_evidence_extraction(response: str) -> dict:
+    """
+    Validate the required structure of an evidence extraction response.
+    """
+    if not response or not response.strip():
+        return {
+            "valid": False,
+            "missing_sections": list(REQUIRED_EXTRACTION_SECTIONS),
+        }
+
+    missing_sections = [
+        section
+        for section in REQUIRED_EXTRACTION_SECTIONS
+        if section not in response
+    ]
+
+    return {
+        "valid": not missing_sections,
+        "missing_sections": missing_sections,
+    }
+def parse_evidence_extraction(response: str) -> dict:
+    """
+    Parse a validated evidence extraction response into structured fields.
+    """
+
+    def extract_section(start: str, end: str | None = None) -> str:
+        content = response.split(start, 1)[1]
+
+        if end:
+            content = content.split(end, 1)[0]
+
+        value = content.strip()
+
+        if value.upper() == "NOT_AVAILABLE":
+         return ""
+
+        return value
+
+    objective = extract_section("OBJECTIVE:", "METHODOLOGY:")
+    methodology = extract_section("METHODOLOGY:", "DATASET_SAMPLE:")
+    dataset_sample = extract_section("DATASET_SAMPLE:", "FINDINGS:")
+    findings = extract_section("FINDINGS:", "LIMITATIONS:")
+    limitations = extract_section(
+        "LIMITATIONS:",
+        "SUPPORTED_SUBQUESTIONS:",
+    )
+
+    supported_section = response.split(
+    "SUPPORTED_SUBQUESTIONS:", 1
+    )[1].split("SUPPORTING_EVIDENCE:", 1)[0]
+
+    supported_subquestions = [
+    line[1:].strip().strip('"').strip("'")
+    for line in supported_section.splitlines()
+    if line.strip().startswith("-")
+    and line[1:].strip().upper() != "NOT_AVAILABLE"
+    ]
+
+    evidence_section = response.split(
+    "SUPPORTING_EVIDENCE:", 1
+    )[1]
+
+    supporting_evidence = [
+    line[1:].strip().strip('"').strip("'")
+    for line in evidence_section.splitlines()
+    if line.strip().startswith("-")
+    and line[1:].strip().upper() != "NOT_AVAILABLE"
+]
+    supported_subquestions = [
+        line[1:].strip().strip('"').strip("'")
+        for line in supported_section.splitlines()
+        if line.strip().startswith("-")
+        and line[1:].strip() != "NOT_AVAILABLE"
+    ]
+
+    return {
+        "objective": objective,
+        "methodology": methodology,
+        "dataset_sample": dataset_sample,
+        "findings": findings,
+        "limitations": limitations,
+        "supported_subquestions": supported_subquestions,
+        "supporting_evidence": supporting_evidence,
+    }

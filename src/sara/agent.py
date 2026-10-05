@@ -4,7 +4,10 @@ Bounded agent loop for SARA.
 The agent operates within explicit execution limits and must
 terminate in a defined state rather than running indefinitely.
 """
-from .extraction import create_empty_evidence_record
+from .extraction import (
+    create_empty_evidence_record,
+    verify_supporting_evidence,
+)
 from .screening import screen_papers
 from .executor import execute_tool
 from .state import AgentState
@@ -12,12 +15,18 @@ from .tracing import create_run_id, create_trace_event
 from .evidence import evaluate_evidence_sufficiency
 from .replanning import can_replan, build_replanning_context
 from .model import OllamaModelClient
-from .prompts import RESEARCH_PLANNING_PROMPT, REPLANNING_PROMPT
+from .prompts import (
+    RESEARCH_PLANNING_PROMPT,
+    REPLANNING_PROMPT,
+    EVIDENCE_EXTRACTION_PROMPT,
+)
 from .schemas import (
     validate_research_plan,
     parse_research_plan,
     validate_replanning_response,
     parse_revised_keywords,
+    validate_evidence_extraction,
+    parse_evidence_extraction,
 )
 TERMINAL_STATES = {
     "COMPLETED",
@@ -125,6 +134,128 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                         create_empty_evidence_record(paper)
                         for paper in state.selected_papers
                     ]
+                    paper_with_abstract = next(
+                        (
+                            paper
+                            for paper in state.selected_papers
+                            if paper.get("abstract")
+                        ),
+                        None,
+                    )
+
+                    if paper_with_abstract:
+                        extraction_prompt = EVIDENCE_EXTRACTION_PROMPT.format(
+                            title=paper_with_abstract.get("title", ""),
+                            abstract=paper_with_abstract.get("abstract", ""),
+                            subquestions=state.subquestions,
+                        )
+
+                        extraction_response = model_client.generate(
+                            extraction_prompt
+                        )
+
+                        extraction_validation = validate_evidence_extraction(
+                            extraction_response
+                        )
+                    trace.append(
+                            create_trace_event(
+                                run_id=run_id,
+                                turn=turn,
+                                action="validate_evidence_extraction",
+                                status="VALID"
+                                if extraction_validation["valid"]
+                                else "INVALID",
+                                details={
+                                    "paper_id": (
+                                        paper_with_abstract.get("doi")
+                                        or paper_with_abstract.get("id")
+                                    ),
+                                    "title": paper_with_abstract.get(
+                                        "title", ""
+                                    ),
+                                    "validation": extraction_validation,
+                                },
+                            )
+                        )
+                    if extraction_validation["valid"]:
+                            parsed_extraction = parse_evidence_extraction(
+                                extraction_response
+                            )
+                            trace.append(
+                                create_trace_event(
+                                    run_id=run_id,
+                                    turn=turn,
+                                    action="parse_evidence_extraction",
+                                    status="COMPLETED",
+                                    details={
+                                        "paper_id": (
+                                            paper_with_abstract.get("doi")
+                                            or paper_with_abstract.get("id")
+                                        ),
+                                        "extraction": parsed_extraction,
+                                    },
+                                )
+                            )
+                            extracted_record = create_empty_evidence_record(
+                                paper_with_abstract
+                            )
+                            extracted_record.update(parsed_extraction)
+
+                            grounding_result = verify_supporting_evidence(
+                                paper_with_abstract.get("abstract", ""),
+                                parsed_extraction.get(
+                                    "supporting_evidence", []
+                                ),
+                            )
+
+                            if grounding_result["verified"]:
+                                extracted_record[
+                                    "claim_support_status"
+                                ] = "supported"
+
+                            trace.append(
+                                create_trace_event(
+                                    run_id=run_id,
+                                    turn=turn,
+                                    action="verify_supporting_evidence",
+                                    status="VERIFIED"
+                                    if grounding_result["verified"]
+                                    else "UNVERIFIED",
+                                    details={
+                                        "paper_id": (
+                                            paper_with_abstract.get("doi")
+                                            or paper_with_abstract.get("id")
+                                        ),
+                                        "title": paper_with_abstract.get(
+                                            "title", ""
+                                        ),
+                                        "grounding": grounding_result,
+                                    },
+                                )
+                            )
+
+                            validated_subquestions = [
+                                subquestion
+                                for subquestion in extracted_record[
+                                    "supported_subquestions"
+                                ]
+                                if subquestion in state.subquestions
+                            ]
+
+                            extracted_record[
+                                "supported_subquestions"
+                            ] = validated_subquestions
+
+                            for index, evidence_record in enumerate(
+                                state.evidence
+                            ):
+                                if (
+                                    evidence_record["paper_id"]
+                                    == extracted_record["paper_id"]
+                                ):
+                                    state.evidence[index] = extracted_record
+                                    break
+                           
                     trace.append(
                         create_trace_event(
                             run_id=run_id,
@@ -257,5 +388,5 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         "replanning_attempts": state.replanning_attempts,
         "trace": trace,
         "gaps": state.gaps,
-        
+        "evidence": state.evidence,
     }
