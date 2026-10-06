@@ -382,9 +382,27 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                 subquestions=state.subquestions,
             )
 
-            extraction_response = model_client.generate(
-                extraction_prompt
-            )
+            try:
+                extraction_response = model_client.generate(
+                    extraction_prompt
+                )
+            except Exception as exc:
+                trace.append(
+                    create_trace_event(
+                        run_id=run_id,
+                        turn=turn,
+                        action="evidence_extraction",
+                        status="FAILED_SAFELY",
+                        details={
+                            "paper_id": paper_id,
+                            "title": paper_with_abstract.get(
+                                "title", ""
+                            ),
+                            "error": str(exc),
+                        },
+                    )
+                )
+                continue
 
             extraction_validation = validate_evidence_extraction(
                 extraction_response
