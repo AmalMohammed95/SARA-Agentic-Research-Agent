@@ -312,14 +312,41 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                 state.excluded_papers.append(paper)
                 existing_excluded_ids.add(paper_id)
 
-        # Extract evidence from at most two new papers per turn.
+        # Extract evidence from at most two pending selected papers per turn.
+        pending_evidence_ids = {
+            record["paper_id"]
+            for record in state.evidence
+            if not (
+                record.get("objective")
+                or record.get("methodology")
+                or record.get("dataset_sample")
+                or record.get("findings")
+                or record.get("limitations")
+            )
+        }
+
         papers_with_abstract = [
             paper
-            for paper in newly_selected_papers
-            if paper.get("abstract")
+            for paper in state.selected_papers
+            if (
+                (paper.get("doi") or paper.get("id"))
+                in pending_evidence_ids
+                and paper.get("abstract")
+                and state.extraction_attempts.get(
+                    paper.get("doi") or paper.get("id"), 0
+                ) < 2
+            )
         ][:2]
 
         for paper_with_abstract in papers_with_abstract:
+            paper_id = (
+                paper_with_abstract.get("doi")
+                or paper_with_abstract.get("id")
+            )
+
+            state.extraction_attempts[paper_id] = (
+                state.extraction_attempts.get(paper_id, 0) + 1
+            )
             extraction_prompt = EVIDENCE_EXTRACTION_PROMPT.format(
                 title=paper_with_abstract.get("title", ""),
                 abstract=paper_with_abstract.get("abstract", ""),

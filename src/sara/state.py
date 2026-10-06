@@ -20,6 +20,7 @@ class AgentState:
 
     iteration: int = 0
     replanning_attempts: int = 0
+    extraction_attempts: dict[str, int] = field(default_factory=dict)
 
     subquestions: list[str] = field(default_factory=list)
     keywords: list[str] = field(default_factory=list)
