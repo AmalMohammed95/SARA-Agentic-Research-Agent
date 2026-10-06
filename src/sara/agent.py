@@ -189,7 +189,36 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                 abstract=paper.get("abstract", ""),
             )
 
-            screening_response = model_client.generate(screening_prompt)
+            try:
+                screening_response = model_client.generate(
+                    screening_prompt
+                )
+            except Exception as exc:
+                semantically_excluded.append(
+                    {
+                        **paper,
+                        "exclusion_reason": (
+                            "Semantic screening model call failed."
+                        ),
+                    }
+                )
+
+                trace.append(
+                    create_trace_event(
+                        run_id=run_id,
+                        turn=turn,
+                        action="semantic_screening",
+                        status="FAILED_SAFELY",
+                        details={
+                            "paper_id": (
+                                paper.get("doi") or paper.get("id")
+                            ),
+                            "title": paper.get("title", ""),
+                            "error": str(exc),
+                        },
+                    )
+                )
+                continue
             screening_validation = validate_semantic_screening(
                 screening_response
             )
