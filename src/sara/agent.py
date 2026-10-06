@@ -616,7 +616,30 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                 current_keywords=replanning_context["current_keywords"],
                 evidence_gaps=replanning_context["evidence_gaps"],
             )
-            replanning_response = model_client.generate(replanning_prompt)
+            try:
+                replanning_response = model_client.generate(
+                    replanning_prompt
+                )
+            except Exception as exc:
+                trace.append(
+                    create_trace_event(
+                        run_id=run_id,
+                        turn=turn,
+                        action="replanning",
+                        status="FAILED_SAFELY",
+                        details={
+                            "attempt": state.replanning_attempts,
+                            "error": str(exc),
+                        },
+                    )
+                )
+
+                state.status = "INSUFFICIENT_EVIDENCE"
+                state.stopping_reason = (
+                    "Evidence is insufficient and the replanning "
+                    "model call failed safely."
+                )
+                break
             replanning_validation = validate_replanning_response(
                 replanning_response
             )
