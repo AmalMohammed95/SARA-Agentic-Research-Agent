@@ -9,7 +9,7 @@ from .extraction import (
     create_empty_evidence_record,
     verify_supporting_evidence,
 )
-from .screening import screen_papers
+from .screening import screen_agent_papers
 from .executor import execute_tool
 from .state import AgentState
 from .tracing import create_run_id, create_trace_event
@@ -20,6 +20,7 @@ from .prompts import (
     RESEARCH_PLANNING_PROMPT,
     REPLANNING_PROMPT,
     EVIDENCE_EXTRACTION_PROMPT,
+    SEMANTIC_SCREENING_PROMPT,
 )
 from .schemas import (
     validate_research_plan,
@@ -28,6 +29,9 @@ from .schemas import (
     parse_revised_keywords,
     validate_evidence_extraction,
     parse_evidence_extraction,
+    validate_extraction_quality,
+    validate_semantic_screening,
+    parse_semantic_screening,
 )
 
 
@@ -73,7 +77,35 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
     planning_prompt = RESEARCH_PLANNING_PROMPT.format(
         research_question=state.research_question,
     )
-    planning_response = model_client.generate(planning_prompt)
+    try:
+        planning_response = model_client.generate(planning_prompt)
+    except Exception as exc:
+        state.status = "FAILED_SAFELY"
+        state.stopping_reason = (
+            f"Initial planning model call failed: {exc}"
+        )
+
+        trace.append(
+            create_trace_event(
+                run_id=run_id,
+                turn=0,
+                action="research_planning",
+                status="FAILED_SAFELY",
+                details={"error": str(exc)},
+            )
+        )
+
+        return {
+            "status": state.status,
+            "run_id": state.run_id,
+            "turns": state.iteration,
+            "reason": state.stopping_reason,
+            "replanning_attempts": state.replanning_attempts,
+            "trace": trace,
+            "gaps": state.gaps,
+            "evidence": state.evidence,
+        }
+
     planning_validation = validate_research_plan(planning_response)
 
     trace.append(
@@ -142,11 +174,97 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
 
         new_retrieved_papers = search_result["result"] or []
 
-        included_papers, excluded_papers = screen_papers(
+        included_papers, excluded_papers = screen_agent_papers(
             new_retrieved_papers,
-            search_query,
         )
 
+        # Semantic screening of deterministically eligible papers.
+        semantically_included = []
+        semantically_excluded = []
+
+        for paper in included_papers:
+            screening_prompt = SEMANTIC_SCREENING_PROMPT.format(
+                research_question=state.research_question,
+                title=paper.get("title", ""),
+                abstract=paper.get("abstract", ""),
+            )
+
+            screening_response = model_client.generate(screening_prompt)
+            screening_validation = validate_semantic_screening(
+                screening_response
+            )
+
+            if not screening_validation["valid"]:
+                semantically_excluded.append(
+                    {
+                        **paper,
+                        "exclusion_reason": (
+                            "Invalid semantic screening response."
+                        ),
+                    }
+                )
+
+                trace.append(
+                    create_trace_event(
+                        run_id=run_id,
+                        turn=turn,
+                        action="semantic_screening",
+                        status="INVALID",
+                        details={
+                            "paper_id": (
+                                paper.get("doi") or paper.get("id")
+                            ),
+                            "title": paper.get("title", ""),
+                            "reason": screening_validation["reason"],
+                        },
+                    )
+                )
+                continue
+
+            screening_result = parse_semantic_screening(
+                screening_response
+            )
+
+            if screening_result["decision"] == "INCLUDE":
+                semantically_included.append(
+                    {
+                        **paper,
+                        "screening_status": "semantically_relevant",
+                        "screening_reason": screening_result["reason"],
+                    }
+                )
+            else:
+                semantically_excluded.append(
+                    {
+                        **paper,
+                        "exclusion_reason": screening_result["reason"],
+                    }
+                )
+
+            trace.append(
+                create_trace_event(
+                    run_id=run_id,
+                    turn=turn,
+                    action="semantic_screening",
+                    status=screening_result["decision"],
+                    details={
+                        "paper_id": (
+                            paper.get("doi") or paper.get("id")
+                        ),
+                        "title": paper.get("title", ""),
+                        "reason": screening_result["reason"],
+                    },
+                )
+            )
+
+            
+
+        
+            
+        included_papers = semantically_included
+        excluded_papers.extend(semantically_excluded)
+        
+        
         # Accumulate retrieved papers across turns without duplicates.
         existing_retrieved_ids = {
             paper.get("doi") or paper.get("id")
@@ -155,6 +273,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
 
         for paper in new_retrieved_papers:
             paper_id = paper.get("doi") or paper.get("id")
+
             if paper_id not in existing_retrieved_ids:
                 state.retrieved_papers.append(paper)
                 existing_retrieved_ids.add(paper_id)
@@ -164,150 +283,202 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             paper.get("doi") or paper.get("id")
             for paper in state.selected_papers
         }
+
         newly_selected_papers = []
+
         for paper in included_papers:
             paper_id = paper.get("doi") or paper.get("id")
+
             if paper_id not in existing_selected_ids:
                 state.selected_papers.append(paper)
                 newly_selected_papers.append(paper)
-            
                 existing_selected_ids.add(paper_id)
 
-                # Create an evidence record only for newly selected papers.
+                # Create evidence only for a newly selected paper.
                 state.evidence.append(
                     create_empty_evidence_record(paper)
                 )
 
-        # Preserve exclusions from previous turns.
+        # Preserve exclusions from previous turns without duplicates.
         existing_excluded_ids = {
             paper.get("doi") or paper.get("id")
             for paper in state.excluded_papers
         }
-       
+
         for paper in excluded_papers:
             paper_id = paper.get("doi") or paper.get("id")
+
             if paper_id not in existing_excluded_ids:
                 state.excluded_papers.append(paper)
                 existing_excluded_ids.add(paper_id)
+
+        # Extract evidence from at most two new papers per turn.
         papers_with_abstract = [
             paper
-        for paper in newly_selected_papers
-             if paper.get("abstract")
-            ][:2]
+            for paper in newly_selected_papers
+            if paper.get("abstract")
+        ][:2]
+
         for paper_with_abstract in papers_with_abstract:
-                extraction_prompt = EVIDENCE_EXTRACTION_PROMPT.format(
-                    title=paper_with_abstract.get("title", ""),
-                    abstract=paper_with_abstract.get("abstract", ""),
-                    subquestions=state.subquestions,
-                )
-                extraction_response = model_client.generate(extraction_prompt)
-                extraction_validation = validate_evidence_extraction(
-                    extraction_response
-                )
+            extraction_prompt = EVIDENCE_EXTRACTION_PROMPT.format(
+                title=paper_with_abstract.get("title", ""),
+                abstract=paper_with_abstract.get("abstract", ""),
+                subquestions=state.subquestions,
+            )
 
-                trace.append(
-                    create_trace_event(
-                        run_id=run_id,
-                        turn=turn,
-                        action="validate_evidence_extraction",
-                        status=(
-                            "VALID"
-                            if extraction_validation["valid"]
-                            else "INVALID"
+            extraction_response = model_client.generate(
+                extraction_prompt
+            )
+
+            extraction_validation = validate_evidence_extraction(
+                extraction_response
+            )
+
+            trace.append(
+                create_trace_event(
+                    run_id=run_id,
+                    turn=turn,
+                    action="validate_evidence_extraction",
+                    status=(
+                        "VALID"
+                        if extraction_validation["valid"]
+                        else "INVALID"
+                    ),
+                    details={
+                        "paper_id": (
+                            paper_with_abstract.get("doi")
+                            or paper_with_abstract.get("id")
                         ),
-                        details={
-                            "paper_id": (
-                                paper_with_abstract.get("doi")
-                                or paper_with_abstract.get("id")
-                            ),
-                            "title": paper_with_abstract.get("title", ""),
-                            "validation": extraction_validation,
-                        },
-                    )
+                        "title": paper_with_abstract.get(
+                            "title", ""
+                        ),
+                        "validation": extraction_validation,
+                    },
                 )
+            )
 
-                if extraction_validation["valid"]:
-                    parsed_extraction = parse_evidence_extraction(
-                        extraction_response
-                    )
-                    trace.append(
-                        create_trace_event(
-                            run_id=run_id,
-                            turn=turn,
-                            action="parse_evidence_extraction",
-                            status="COMPLETED",
-                            details={
-                                "paper_id": (
-                                    paper_with_abstract.get("doi")
-                                    or paper_with_abstract.get("id")
-                                ),
-                                "extraction": parsed_extraction,
-                            },
-                        )
-                    )
+            if not extraction_validation["valid"]:
+                continue
 
-                    extracted_record = create_empty_evidence_record(
-                        paper_with_abstract
-                    )
-                    extracted_record.update(parsed_extraction)
+            parsed_extraction = parse_evidence_extraction(
+                extraction_response
+            )
 
-                    grounding_result = verify_supporting_evidence(
-                        paper_with_abstract.get("abstract", ""),
-                        parsed_extraction.get("supporting_evidence", []),
-                    )
-                    validated_subquestions = [
-                                            subquestion
-                                            for subquestion in extracted_record[
-                                                "supported_subquestions"
-                                            ]
-                                            if subquestion in state.subquestions
-                                        ]
-                    if (
-                                grounding_result["verified"]
-                                and validated_subquestions
-                                and (
-                                    parsed_extraction.get("objective")
-                                    or parsed_extraction.get("methodology")
-                                    or parsed_extraction.get("findings")
-                                    or parsed_extraction.get("limitations")
-                                )
-                            ):
-                        extracted_record["claim_support_status"] = "supported"
+            trace.append(
+                create_trace_event(
+                    run_id=run_id,
+                    turn=turn,
+                    action="parse_evidence_extraction",
+                    status="COMPLETED",
+                    details={
+                        "paper_id": (
+                            paper_with_abstract.get("doi")
+                            or paper_with_abstract.get("id")
+                        ),
+                        "extraction": parsed_extraction,
+                    },
+                )
+            )
+            quality_check = validate_extraction_quality(
+                parsed_extraction
+            )
 
-                    trace.append(
-                        create_trace_event(
-                            run_id=run_id,
-                            turn=turn,
-                            action="verify_supporting_evidence",
-                            status=(
-                                "VERIFIED"
-                                if grounding_result["verified"]
-                                else "UNVERIFIED"
-                            ),
-                            details={
-                                "paper_id": (
-                                    paper_with_abstract.get("doi")
-                                    or paper_with_abstract.get("id")
-                                ),
-                                "title": paper_with_abstract.get("title", ""),
-                                "grounding": grounding_result,
-                            },
-                        )
-                    )
+            trace.append(
+                create_trace_event(
+                    run_id=run_id,
+                    turn=turn,
+                    action="validate_extraction_quality",
+                    status=(
+                        "USABLE"
+                        if quality_check["usable"]
+                        else "UNUSABLE"
+                    ),
+                    details={
+                        "paper_id": (
+                            paper_with_abstract.get("doi")
+                            or paper_with_abstract.get("id")
+                        ),
+                        "quality": quality_check,
+                    },
+                )
+            )
 
-                    
-                    extracted_record[
-                        "supported_subquestions"
-                    ] = validated_subquestions
+            if not quality_check["usable"]:
+                continue
+        
 
-                    for index, evidence_record in enumerate(state.evidence):
-                        if (
-                            evidence_record["paper_id"]
-                            == extracted_record["paper_id"]
-                        ):
-                            state.evidence[index] = extracted_record
-                            break
+            extracted_record = create_empty_evidence_record(
+                paper_with_abstract
+            )
+            extracted_record.update(parsed_extraction)
 
+            grounding_result = verify_supporting_evidence(
+                paper_with_abstract.get("abstract", ""),
+                parsed_extraction.get(
+                    "supporting_evidence",
+                    [],
+                ),
+            )
+
+            validated_subquestions = [
+                subquestion
+                for subquestion in extracted_record[
+                    "supported_subquestions"
+                ]
+                if subquestion in state.subquestions
+            ]
+
+            extracted_record[
+                "supported_subquestions"
+            ] = validated_subquestions
+
+            if (
+                grounding_result["verified"]
+                and validated_subquestions
+                and (
+                    parsed_extraction.get("objective")
+                    or parsed_extraction.get("methodology")
+                    or parsed_extraction.get("findings")
+                    or parsed_extraction.get("limitations")
+                )
+            ):
+                extracted_record[
+                    "claim_support_status"
+                ] = "supported"
+
+            trace.append(
+                create_trace_event(
+                    run_id=run_id,
+                    turn=turn,
+                    action="verify_supporting_evidence",
+                    status=(
+                        "VERIFIED"
+                        if grounding_result["verified"]
+                        else "UNVERIFIED"
+                    ),
+                    details={
+                        "paper_id": (
+                            paper_with_abstract.get("doi")
+                            or paper_with_abstract.get("id")
+                        ),
+                        "title": paper_with_abstract.get(
+                            "title", ""
+                        ),
+                        "grounding": grounding_result,
+                    },
+                )
+            )
+
+            # Replace the corresponding empty evidence record.
+            for index, evidence_record in enumerate(state.evidence):
+                if (
+                    evidence_record["paper_id"]
+                    == extracted_record["paper_id"]
+                ):
+                    state.evidence[index] = extracted_record
+                    break            
+
+        
         trace.append(
             create_trace_event(
                 run_id=run_id,
@@ -360,7 +531,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             state.stopping_reason = "Evidence sufficiency criteria were met."
             break
 
-        if can_replan(state.replanning_attempts):
+        if turn < max_turns and can_replan(state.replanning_attempts):
             state.replanning_attempts += 1
             replanning_context = build_replanning_context(
                 current_keywords=state.keywords,

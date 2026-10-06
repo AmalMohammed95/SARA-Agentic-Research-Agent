@@ -166,7 +166,6 @@ def parse_evidence_extraction(response: str) -> dict:
     """
     Parse a validated evidence extraction response into structured fields.
     """
-
     def extract_section(start: str, end: str | None = None) -> str:
         content = response.split(start, 1)[1]
 
@@ -176,7 +175,7 @@ def parse_evidence_extraction(response: str) -> dict:
         value = content.strip()
 
         if value.upper() == "NOT_AVAILABLE":
-         return ""
+            return ""
 
         return value
 
@@ -190,31 +189,25 @@ def parse_evidence_extraction(response: str) -> dict:
     )
 
     supported_section = response.split(
-    "SUPPORTED_SUBQUESTIONS:", 1
+        "SUPPORTED_SUBQUESTIONS:", 1
     )[1].split("SUPPORTING_EVIDENCE:", 1)[0]
 
-    supported_subquestions = [
-    line[1:].strip().strip('"').strip("'")
-    for line in supported_section.splitlines()
-    if line.strip().startswith("-")
-    and line[1:].strip().upper() != "NOT_AVAILABLE"
-    ]
-
-    evidence_section = response.split(
-    "SUPPORTING_EVIDENCE:", 1
-    )[1]
-
-    supporting_evidence = [
-    line[1:].strip().strip('"').strip("'")
-    for line in evidence_section.splitlines()
-    if line.strip().startswith("-")
-    and line[1:].strip().upper() != "NOT_AVAILABLE"
-]
     supported_subquestions = [
         line[1:].strip().strip('"').strip("'")
         for line in supported_section.splitlines()
         if line.strip().startswith("-")
-        and line[1:].strip() != "NOT_AVAILABLE"
+        and line[1:].strip().upper() != "NOT_AVAILABLE"
+    ]
+
+    evidence_section = response.split(
+        "SUPPORTING_EVIDENCE:", 1
+    )[1]
+
+    supporting_evidence = [
+        line[1:].strip().strip('"').strip("'")
+        for line in evidence_section.splitlines()
+        if line.strip().startswith("-")
+        and line[1:].strip().upper() != "NOT_AVAILABLE"
     ]
 
     return {
@@ -225,4 +218,76 @@ def parse_evidence_extraction(response: str) -> dict:
         "limitations": limitations,
         "supported_subquestions": supported_subquestions,
         "supporting_evidence": supporting_evidence,
+    }
+
+def validate_extraction_quality(extraction: dict) -> dict:
+    """
+    Evaluate whether a parsed extraction contains substantive evidence.
+    """
+    substantive_fields = (
+        "objective",
+        "methodology",
+        "dataset_sample",
+        "findings",
+        "limitations",
+    )
+
+    populated_fields = [
+        field
+        for field in substantive_fields
+        if extraction.get(field)
+        and str(extraction.get(field)).strip()
+    ]
+
+    return {
+        "usable": bool(populated_fields),
+        "populated_fields": populated_fields,
+        "populated_field_count": len(populated_fields),
+        "total_fields": len(substantive_fields),
+    }
+
+    
+def validate_semantic_screening(response: str) -> dict:
+    """
+    Validate the structure and decision of a semantic screening response.
+    """
+    if not response or not response.strip():
+        return {
+            "valid": False,
+            "reason": "Semantic screening response is empty.",
+        }
+
+    if "DECISION:" not in response or "REASON:" not in response:
+        return {
+            "valid": False,
+            "reason": "Required semantic screening sections are missing.",
+        }
+
+    decision_section = response.split("DECISION:", 1)[1].split(
+        "REASON:", 1
+    )[0].strip().upper()
+
+    if decision_section not in {"INCLUDE", "EXCLUDE"}:
+        return {
+            "valid": False,
+            "reason": "Semantic screening decision must be INCLUDE or EXCLUDE.",
+        }
+
+    return {
+        "valid": True,
+        "reason": "Semantic screening response is valid.",
+    }
+def parse_semantic_screening(response: str) -> dict:
+    """
+    Parse a validated semantic screening response.
+    """
+    decision = response.split("DECISION:", 1)[1].split(
+        "REASON:", 1
+    )[0].strip().upper()
+
+    reason = response.split("REASON:", 1)[1].strip()
+
+    return {
+        "decision": decision,
+        "reason": reason,
     }

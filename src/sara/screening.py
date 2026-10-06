@@ -66,3 +66,53 @@ def screen_papers(
         )
 
     return included, excluded
+
+
+def screen_agent_papers(
+    papers: list[dict],
+    start_year: int = 2021,
+) -> tuple[list[dict], list[dict]]:
+    """Screen papers using deterministic eligibility rules for the agent."""
+    included = []
+    excluded = []
+
+    for paper in papers:
+        year = paper.get("year")
+
+        if not year or year < start_year:
+            excluded.append(
+                {
+                    **paper,
+                    "exclusion_reason": "Publication year outside allowed range.",
+                }
+            )
+            continue
+        abstract = (paper.get("abstract") or "").strip()
+
+        if not abstract:
+            excluded.append(
+                {
+                    **paper,
+                    "exclusion_reason": "No public abstract available.",
+                }
+            )
+            continue
+        paper_id = paper.get("doi") or paper.get("id")
+
+        if not paper_id:
+            excluded.append(
+                {
+                    **paper,
+                    "exclusion_reason": "No verifiable persistent identifier.",
+                }
+            )
+            continue
+        included.append(
+            {
+                **paper,
+                "screening_status": "eligible",
+            }
+        )
+
+
+    return included, excluded

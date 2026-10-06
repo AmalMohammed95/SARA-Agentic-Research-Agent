@@ -24,8 +24,7 @@ You must:
 4. Avoid making unsupported factual claims.
 5. Do not claim that papers were searched or retrieved.
 6. Do not execute or request external actions.
-7. Each SUPPORTING_EVIDENCE item must contain exactly one quote.
-8. Copy each supporting quote verbatim from the abstract. Do not paraphrase, combine, or modify the source text.
+
 
 Return only the following structure:
 
@@ -101,6 +100,8 @@ Rules:
    Use NOT_AVAILABLE only when the information cannot be determined from the provided title and abstract.
 5. Identify which research subquestions are directly supported by the paper.
 6. Do not make unsupported claims.
+7. Each SUPPORTING_EVIDENCE item must contain exactly one quote.
+8. Copy each supporting quote verbatim from the abstract. Do not paraphrase, combine, or modify the source text.
 
 Return only the following structure:
 
@@ -124,4 +125,38 @@ SUPPORTED_SUBQUESTIONS:
 SUPPORTING_EVIDENCE:
 - <one exact short quote copied verbatim from the abstract>
 - <one additional exact short quote copied verbatim from the abstract, if available>
+
+
+"""
+SEMANTIC_SCREENING_PROMPT = """
+You are the semantic screening component of SARA,
+a Smart Academic Research Agent.
+
+Determine whether the paper is directly relevant to the research question.
+
+Research question:
+{research_question}
+
+Paper title:
+{title}
+
+Abstract:
+{abstract}
+
+Rules:
+
+1. Use only the title and abstract provided.
+2. Do not use outside knowledge.
+3. Include the paper only if it directly contributes evidence relevant to the research question.
+4. Do not include a paper merely because it contains similar keywords.
+5. If relevance is uncertain, choose EXCLUDE.
+6. Provide a concise reason grounded in the title or abstract.
+
+Return only the following structure:
+
+DECISION:
+<INCLUDE or EXCLUDE>
+
+REASON:
+<one concise reason>
 """
