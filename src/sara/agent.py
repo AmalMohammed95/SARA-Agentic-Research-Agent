@@ -164,11 +164,13 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             paper.get("doi") or paper.get("id")
             for paper in state.selected_papers
         }
-
+        newly_selected_papers = []
         for paper in included_papers:
             paper_id = paper.get("doi") or paper.get("id")
             if paper_id not in existing_selected_ids:
                 state.selected_papers.append(paper)
+                newly_selected_papers.append(paper)
+            
                 existing_selected_ids.add(paper_id)
 
                 # Create an evidence record only for newly selected papers.
@@ -181,7 +183,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             paper.get("doi") or paper.get("id")
             for paper in state.excluded_papers
         }
-
+       
         for paper in excluded_papers:
             paper_id = paper.get("doi") or paper.get("id")
             if paper_id not in existing_excluded_ids:
@@ -190,7 +192,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         paper_with_abstract = next(
             (
                 paper
-                for paper in included_papers
+                for paper in newly_selected_papers
                 if paper.get("abstract")
             ),
             None,
