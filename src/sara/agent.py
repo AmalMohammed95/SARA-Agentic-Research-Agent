@@ -705,11 +705,19 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             break
 
         state.status = "INSUFFICIENT_EVIDENCE"
-        state.stopping_reason = (
-            "Evidence is insufficient and the replanning limit has been reached."
-        )
-        break
 
+        if not state.retrieved_papers:
+            state.stopping_reason = (
+                "Evidence is insufficient because repeated searches "
+                "returned no papers."
+            )
+        else:
+            state.stopping_reason = (
+                "Evidence is insufficient and the replanning limit "
+                "has been reached."
+            )
+
+        break
     if state.status not in TERMINAL_STATES:
         state.status = "BUDGET_EXHAUSTED"
         state.stopping_reason = "Maximum number of agent turns reached."

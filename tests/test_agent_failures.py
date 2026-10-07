@@ -336,4 +336,57 @@ def test_replanning_can_repeat_same_search_keywords(monkeypatch):
             "repeated the current search keywords."
         )
     )
+def test_no_search_results_across_turns(monkeypatch):
+    class NoResultsModelClient:
+        def __init__(self):
+            self.calls = 0
 
+        def generate(self, prompt: str) -> str:
+            self.calls += 1
+
+            if self.calls == 1:
+                return (
+                    "OBJECTIVE:\n"
+                    "Study LLM agents in academic research.\n"
+                    "SUBQUESTIONS:\n"
+                    "- How are LLM agents used in academic research?\n"
+                    "KEYWORDS:\n"
+                    "- LLM agents academic research\n"
+                )
+
+            return (
+                "REVISED_KEYWORDS:\n"
+                f"- revised academic research query {self.calls}\n"
+            )
+
+    search_queries = []
+
+    def fake_execute_tool(tool_name, arguments):
+        search_queries.append(arguments["query"])
+        return {
+            "status": "COMPLETED",
+            "result": [],
+        }
+
+    monkeypatch.setattr(
+        agent_module,
+        "OllamaModelClient",
+        NoResultsModelClient,
+    )
+    monkeypatch.setattr(
+        agent_module,
+        "execute_tool",
+        fake_execute_tool,
+    )
+
+    result = agent_module.run_agent(
+        "How are LLM agents used in academic research?",
+        max_turns=3,
+    )
+
+    assert result["status"] == "INSUFFICIENT_EVIDENCE"
+    assert len(search_queries) == 3
+    assert result["reason"] == (
+        "Evidence is insufficient because repeated searches "
+        "returned no papers."
+    )
