@@ -32,10 +32,18 @@ def execute_tool(tool_name: str, arguments: dict) -> dict:
         }
 
     if tool_name == "search_openalex":
-        result = search_openalex(
-            query=arguments["query"],
-            max_results=arguments.get("max_results", 5),
-        )
+        try:
+            result = search_openalex(
+                query=arguments["query"],
+                max_results=arguments.get("max_results", 5),
+            )
+        except Exception as exc:
+            return {
+                "status": "FAILED_SAFELY",
+                "tool": tool_name,
+                "reason": f"Tool execution failed safely: {exc}",
+                "result": None,
+            }
 
         return {
             "status": "COMPLETED",
