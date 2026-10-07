@@ -110,3 +110,41 @@ def test_agent_handles_synthesis_model_failure(synthesis_ready, monkeypatch):
 
     assert result["status"] == "FAILED_SAFELY"
     assert result["synthesis"] is None
+def test_agent_persists_human_review(
+    synthesis_ready, monkeypatch, tmp_path
+):
+    from sara.review_store import load_review
+
+    class FakeModel:
+        def generate(self, prompt):
+            if "research planning component" in prompt:
+                return PLAN
+            return make_synthesis("S1")
+
+    monkeypatch.setattr(
+        agent_module, "OllamaModelClient", FakeModel
+    )
+
+    # Isolate review files from the real project directory.
+    from sara.review_store import save_review
+
+    review_dir = tmp_path / "reviews"
+
+    monkeypatch.setattr(
+        agent_module,
+        "save_review",
+        lambda review: save_review(review, review_dir),
+    )
+
+    result = agent_module.run_agent(
+        "How do research agents work?",
+        max_turns=1,
+    )
+
+    assert result["status"] == "WAITING_FOR_APPROVAL"
+
+    saved = load_review(result["run_id"], review_dir)
+
+    assert saved["status"] == "WAITING_FOR_APPROVAL"
+    assert saved["decision"] is None
+    assert saved["run_id"] == result["run_id"]

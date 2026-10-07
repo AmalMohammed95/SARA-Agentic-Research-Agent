@@ -17,6 +17,7 @@ from .evidence import evaluate_evidence_sufficiency
 from .replanning import can_replan, build_replanning_context
 from .model import OllamaModelClient
 from .human_review import create_review_request
+from .review_store import save_review
 from .synthesis import (
     prepare_synthesis_evidence,
     build_synthesis_prompt,
@@ -672,6 +673,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                     run_id=state.run_id,
                     synthesis=synthesis_result,
                 )
+                save_review(review_request)
 
                 state.status = "WAITING_FOR_APPROVAL"
                 state.stopping_reason = (

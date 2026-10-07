@@ -22,3 +22,5 @@ Thumbs.db
 
 # Logs
 *.log
+# Local research runs and human review records
+data/reviews/
