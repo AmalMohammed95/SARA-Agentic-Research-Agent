@@ -276,5 +276,64 @@ def test_empty_replanned_keywords_fail_safely(monkeypatch):
     )
     assert result["status"] == "FAILED_SAFELY"
     assert result["reason"] == "No valid search keywords are available."
-       
+def test_replanning_can_repeat_same_search_keywords(monkeypatch):
+    class RepeatingReplanningModelClient:
+        def __init__(self):
+            self.calls = 0
+
+        def generate(self, prompt: str) -> str:
+            self.calls += 1
+
+            if self.calls == 1:
+                return (
+                    "OBJECTIVE:\n"
+                    "Study LLM agents in academic research.\n"
+                    "SUBQUESTIONS:\n"
+                    "- How are LLM agents used in academic research?\n"
+                    "KEYWORDS:\n"
+                    "- LLM agents academic research\n"
+                )
+
+            return (
+                "REVISED_KEYWORDS:\n"
+                "- LLM agents academic research\n"
+            )
+
+    search_queries = []
+
+    def fake_execute_tool(tool_name, arguments):
+        search_queries.append(arguments["query"])
+
+        return {
+            "status": "COMPLETED",
+            "result": [],
+        }
+
+    monkeypatch.setattr(
+        agent_module,
+        "OllamaModelClient",
+        RepeatingReplanningModelClient,
+    )
+    monkeypatch.setattr(
+        agent_module,
+        "execute_tool",
+        fake_execute_tool,
+    )
+
+    result = agent_module.run_agent(
+        "How are LLM agents used in academic research?",
+        max_turns=2,
+    )
+
+    assert search_queries == [
+        "LLM agents academic research",
+    ]
+    assert result["status"] == "INSUFFICIENT_EVIDENCE"
+    assert (
+        result["reason"]
+        == (
+            "Evidence is insufficient and replanning "
+            "repeated the current search keywords."
+        )
+    )
 

@@ -662,6 +662,15 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                 revised_keywords = parse_revised_keywords(
                     replanning_response
                 )
+
+                if revised_keywords == state.keywords:
+                    state.status = "INSUFFICIENT_EVIDENCE"
+                    state.stopping_reason = (
+                        "Evidence is insufficient and replanning "
+                        "repeated the current search keywords."
+                    )
+                    break
+
                 state.keywords = revised_keywords
                 trace.append(
                     create_trace_event(
