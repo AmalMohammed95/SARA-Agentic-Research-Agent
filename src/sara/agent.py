@@ -16,6 +16,11 @@ from .tracing import create_run_id, create_trace_event
 from .evidence import evaluate_evidence_sufficiency
 from .replanning import can_replan, build_replanning_context
 from .model import OllamaModelClient
+from .synthesis import (
+    prepare_synthesis_evidence,
+    build_synthesis_prompt,
+    validate_synthesis,
+)
 from .prompts import (
     RESEARCH_PLANNING_PROMPT,
     REPLANNING_PROMPT,
@@ -71,6 +76,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
     trace = []
     model_client = OllamaModelClient()
     turn = 0
+    synthesis_result = None
 
     # Initial planning happens once. Replanning updates state.keywords and the
     # next loop iteration uses those revised keywords directly.
@@ -601,10 +607,89 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         )
         state.gaps = evidence_check["gaps"]
 
+        
         if evidence_check["sufficient"]:
-            state.status = "COMPLETED"
-            state.stopping_reason = "Evidence sufficiency criteria were met."
+            verified_evidence = prepare_synthesis_evidence(
+                state.selected_papers,
+                state.evidence,
+            )
+
+            if not verified_evidence:
+                state.status = "FAILED_SAFELY"
+                state.stopping_reason = (
+                    "Synthesis could not proceed because no "
+                    "supported evidence was available."
+                )
+                break
+
+            try:
+                synthesis_prompt, citation_map = build_synthesis_prompt(
+                    state.research_question,
+                    verified_evidence,
+                )
+
+                synthesis_response = model_client.generate(
+                    synthesis_prompt
+                )
+
+                synthesis_validation = validate_synthesis(
+                    synthesis_response,
+                    citation_map,
+                )
+
+                trace.append(
+                    create_trace_event(
+                        run_id=run_id,
+                        turn=turn,
+                        action="evidence_synthesis",
+                        status=(
+                            "VALID"
+                            if synthesis_validation["valid"]
+                            else "INVALID"
+                        ),
+                        details=synthesis_validation,
+                    )
+                )
+
+                if not synthesis_validation["valid"]:
+                    state.status = "ESCALATED"
+                    state.stopping_reason = (
+                        "Synthesis requires human review because "
+                        "its structure or citations failed validation."
+                    )
+                    break
+
+                synthesis_result = {
+                    "text": synthesis_response,
+                    "citations": synthesis_validation["citations"],
+                    "validation": "STRUCTURE_AND_CITATIONS_ONLY",
+                    "requires_human_review": True,
+                }
+
+                state.status = "COMPLETED"
+                state.stopping_reason = (
+                    "Evidence sufficiency criteria were met and "
+                    "synthesis passed structural citation validation."
+                )
+
+            except Exception as exc:
+                state.status = "FAILED_SAFELY"
+                state.stopping_reason = (
+                    "Evidence synthesis failed safely."
+                )
+
+                trace.append(
+                    create_trace_event(
+                        run_id=run_id,
+                        turn=turn,
+                        action="evidence_synthesis",
+                        status="FAILED_SAFELY",
+                        details={"error": str(exc)},
+                    )
+                )
+
             break
+
 
         if turn < max_turns and can_replan(state.replanning_attempts):
             state.replanning_attempts += 1
@@ -737,4 +822,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         "trace": trace,
         "gaps": state.gaps,
         "evidence": state.evidence,
+        "selected_papers": state.selected_papers,
+        "excluded_papers": state.excluded_papers,
+        "synthesis": synthesis_result,
     }
