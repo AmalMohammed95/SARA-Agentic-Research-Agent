@@ -299,6 +299,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             paper.get("doi") or paper.get("id")
             for paper in state.retrieved_papers
         }
+        previous_retrieved_count = len(state.retrieved_papers)
 
         for paper in new_retrieved_papers:
             paper_id = paper.get("doi") or paper.get("id")
@@ -710,6 +711,11 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             state.stopping_reason = (
                 "Evidence is insufficient because repeated searches "
                 "returned no papers."
+            )
+        elif len(state.retrieved_papers) == previous_retrieved_count:
+            state.stopping_reason = (
+                "Evidence is insufficient because repeated searches "
+                "produced no new papers."
             )
         else:
             state.stopping_reason = (

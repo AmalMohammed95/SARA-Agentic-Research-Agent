@@ -390,3 +390,65 @@ def test_no_search_results_across_turns(monkeypatch):
         "Evidence is insufficient because repeated searches "
         "returned no papers."
     )
+def test_repeated_search_results_without_progress(monkeypatch):
+    class NoProgressModelClient:
+        def __init__(self):
+            self.calls = 0
+
+        def generate(self, prompt: str) -> str:
+            self.calls += 1
+
+            if self.calls == 1:
+                return (
+                    "OBJECTIVE:\n"
+                    "Study LLM agents in academic research.\n"
+                    "SUBQUESTIONS:\n"
+                    "- How are LLM agents used in academic research?\n"
+                    "KEYWORDS:\n"
+                    "- LLM agents academic research\n"
+                )
+
+            return (
+                "REVISED_KEYWORDS:\n"
+                f"- alternative academic research query {self.calls}\n"
+            )
+
+    search_queries = []
+
+    repeated_paper = {
+        "id": "https://openalex.org/W123456789",
+        "title": "Unrelated Academic Research Paper",
+        "year": 2024,
+        "doi": "https://doi.org/10.1000/example",
+        "abstract": "This paper studies an unrelated academic topic.",
+    }
+
+    def fake_execute_tool(tool_name, arguments):
+        search_queries.append(arguments["query"])
+        return {
+            "status": "COMPLETED",
+            "result": [repeated_paper],
+        }
+
+    monkeypatch.setattr(
+        agent_module,
+        "OllamaModelClient",
+        NoProgressModelClient,
+    )
+    monkeypatch.setattr(
+        agent_module,
+        "execute_tool",
+        fake_execute_tool,
+    )
+
+    result = agent_module.run_agent(
+        "How are LLM agents used in academic research?",
+        max_turns=3,
+    )
+
+    assert result["status"] == "INSUFFICIENT_EVIDENCE"
+    assert len(search_queries) == 3
+    assert result["reason"] == (
+        "Evidence is insufficient because repeated searches "
+        "produced no new papers."
+    )
