@@ -232,3 +232,49 @@ def test_replanning_model_failure_is_safe(monkeypatch):
         failure_events[0]["details"]["error"]
         == "Simulated replanning failure"
     )
+def test_empty_replanned_keywords_fail_safely(monkeypatch):
+    class EmptyReplanningKeywordsModelClient:
+        def __init__(self):
+            self.calls = 0
+
+        def generate(self, prompt: str) -> str:
+            self.calls += 1
+
+            if self.calls == 1:
+                return (
+                    "OBJECTIVE:\n"
+                    "Study LLM agents in academic research.\n"
+                    "SUBQUESTIONS:\n"
+                    "- How are LLM agents used in academic research?\n"
+                    "KEYWORDS:\n"
+                    "- LLM agents academic research\n"
+                )
+
+            return (
+                "REVISED_KEYWORDS:\n"
+            )
+
+    def fake_execute_tool(tool_name, arguments):
+        return {
+            "status": "COMPLETED",
+            "result": [],
+        }
+
+    monkeypatch.setattr(
+        agent_module,
+        "OllamaModelClient",
+        EmptyReplanningKeywordsModelClient,
+    )
+    monkeypatch.setattr(
+        agent_module,
+        "execute_tool",
+        fake_execute_tool,
+    )
+    result = agent_module.run_agent(
+        "How are LLM agents used in academic research?",
+        max_turns=2,
+    )
+    assert result["status"] == "FAILED_SAFELY"
+    assert result["reason"] == "No valid search keywords are available."
+       
+
