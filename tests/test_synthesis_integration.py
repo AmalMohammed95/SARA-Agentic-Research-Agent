@@ -75,7 +75,8 @@ def test_agent_completes_valid_synthesis(synthesis_ready, monkeypatch):
 
     result = agent_module.run_agent("How do research agents work?", max_turns=1)
 
-    assert result["status"] == "COMPLETED"
+    assert result["status"] == "WAITING_FOR_APPROVAL"
+    assert result["review_request"]["decision"] is None
     assert result["synthesis"] is not None
     assert result["synthesis"]["citations"]["S1"] == "paper-1"
     assert result["synthesis"]["requires_human_review"] is True

@@ -16,6 +16,7 @@ from .tracing import create_run_id, create_trace_event
 from .evidence import evaluate_evidence_sufficiency
 from .replanning import can_replan, build_replanning_context
 from .model import OllamaModelClient
+from .human_review import create_review_request
 from .synthesis import (
     prepare_synthesis_evidence,
     build_synthesis_prompt,
@@ -77,6 +78,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
     model_client = OllamaModelClient()
     turn = 0
     synthesis_result = None
+    review_request = None
 
     # Initial planning happens once. Replanning updates state.keywords and the
     # next loop iteration uses those revised keywords directly.
@@ -666,10 +668,25 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                     "requires_human_review": True,
                 }
 
-                state.status = "COMPLETED"
+                review_request = create_review_request(
+                    run_id=state.run_id,
+                    synthesis=synthesis_result,
+                )
+
+                state.status = "WAITING_FOR_APPROVAL"
                 state.stopping_reason = (
-                    "Evidence sufficiency criteria were met and "
-                    "synthesis passed structural citation validation."
+                    "Evidence synthesis passed structural citation "
+                    "validation and requires explicit human approval."
+                )
+
+                trace.append(
+                    create_trace_event(
+                        run_id=run_id,
+                        turn=turn,
+                        action="human_review_requested",
+                        status="WAITING_FOR_APPROVAL",
+                        details={"run_id": run_id},
+                    )
                 )
 
             except Exception as exc:
@@ -825,4 +842,5 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         "selected_papers": state.selected_papers,
         "excluded_papers": state.excluded_papers,
         "synthesis": synthesis_result,
+        "review_request": review_request,
     }
