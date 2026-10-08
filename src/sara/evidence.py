@@ -37,6 +37,68 @@ def get_paper_identifier(paper: dict) -> str | None:
     DOI is preferred, followed by the paper ID.
     """
     return paper.get("doi") or paper.get("id")
+def deduplicate_papers(papers: list[dict]) -> list[dict]:
+    """
+    Remove duplicate papers using DOI or OpenAlex ID.
+    Preserve the first occurrence.
+    """
+    unique_papers = []
+    seen_dois = set()
+    seen_ids = set()
+
+    for paper in papers:
+        doi = paper.get("doi")
+        paper_id = paper.get("id")
+
+        normalized_doi = (
+            str(doi).strip().lower()
+            if doi
+            else None
+        )
+
+        normalized_id = (
+            str(paper_id).strip().lower()
+            if paper_id
+            else None
+        )
+
+        if (
+            normalized_doi
+            and normalized_doi in seen_dois
+        ) or (
+            normalized_id
+            and normalized_id in seen_ids
+        ):
+            continue
+
+        unique_papers.append(paper)
+
+        if normalized_doi:
+            seen_dois.add(normalized_doi)
+
+        if normalized_id:
+            seen_ids.add(normalized_id)
+
+    return unique_papers
+def is_duplicate_paper(paper: dict, existing_papers: list[dict]) -> bool:
+    """
+    Check whether a paper shares a DOI or OpenAlex ID
+    with an existing paper.
+    """
+    doi = str(paper.get("doi") or "").strip().lower()
+    paper_id = str(paper.get("id") or "").strip().lower()
+
+    for existing in existing_papers:
+        existing_doi = str(existing.get("doi") or "").strip().lower()
+        existing_id = str(existing.get("id") or "").strip().lower()
+
+        if doi and existing_doi and doi == existing_doi:
+            return True
+
+        if paper_id and existing_id and paper_id == existing_id:
+            return True
+
+    return False
 def evaluate_evidence_sufficiency(
     selected_papers: list[dict],
     subquestions: list[str] | None = None,
@@ -74,10 +136,16 @@ def evaluate_evidence_sufficiency(
 )
     evidence = evidence or []
 
+    evidence_paper_ids = {
+        record.get("paper_id")
+        for record in evidence
+        if record.get("paper_id") in accepted_identifiers
+    }
+
     missing_evidence_record_count = max(
-    0,
-    len(unique_identifiers) - len(evidence),
-)
+        0,
+        len(unique_identifiers) - len(evidence_paper_ids),
+    )
 
     invalid_claim_support_status_count = sum(
     1
@@ -115,18 +183,72 @@ def evaluate_evidence_sufficiency(
     len(unique_identifiers) * len(REQUIRED_EVIDENCE_FIELDS)
 )
 
-    missing_fields = sum(
-        1
-        for record in evidence
-        for field in REQUIRED_EVIDENCE_FIELDS
-        if not record.get(field)
-    )
-    missing_fields += (
-    missing_evidence_record_count * len(REQUIRED_EVIDENCE_FIELDS)
-)
+    missing_markers = {
+        "",
+        "NOT_AVAILABLE",
+        "N/A",
+        "NONE",
+        "NULL",
+        "UNKNOWN",
+    }
+
+    missing_markers = {
+        "",
+        "NOT_AVAILABLE",
+        "N/A",
+        "NONE",
+        "NULL",
+        "UNKNOWN",
+    }
+
+    def is_missing(value):
+        if value is None or value == []:
+            return True
+        if isinstance(value, str):
+            return value.strip().upper() in missing_markers
+        return False
+
+    evidence_by_paper = {}
+
+    for record in evidence:
+        paper_id = record.get("paper_id")
+
+        if paper_id not in accepted_identifiers:
+            continue
+
+        if paper_id not in evidence_by_paper:
+            evidence_by_paper[paper_id] = []
+
+        evidence_by_paper[paper_id].append(record)
+
+    missing_fields = 0
+
+    for paper in selected_papers:
+        paper_ids = {
+            paper.get("doi"),
+            paper.get("id"),
+        }
+        paper_ids.discard(None)
+
+        matching_records = [
+            record
+            for paper_id in paper_ids
+            for record in evidence_by_paper.get(paper_id, [])
+        ]
+
+        if not matching_records:
+            missing_fields += len(REQUIRED_EVIDENCE_FIELDS)
+            continue
+
+        for field in REQUIRED_EVIDENCE_FIELDS:
+            if all(
+                is_missing(record.get(field))
+                for record in matching_records
+            ):
+                missing_fields += 1
 
     missing_field_rate = (
-        missing_fields / total_required_fields
+        min(1.0, missing_fields / total_required_fields)
         if total_required_fields > 0
         else 1.0
     )
@@ -135,14 +257,19 @@ def evaluate_evidence_sufficiency(
     subquestion_coverage = {}
 
     for subquestion in subquestions:
-        coverage_count = sum(
-            1
+        supporting_paper_ids = {
+            record.get("paper_id")
             for record in evidence
             if record.get("claim_support_status") == "supported"
-            and subquestion in record.get("supported_subquestions", [])
-        )
+            and subquestion in record.get(
+                "supported_subquestions", []
+            )
+            and record.get("paper_id") in accepted_identifiers
+        }
 
-        subquestion_coverage[subquestion] = coverage_count
+        subquestion_coverage[subquestion] = len(
+            supporting_paper_ids
+        )
     coverage_gaps = [
         f"Subquestion '{subquestion}' has only {count} supporting studies; "
         f"at least {MIN_STUDIES_PER_SUBQUESTION} are required."

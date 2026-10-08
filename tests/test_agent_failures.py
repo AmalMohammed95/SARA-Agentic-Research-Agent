@@ -452,3 +452,86 @@ def test_repeated_search_results_without_progress(monkeypatch):
         "Evidence is insufficient because repeated searches "
         "produced no new papers."
     )
+
+
+def test_agent_deduplicates_papers_across_turns(monkeypatch):
+    class FakeModel:
+        def generate(self, prompt):
+            if "research planning component" in prompt:
+                return (
+                    "OBJECTIVE:\n"
+                    "Study research agents.\n"
+                    "SUBQUESTIONS:\n"
+                    "- How do research agents support reviews?\n"
+                    "KEYWORDS:\n"
+                    "- research agents\n"
+                )
+
+            if "DECISION:" in prompt or "semantic" in prompt.lower():
+                return (
+                    "DECISION: INCLUDE\n"
+                    "REASON: Relevant to the research question."
+                )
+
+            if "replan" in prompt.lower() or "revis" in prompt.lower():
+                return (
+                    "REVISED_KEYWORDS:\n"
+                    "- research agents literature reviews\n"
+                )
+
+            raise RuntimeError("Simulated extraction failure")
+
+    search_calls = []
+
+    def fake_execute_tool(tool_name, arguments):
+        search_calls.append(arguments)
+
+        if len(search_calls) == 1:
+            paper = {
+                "id": "W123",
+                "doi": "10.1000/example",
+                "title": "Research Agents",
+                "year": 2025,
+                "abstract": "Research agents support literature reviews.",
+            }
+        else:
+            paper = {
+                "id": "W123",
+                "doi": None,
+                "title": "Research Agents",
+                "year": 2025,
+                "abstract": "Research agents support literature reviews.",
+            }
+
+        return {
+            "status": "COMPLETED",
+            "result": [paper],
+        }
+
+    monkeypatch.setattr(
+        agent_module, "OllamaModelClient", FakeModel
+    )
+    monkeypatch.setattr(
+        agent_module, "execute_tool", fake_execute_tool
+    )
+
+    result = agent_module.run_agent(
+        "How do research agents support reviews?",
+        max_turns=2,
+    )
+    print("\nSTATUS:", result["status"])
+    print("REASON:", result["reason"])
+    print("TURNS:", result["turns"])
+    print("SEARCH CALLS:", len(search_calls))
+
+    for event in result["trace"]:
+        print(
+            "TRACE:",
+            event.get("action"),
+            event.get("status"),
+            event.get("details"),
+        )
+
+    assert len(search_calls) == 2
+    assert len(result["selected_papers"]) == 1
+    assert len(result["evidence"]) == 1

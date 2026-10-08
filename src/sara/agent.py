@@ -18,6 +18,7 @@ from .replanning import can_replan, build_replanning_context
 from .model import OllamaModelClient
 from .human_review import create_review_request
 from .review_store import save_review
+from sara.evidence import deduplicate_papers, is_duplicate_paper
 from .synthesis import (
     prepare_synthesis_evidence,
     build_synthesis_prompt,
@@ -40,7 +41,7 @@ from .schemas import (
     validate_semantic_screening,
     parse_semantic_screening,
 )
-
+MAX_EXTRACTIONS_PER_TURN = 5
 
 TERMINAL_STATES = {
     "COMPLETED",
@@ -181,7 +182,9 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             state.stopping_reason = "OpenAlex search did not complete successfully."
             break
 
-        new_retrieved_papers = search_result["result"] or []
+        new_retrieved_papers = deduplicate_papers(
+                search_result["result"] or []
+            )
 
         included_papers, excluded_papers = screen_agent_papers(
             new_retrieved_papers,
@@ -313,7 +316,9 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         for paper in new_retrieved_papers:
             paper_id = paper.get("doi") or paper.get("id")
 
-            if paper_id not in existing_retrieved_ids:
+            if not is_duplicate_paper(
+                paper, state.retrieved_papers
+            ):
                 state.retrieved_papers.append(paper)
                 existing_retrieved_ids.add(paper_id)
 
@@ -328,7 +333,9 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         for paper in included_papers:
             paper_id = paper.get("doi") or paper.get("id")
 
-            if paper_id not in existing_selected_ids:
+            if not is_duplicate_paper(
+                    paper, state.selected_papers
+                ):
                 state.selected_papers.append(paper)
                 newly_selected_papers.append(paper)
                 existing_selected_ids.add(paper_id)
@@ -375,7 +382,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                     paper.get("doi") or paper.get("id"), 0
                 ) < 2
             )
-        ][:2]
+        ][:MAX_EXTRACTIONS_PER_TURN]
 
         for paper_with_abstract in papers_with_abstract:
             paper_id = (
@@ -511,6 +518,11 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                 ]
                 if subquestion in state.subquestions
             ]
+
+        # Do not count subquestion coverage when source
+        # quotations have not passed grounding verification.
+            if not grounding_result["verified"]:
+                validated_subquestions = []
 
             extracted_record[
                 "supported_subquestions"
