@@ -58,6 +58,7 @@ def test_resume_and_atomic_save(tmp_path, monkeypatch):
 def test_main_resumes_without_duplicate_results(tmp_path, monkeypatch):
     import csv
     import json
+    monkeypatch.setattr("sys.argv", ["run_comparison.py"])
 
     questions_file = tmp_path / "questions.csv"
     results_file = tmp_path / "results.json"

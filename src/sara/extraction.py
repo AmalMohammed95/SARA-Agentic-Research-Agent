@@ -4,7 +4,7 @@ Evidence extraction utilities for SARA.
 This module converts selected academic papers into structured
 evidence records that can later be validated by the evidence gate.
 """
-
+import re
 REQUIRED_EXTRACTION_FIELDS = (
     "objective",
     "methodology",
@@ -70,10 +70,17 @@ def verify_supporting_evidence(
     for quote in supporting_evidence:
         normalized_quote = " ".join(quote.lower().split())
 
-        normalized_quote = normalized_quote.strip(
+        # Remove an optional trailing source label.
+        normalized_quote = re.sub(
+            r"\s*\(abstract\)\s*$",
+            "",
+            normalized_quote,
+        )
+
+        # Remove surrounding quotation marks.
+        normalized_quote = normalized_quote.strip().strip(
             "\"'“”‘’"
         ).strip()
-
         if normalized_quote and normalized_quote in normalized_abstract:
             verified_quotes.append(quote)
         else:
