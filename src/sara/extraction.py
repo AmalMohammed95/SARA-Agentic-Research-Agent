@@ -13,6 +13,23 @@ REQUIRED_EXTRACTION_FIELDS = (
     "limitations",
 )
 
+NOT_APPLICABLE = "NOT_APPLICABLE"
+
+def is_valid_not_applicable(field: str, record: dict) -> bool:
+    """Allow N/A only for dataset_sample in non-empirical studies."""
+    if field != "dataset_sample":
+        return False
+
+    if record.get(field) != NOT_APPLICABLE:
+        return False
+
+    return record.get("study_type") in {
+        "theoretical",
+        "conceptual",
+        "narrative_review",
+    }
+
+
 
 def create_empty_evidence_record(paper: dict) -> dict:
     """
@@ -22,6 +39,7 @@ def create_empty_evidence_record(paper: dict) -> dict:
     """
     return {
         "paper_id": paper.get("doi") or paper.get("id"),
+        "study_type": "unknown",
         "objective": "",
         "methodology": "",
         "dataset_sample": "",
@@ -51,6 +69,10 @@ def verify_supporting_evidence(
 
     for quote in supporting_evidence:
         normalized_quote = " ".join(quote.lower().split())
+
+        normalized_quote = normalized_quote.strip(
+            "\"'“”‘’"
+        ).strip()
 
         if normalized_quote and normalized_quote in normalized_abstract:
             verified_quotes.append(quote)

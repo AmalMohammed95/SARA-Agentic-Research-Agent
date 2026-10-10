@@ -114,8 +114,8 @@ def evaluate_evidence_sufficiency(
     Returns:
         A structured sufficiency decision.
     """
-
     relevant_count = len(selected_papers)
+    selected_papers = deduplicate_papers(selected_papers)
     unique_identifiers = {
         get_paper_identifier(paper)
         for paper in selected_papers
@@ -142,11 +142,15 @@ def evaluate_evidence_sufficiency(
         if record.get("paper_id") in accepted_identifiers
     }
 
-    missing_evidence_record_count = max(
-        0,
-        len(unique_identifiers) - len(evidence_paper_ids),
+    missing_evidence_record_count = sum(
+        1
+        for paper in selected_papers
+        if not any(
+            identifier in evidence_paper_ids
+            for identifier in (paper.get("doi"), paper.get("id"))
+            if identifier is not None
+        )
     )
-
     invalid_claim_support_status_count = sum(
     1
     for record in evidence
@@ -184,15 +188,7 @@ def evaluate_evidence_sufficiency(
 )
 
     missing_markers = {
-        "",
-        "NOT_AVAILABLE",
-        "N/A",
-        "NONE",
-        "NULL",
-        "UNKNOWN",
-    }
-
-    missing_markers = {
+   
         "",
         "NOT_AVAILABLE",
         "N/A",
@@ -202,11 +198,27 @@ def evaluate_evidence_sufficiency(
     }
 
     def is_missing(value):
-        if value is None or value == []:
+        if value is None:
             return True
+
+        if isinstance(value, (list, tuple, dict, set)):
+            return len(value) == 0
+
         if isinstance(value, str):
-            return value.strip().upper() in missing_markers
+            normalized = value.strip().upper()
+
+            # Handle common LLM formatting variations.
+            normalized = normalized.lstrip("-*• ").strip()
+            normalized = normalized.strip("`'\"").strip()
+
+            return normalized in missing_markers
+
         return False
+   
+
+   
+
+    
 
     evidence_by_paper = {}
 
@@ -241,10 +253,12 @@ def evaluate_evidence_sufficiency(
             continue
 
         for field in REQUIRED_EVIDENCE_FIELDS:
-            if all(
+            field_is_missing = all(
                 is_missing(record.get(field))
                 for record in matching_records
-            ):
+            )
+
+            if field_is_missing:
                 missing_fields += 1
 
     missing_field_rate = (
@@ -253,23 +267,33 @@ def evaluate_evidence_sufficiency(
         else 1.0
     )
     subquestions = subquestions or []
-
     subquestion_coverage = {}
 
-    for subquestion in subquestions:
-        supporting_paper_ids = {
-            record.get("paper_id")
-            for record in evidence
-            if record.get("claim_support_status") == "supported"
-            and subquestion in record.get(
-                "supported_subquestions", []
-            )
-            and record.get("paper_id") in accepted_identifiers
-        }
 
-        subquestion_coverage[subquestion] = len(
-            supporting_paper_ids
-        )
+    for subquestion in subquestions:
+        supporting_studies = 0
+
+        for paper in selected_papers:
+            paper_ids = {
+                paper.get("doi"),
+                paper.get("id"),
+            }
+            paper_ids.discard(None)
+
+            has_support = any(
+                record.get("paper_id") in paper_ids
+                and record.get("claim_support_status") == "supported"
+                and subquestion in record.get(
+                    "supported_subquestions", []
+                )
+                for record in evidence
+            )
+
+            if has_support:
+                supporting_studies += 1
+
+        subquestion_coverage[subquestion] = supporting_studies
+
     coverage_gaps = [
         f"Subquestion '{subquestion}' has only {count} supporting studies; "
         f"at least {MIN_STUDIES_PER_SUBQUESTION} are required."
@@ -277,18 +301,13 @@ def evaluate_evidence_sufficiency(
         if count < MIN_STUDIES_PER_SUBQUESTION
     ]
 
-    if unique_relevant_count < MIN_RELEVANT_STUDIES:
-        return {
-            "sufficient": False,
-            "relevant_studies": relevant_count,
-            "required_studies": MIN_RELEVANT_STUDIES,
-            "unique_relevant_studies": unique_relevant_count,
-            "unidentified_papers": unidentified_papers_count,
-            "gaps": [
-                f"At least {MIN_RELEVANT_STUDIES} unique identifiable relevant studies are required."
-            ],
-        }
+    
     gaps = []
+    if missing_evidence_record_count > 0:
+        gaps.append(
+            f"{missing_evidence_record_count} selected study/studies "
+            "have no matching evidence record."
+        )
 
     if unique_relevant_count < MIN_RELEVANT_STUDIES:
         gaps.append(

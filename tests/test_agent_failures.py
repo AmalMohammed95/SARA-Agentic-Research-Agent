@@ -1,5 +1,5 @@
 import sara.agent as agent_module
-
+from sara.schemas import validate_semantic_screening
 
 class FailingModelClient:
     def generate(self, prompt: str) -> str:
@@ -112,9 +112,11 @@ def test_evidence_extraction_model_failure_is_safe(monkeypatch):
 
             if self.calls == 2:
                 return (
-                    "DECISION: INCLUDE\n"
-                    "REASON: The paper directly addresses the "
-                    "research question."
+                    '{"results": ['
+                    '{"paper_id": "10.1000/test-paper", '
+                    '"decision": "INCLUDE", '
+                    '"reason": "The paper directly addresses the research question."}'
+                    ']}'
                 )
 
             raise RuntimeError("Simulated evidence extraction failure")
@@ -533,5 +535,144 @@ def test_agent_deduplicates_papers_across_turns(monkeypatch):
         )
 
     assert len(search_calls) == 2
+    assert search_calls[0]["query"] != search_calls[1]["query"]
     assert len(result["selected_papers"]) == 1
     assert len(result["evidence"]) == 1
+def test_search_query_selection_avoids_repetition():
+    keywords = [
+        "Large language models",
+        "Academic literature reviews",
+        "Research assistant agents",
+    ]
+
+    used_search_queries = set()
+    selected_queries = []
+
+    for turn in range(1, 4):
+        available_queries = [
+            keyword
+            for keyword in keywords
+            if keyword.strip()
+            and keyword.strip().lower() not in used_search_queries
+        ]
+
+        if available_queries:
+            search_query = available_queries[0].strip()
+        else:
+            search_query = keywords[0].strip()
+
+        used_search_queries.add(search_query.lower())
+        selected_queries.append(search_query)
+
+    assert selected_queries == [
+        "Large language models",
+        "Academic literature reviews",
+        "Research assistant agents",
+    ]
+def test_select_search_query_uses_unique_keywords():
+    from sara.agent import select_search_query
+
+    keywords = [
+        "Large language models",
+        "Academic literature reviews",
+        "Research assistant agents",
+    ]
+
+    used = set()
+
+    assert select_search_query(keywords, used) == "Large language models"
+    assert select_search_query(keywords, used) == "Academic literature reviews"
+    assert select_search_query(keywords, used) == "Research assistant agents"
+    assert select_search_query(keywords, used) is None
+
+    assert len(used) == 3
+def test_agent_rejects_missing_extraction_evidence(monkeypatch):
+    question = "How are LLM agents used in academic research?"
+
+    class FakeModelClient:
+        def generate(self, prompt):
+            if "research planning component" in prompt:
+                return (
+                    "OBJECTIVE:\n"
+                    "Study LLM agents in academic research.\n"
+                    "SUBQUESTIONS:\n"
+                    f"- {question}\n"
+                    "KEYWORDS:\n"
+                    "- LLM agents academic research\n"
+                )
+
+            if "DECISION:" in prompt or "semantic screening" in prompt.lower():
+                return (
+                    "DECISION: INCLUDE\n"
+                    "REASON: The paper addresses the research question."
+                )
+
+            return (
+                "OBJECTIVE:\n"
+                "- NOT_AVAILABLE\n"
+                "METHODOLOGY:\n"
+                "- NOT_AVAILABLE\n"
+                "DATASET_SAMPLE:\n"
+                "- NOT_AVAILABLE\n"
+                "FINDINGS:\n"
+                "- NOT_AVAILABLE\n"
+                "LIMITATIONS:\n"
+                "- NOT_AVAILABLE\n"
+                "SUPPORTED_SUBQUESTIONS:\n"
+                f"- {question}\n"
+                "SUPPORTING_EVIDENCE:\n"
+                "- This study examines LLM agents in academic research.\n"
+            )
+
+    def fake_execute_tool(tool_name, arguments):
+        return {
+            "status": "COMPLETED",
+            "result": [
+                {
+                    "id": "W123456",
+                    "doi": "10.1000/test-paper",
+                    "title": "LLM Agents in Academic Research",
+                    "year": 2025,
+                    "abstract": (
+                        "This study examines LLM agents "
+                        "in academic research."
+                    ),
+                }
+            ],
+        }
+
+    monkeypatch.setattr(
+        agent_module, "OllamaModelClient", FakeModelClient
+    )
+    monkeypatch.setattr(
+        agent_module, "execute_tool", fake_execute_tool
+    )
+
+    result = agent_module.run_agent(question, max_turns=1)
+
+    assert all(
+        record["claim_support_status"] != "supported"
+        for record in result["evidence"]
+    )
+    quality_events = [
+        event
+        for event in result["trace"]
+        if event["action"] == "validate_extraction_quality"
+    ]
+
+    assert len(quality_events) == 1
+    assert quality_events[0]["status"] == "UNUSABLE"
+    assert (
+        quality_events[0]["details"]["quality"]["populated_field_count"]
+        == 0
+    )
+def test_semantic_screening_rejects_empty_reason():
+    response = (
+        "DECISION:\n"
+        "INCLUDE\n"
+        "REASON:\n"
+    )
+
+    result = validate_semantic_screening(response)
+
+    assert result["valid"] is False

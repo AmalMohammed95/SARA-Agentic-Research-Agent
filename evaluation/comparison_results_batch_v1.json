@@ -1,0 +1,2389 @@
+{
+  "evaluated_at": "2026-10-10T04:34:39.295871+00:00",
+  "results": [
+    {
+      "case_id": "E01",
+      "category": "specific",
+      "research_question": "How is deep learning used for leukemia detection in peripheral blood smear images?",
+      "system": "Baseline",
+      "status": "COMPLETED",
+      "duration_seconds": 1.328,
+      "error": null,
+      "raw_result": {
+        "status": "COMPLETED",
+        "research_question": "How is deep learning used for leukemia detection in peripheral blood smear images?",
+        "search_query": "deep learning leukemia detection peripheral blood smear images",
+        "workflow": "non_agentic_baseline",
+        "papers_found": 5,
+        "papers_included": 5,
+        "papers_excluded": 0,
+        "included_papers": [
+          {
+            "id": "https://openalex.org/W4409917133",
+            "title": "Integration of Deep Learning Architectures With GRU for Automated Leukemia Detection in Peripheral Blood Smear Images",
+            "year": 2025,
+            "doi": "https://doi.org/10.1109/access.2025.3565546",
+            "abstract": "This paper investigates the integration of deep learning (DL) architectures with Recurrent Neural Networks (RNNs) for automated leukemia detection in Peripheral Blood Smear (PBS) images. Models such as DenseNet201, EfficientNetB3, Inception v3, InceptionResNetV2, MobileNetV2, ResNet50, VGG16, and Xception, each enhanced with a Gated Recurrent Unit (GRU) layer, are employed to capture spatial and temporal dependencies in image data. Through extensive experimentation on a standard leukemia dataset, the performance of each model is evaluated based on accuracy and computational efficiency. Among these, the Xception + GRU model achieves the highest classification accuracy, attaining an impressive 99.69%. This exceptional result underscores the efficacy of combining Convolutional Neural Networks (CNNs) with RNNs, particularly GRUs, in the accurate detection of leukemia from PBS images. The findings offer valuable contributions to the field of medical image analysis, demonstrating the potential of DL techniques to enhance automated disease diagnosis. By advancing the precision of leukemia detection, this study provides promising implications for improving patient care and treatment outcomes.",
+            "matched_keywords": [
+              "peripheral",
+              "smear",
+              "detection",
+              "learning",
+              "deep",
+              "images",
+              "blood",
+              "leukemia"
+            ]
+          },
+          {
+            "id": "https://openalex.org/W4392007319",
+            "title": "A Framework for Early Detection of Acute Lymphoblastic Leukemia and Its Subtypes From Peripheral Blood Smear Images Using Deep Ensemble Learning Technique",
+            "year": 2024,
+            "doi": "https://doi.org/10.1109/access.2024.3368031",
+            "abstract": "Acute lymphoblastic leukemia (ALL), one of the prevalent types of carcinogenic disease, has been seen a deadly illness exposing numerous patients across the world to potential threats of lives. It impacts both adults and children providing a narrow range of chances of being cured if diagnosed at a later stage. A definitive diagnosis often demands highly invasive diagnostic procedures thereby proving time-consuming and expensive. Peripheral Blood Smear (PBS) images have been playing a crucial role in the initial screening of ALL in suspected individuals. However, the nonspecific nature of ALL poses a substantial challenge in the analysis of these images thus leaving space for misdiagnosis. Aiming at contribute to the early diagnoses of this life-threatening disease, we put forward automated platform for screening the presence of ALL concerning its specific subtypes (benign, Early Pro-B, Pro-B and Pre-B) using PBS images. The proposed web based platform follows weighted ensemble learning technique using a Residual Convolutional Neural Network (ResNet-152) as the base learner to identify ALL from hematogone cases and then determine ALL subtypes. This is likely to save both diagnosis time and the efforts of clinicians and patients. Experimental results are obtained and comparative analysis among 7 well-known CNN Network architectures (AlexNet, VGGNet, Inception, ResNet-50, ResNet-18, Inception and DenseNet-121) is also performed that demonstrated that the proposed platform achieved comparatively high accuracy (99.95%), precision (99.92%), recall (99.92%), F1-Score (99.90%), sensitivity (99.92%) and specificity (99.97%). The promising results demonstrate that the proposed platform has the potential to be used as a reliable tool for early diagnosis of ALL and its sub-types. Furthermore, this provides references for pathologists and healthcare providers, aiding them in producing specific guidelines and more informed choices about patient and disease management.",
+            "matched_keywords": [
+              "peripheral",
+              "smear",
+              "detection",
+              "learning",
+              "deep",
+              "images",
+              "blood",
+              "leukemia"
+            ]
+          },
+          {
+            "id": "https://openalex.org/W3173704035",
+            "title": "Machine Learning in Detection and Classification of Leukemia Using Smear Blood Images: A Systematic Review",
+            "year": 2021,
+            "doi": "https://doi.org/10.1155/2021/9933481",
+            "abstract": "Introduction. The early detection and diagnosis of leukemia, i.e., the precise differentiation of malignant leukocytes with minimum costs in the early stages of the disease, is a major problem in the domain of disease diagnosis. Despite the high prevalence of leukemia, there is a shortage of flow cytometry equipment, and the methods available at laboratory diagnostic centers are time-consuming. Motivated by the capabilities of machine learning (machine learning (ML)) in disease diagnosis, the present systematic review was conducted to review the studies aiming to discover and classify leukemia by using machine learning. Methods. A systematic search in four databases (PubMed, Scopus, Web of Science, and ScienceDirect) and Google Scholar was performed via a search strategy using Machine Learning (ML), leukemia, peripheral blood smear (PBS) image, detection, diagnosis, and classification as the keywords. Initially, 116 articles were retrieved. After applying the inclusion and exclusion criteria, 16 articles remained as the population of the study. Results. This review study presents a comprehensive and systematic view of the status of all published ML-based leukemia detection and classification models that process PBS images. The average accuracy of the ML methods applied in PBS image analysis to detect leukemia was >97%, indicating that the use of ML could lead to extraordinary outcomes in leukemia detection from PBS images. Among all ML techniques, deep learning (DL) achieved higher precision and sensitivity in detecting different cases of leukemia, compared to its precedents. ML has many applications in analyzing different types of leukemia images, but the use of ML algorithms to detect acute lymphoblastic leukemia (ALL) has attracted the greatest attention in the fields of hematology and artificial intelligence. Conclusion. Using the ML method to process leukemia smear images can improve accuracy, reduce diagnosis time, and provide faster, cheaper, and safer diagnostic services. In addition to the current diagnostic methods, clinical and laboratory experts can also adopt ML methods in laboratory applications and tools.",
+            "matched_keywords": [
+              "smear",
+              "detection",
+              "learning",
+              "images",
+              "blood",
+              "leukemia"
+            ]
+          },
+          {
+            "id": "https://openalex.org/W4296745041",
+            "title": "Customized Deep Learning Classifier for Detection of Acute Lymphoblastic Leukemia Using Blood Smear Images",
+            "year": 2022,
+            "doi": "https://doi.org/10.3390/healthcare10101812",
+            "abstract": "Acute lymphoblastic leukemia (ALL) is a rare type of blood cancer caused due to the overproduction of lymphocytes by the bone marrow in the human body. It is one of the common types of cancer in children, which has a fair chance of being cured. However, this may even occur in adults, and the chances of a cure are slim if diagnosed at a later stage. To aid in the early detection of this deadly disease, an intelligent method to screen the white blood cells is proposed in this study. The proposed intelligent deep learning algorithm uses the microscopic images of blood smears as the input data. This algorithm is implemented with a convolutional neural network (CNN) to predict the leukemic cells from the healthy blood cells. The custom ALLNET model was trained and tested using the microscopic images available as open-source data. The model training was carried out on Google Collaboratory using the Nvidia Tesla P-100 GPU method. Maximum accuracy of 95.54%, specificity of 95.81%, sensitivity of 95.91%, F1-score of 95.43%, and precision of 96% were obtained by this accurate classifier. The proposed technique may be used during the pre-screening to detect the leukemia cells during complete blood count (CBC) and peripheral blood tests.",
+            "matched_keywords": [
+              "smear",
+              "detection",
+              "learning",
+              "deep",
+              "images",
+              "blood",
+              "leukemia"
+            ]
+          },
+          {
+            "id": "https://openalex.org/W7154227653",
+            "title": "A Hybrid Segmentation and Deep Learning Framework for Automated Leukemia Detection in Blood Smear Images",
+            "year": 2026,
+            "doi": "https://doi.org/10.21203/rs.3.rs-9390229/v1",
+            "abstract": "",
+            "matched_keywords": [
+              "smear",
+              "detection",
+              "learning",
+              "deep",
+              "images",
+              "blood",
+              "leukemia"
+            ]
+          }
+        ],
+        "excluded_papers": [],
+        "message": "Baseline academic search and screening completed."
+      }
+    },
+    {
+      "case_id": "E01",
+      "category": "specific",
+      "research_question": "How is deep learning used for leukemia detection in peripheral blood smear images?",
+      "system": "SARA",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "duration_seconds": 2695.436,
+      "error": null,
+      "raw_result": {
+        "status": "INSUFFICIENT_EVIDENCE",
+        "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+        "turns": 3,
+        "reason": "Evidence is insufficient and the replanning limit has been reached.",
+        "replanning_attempts": 2,
+        "trace": [
+          {
+            "timestamp": "2026-10-10T03:50:18.455179+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 0,
+            "action": "validate_research_plan",
+            "status": "VALID",
+            "details": {
+              "valid": true,
+              "missing_sections": [],
+              "reason": "Research plan structure is valid."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:50:19.906404+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "search_openalex",
+            "status": "COMPLETED",
+            "details": {
+              "query": "Deep learning leukemia detection blood smear",
+              "results_count": 10
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:57:43.517987+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/healthcare10101812",
+              "title": "Customized Deep Learning Classifier for Detection of Acute Lymphoblastic Leukemia Using Blood Smear Images",
+              "reason": "The abstract directly addresses the use of deep learning for the detection of leukemia in blood smear images, specifically mentioning the application of a convolutional neural network (CNN) for this purpose."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:57:43.518014+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.48550/arxiv.2301.03367",
+              "title": "Leukemia detection based on microscopic blood smear images using deep learning",
+              "reason": "The abstract directly addresses the use of deep learning for leukemia detection in microscopic blood smear images, which aligns with the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:57:43.518021+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/access.2025.3565546",
+              "title": "Integration of Deep Learning Architectures With GRU for Automated Leukemia Detection in Peripheral Blood Smear Images",
+              "reason": "The paper directly investigates the use of deep learning architectures, including DenseNet201, EfficientNetB3, Inception v3, InceptionResNetV2, MobileNetV2, ResNet50, VGG16, and Xception, for leukemia detection in peripheral blood smear images, which is directly relevant to the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:57:43.518026+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/iciteics64870.2025.11341392",
+              "title": "DeepL-DDCL: Deep Learning-Driven Detection and Classification of Leukemia Using Microscopic Blood Smear Images",
+              "reason": "The abstract directly states that the paper uses deep learning for the detection and classification of leukemia using microscopic blood smear images, which directly addresses the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:57:43.518032+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/curroncol33080486",
+              "title": "Deep Learning-Based Detection Model for Leukemia Cells in Peripheral Blood Smears Using YOLOv11-Large",
+              "reason": "The abstract directly addresses the use of deep learning for leukemia detection in peripheral blood smear images, specifically mentioning the YOLOv11-large model and its application to 13 leukemia-relevant WBC subtypes."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:57:43.518036+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/conecct57959.2023.10234824",
+              "title": "Deep Learning-Based Analysis of Blood Smear Images for Detection of Acute Lymphoblastic Leukemia",
+              "reason": "The abstract directly addresses the use of deep learning for the detection of Acute Lymphoblastic Leukemia in blood smear images, which is relevant to the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:57:43.518042+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/aectsd65988.2025.11410831",
+              "title": "Deep Learning Approach for Leukemia Detection and Classification From Blood Smear Images Using DenseNet201",
+              "reason": "The paper uses deep learning (specifically DenseNet201) for leukemia detection from blood smear images, which directly addresses the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:57:43.518047+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/becithcon69222.2025.11504220",
+              "title": "Hybrid Deep Learning with Uncertainty Quantification for Robust Detection of Acute Lymphoblastic Leukemia in Blood Smear Images",
+              "reason": "The abstract directly addresses the use of deep learning for leukemia detection in blood smear images, specifically mentioning the use of CNN architectures and GRU units, and evaluating the method on relevant datasets."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:57:43.518052+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/access.2024.3368031",
+              "title": "A Framework for Early Detection of Acute Lymphoblastic Leukemia and Its Subtypes From Peripheral Blood Smear Images Using Deep Ensemble Learning Technique",
+              "reason": "The abstract directly mentions the use of deep learning techniques, specifically a Residual Convolutional Neural Network (ResNet-152), for the detection of acute lymphoblastic leukemia (ALL) from peripheral blood smear images, which aligns with the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:57:43.518057+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.31276/vjste.64(1).63-71",
+              "title": "A deep learning approach in detection of malaria and acute lymphoblastic leukemia diseases utilising blood smear microscopic images",
+              "reason": "The paper proposes a deep learning approach for detecting both malaria and acute lymphoblastic leukemia using blood smear microscopic images, directly addressing the use of deep learning in leukemia detection as part of the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:59:19.114194+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "validate_evidence_extraction",
+            "status": "VALID",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/healthcare10101812",
+              "title": "Customized Deep Learning Classifier for Detection of Acute Lymphoblastic Leukemia Using Blood Smear Images",
+              "validation": {
+                "valid": true,
+                "missing_sections": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:59:19.117323+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "parse_evidence_extraction",
+            "status": "COMPLETED",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/healthcare10101812",
+              "extraction": {
+                "objective": "To aid in the early detection of acute lymphoblastic leukemia (ALL) by proposing an intelligent method to screen white blood cells using microscopic images of blood smears.",
+                "methodology": "The proposed intelligent deep learning algorithm uses a convolutional neural network (CNN) to predict leukemic cells from healthy blood cells. The custom ALLNET model was trained and tested using open-source microscopic images. Model training was carried out on Google Collaboratory using the Nvidia Tesla P-100 GPU method.",
+                "dataset_sample": "The model was trained and tested using microscopic images available as open-source data.",
+                "findings": "Maximum accuracy of 95.54%, specificity of 95.81%, sensitivity of 95.91%, F1-score of 95.43%, and precision of 96% were obtained by this accurate classifier.",
+                "limitations": "",
+                "supported_subquestions": [
+                  "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+                  "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+                  "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+                ],
+                "supporting_evidence": [
+                  "The proposed intelligent deep learning algorithm uses the microscopic images of blood smears as the input data.\" (Abstract)",
+                  "This algorithm is implemented with a convolutional neural network (CNN) to predict the leukemic cells from the healthy blood cells.\" (Abstract)",
+                  "The custom ALLNET model was trained and tested using the microscopic images available as open-source data.\" (Abstract)",
+                  "Maximum accuracy of 95.54%, specificity of 95.81%, sensitivity of 95.91%, F1-score of 95.43%, and precision of 96% were obtained by this accurate classifier.\" (Abstract)"
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:59:19.117431+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "validate_extraction_quality",
+            "status": "USABLE",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/healthcare10101812",
+              "quality": {
+                "usable": true,
+                "populated_fields": [
+                  "objective",
+                  "methodology",
+                  "dataset_sample",
+                  "findings"
+                ],
+                "populated_field_count": 4,
+                "total_fields": 5
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T03:59:19.117505+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "verify_supporting_evidence",
+            "status": "UNVERIFIED",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/healthcare10101812",
+              "title": "Customized Deep Learning Classifier for Detection of Acute Lymphoblastic Leukemia Using Blood Smear Images",
+              "grounding": {
+                "verified": false,
+                "verified_quotes": [],
+                "unverified_quotes": [
+                  "The proposed intelligent deep learning algorithm uses the microscopic images of blood smears as the input data.\" (Abstract)",
+                  "This algorithm is implemented with a convolutional neural network (CNN) to predict the leukemic cells from the healthy blood cells.\" (Abstract)",
+                  "The custom ALLNET model was trained and tested using the microscopic images available as open-source data.\" (Abstract)",
+                  "Maximum accuracy of 95.54%, specificity of 95.81%, sensitivity of 95.91%, F1-score of 95.43%, and precision of 96% were obtained by this accurate classifier.\" (Abstract)"
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:00:19.545063+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "validate_evidence_extraction",
+            "status": "VALID",
+            "details": {
+              "paper_id": "https://doi.org/10.48550/arxiv.2301.03367",
+              "title": "Leukemia detection based on microscopic blood smear images using deep learning",
+              "validation": {
+                "valid": true,
+                "missing_sections": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:00:19.545451+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "parse_evidence_extraction",
+            "status": "COMPLETED",
+            "details": {
+              "paper_id": "https://doi.org/10.48550/arxiv.2301.03367",
+              "extraction": {
+                "objective": "To detect leukemia in microscopic blood smear images using deep neural networks to diagnose leukemia early in blood.",
+                "methodology": "Computer vision classification technique using deep learning.",
+                "dataset_sample": "",
+                "findings": "The system for leukemia detection provides 97.3 % accuracy in classifying samples as cancerous or normal samples.",
+                "limitations": "",
+                "supported_subquestions": [
+                  "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+                  "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+                ],
+                "supporting_evidence": [
+                  "our system for leukemia detection provides 97.3 % accuracy in classifying samples as cancerous or normal samples by taking a shot of blood smear and passing it as an input to the system that will check whether it contains cancer or not."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:00:19.545490+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "validate_extraction_quality",
+            "status": "USABLE",
+            "details": {
+              "paper_id": "https://doi.org/10.48550/arxiv.2301.03367",
+              "quality": {
+                "usable": true,
+                "populated_fields": [
+                  "objective",
+                  "methodology",
+                  "findings"
+                ],
+                "populated_field_count": 3,
+                "total_fields": 5
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:00:19.545530+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "verify_supporting_evidence",
+            "status": "VERIFIED",
+            "details": {
+              "paper_id": "https://doi.org/10.48550/arxiv.2301.03367",
+              "title": "Leukemia detection based on microscopic blood smear images using deep learning",
+              "grounding": {
+                "verified": true,
+                "verified_quotes": [
+                  "our system for leukemia detection provides 97.3 % accuracy in classifying samples as cancerous or normal samples by taking a shot of blood smear and passing it as an input to the system that will check whether it contains cancer or not."
+                ],
+                "unverified_quotes": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:01:57.139234+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "validate_evidence_extraction",
+            "status": "VALID",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/access.2025.3565546",
+              "title": "Integration of Deep Learning Architectures With GRU for Automated Leukemia Detection in Peripheral Blood Smear Images",
+              "validation": {
+                "valid": true,
+                "missing_sections": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:01:57.139699+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "parse_evidence_extraction",
+            "status": "COMPLETED",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/access.2025.3565546",
+              "extraction": {
+                "objective": "To investigate the integration of deep learning (DL) architectures with Recurrent Neural Networks (RNNs) for automated leukemia detection in Peripheral Blood Smear (PBS) images.",
+                "methodology": "Models such as DenseNet201, EfficientNetB3, Inception v3, InceptionResNetV2, MobileNetV2, ResNet50, VGG16, and Xception, each enhanced with a Gated Recurrent Unit (GRU) layer, were employed to capture spatial and temporal dependencies in image data. Through extensive experimentation on a standard leukemia dataset, the performance of each model was evaluated based on accuracy and computational efficiency.",
+                "dataset_sample": "A standard leukemia dataset was used for experimentation.",
+                "findings": "The Xception + GRU model achieved the highest classification accuracy, attaining an impressive 99.69%.",
+                "limitations": "",
+                "supported_subquestions": [
+                  "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+                  "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+                  "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+                ],
+                "supporting_evidence": [
+                  "This paper investigates the integration of deep learning (DL) architectures with Recurrent Neural Networks (RNNs) for automated leukemia detection in Peripheral Blood Smear (PBS) images.",
+                  "Models such as DenseNet201, EfficientNetB3, Inception v3, InceptionResNetV2, MobileNetV2, ResNet50, VGG16, and Xception, each enhanced with a Gated Recurrent Unit (GRU) layer, are employed to capture spatial and temporal dependencies in image data.",
+                  "Through extensive experimentation on a standard leukemia dataset, the performance of each model is evaluated based on accuracy and computational efficiency.",
+                  "Among these, the Xception + GRU model achieves the highest classification accuracy, attaining an impressive 99.69%."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:01:57.139758+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "validate_extraction_quality",
+            "status": "USABLE",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/access.2025.3565546",
+              "quality": {
+                "usable": true,
+                "populated_fields": [
+                  "objective",
+                  "methodology",
+                  "dataset_sample",
+                  "findings"
+                ],
+                "populated_field_count": 4,
+                "total_fields": 5
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:01:57.139801+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "verify_supporting_evidence",
+            "status": "VERIFIED",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/access.2025.3565546",
+              "title": "Integration of Deep Learning Architectures With GRU for Automated Leukemia Detection in Peripheral Blood Smear Images",
+              "grounding": {
+                "verified": true,
+                "verified_quotes": [
+                  "This paper investigates the integration of deep learning (DL) architectures with Recurrent Neural Networks (RNNs) for automated leukemia detection in Peripheral Blood Smear (PBS) images.",
+                  "Models such as DenseNet201, EfficientNetB3, Inception v3, InceptionResNetV2, MobileNetV2, ResNet50, VGG16, and Xception, each enhanced with a Gated Recurrent Unit (GRU) layer, are employed to capture spatial and temporal dependencies in image data.",
+                  "Through extensive experimentation on a standard leukemia dataset, the performance of each model is evaluated based on accuracy and computational efficiency.",
+                  "Among these, the Xception + GRU model achieves the highest classification accuracy, attaining an impressive 99.69%."
+                ],
+                "unverified_quotes": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:03:11.364541+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "validate_evidence_extraction",
+            "status": "VALID",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/iciteics64870.2025.11341392",
+              "title": "DeepL-DDCL: Deep Learning-Driven Detection and Classification of Leukemia Using Microscopic Blood Smear Images",
+              "validation": {
+                "valid": true,
+                "missing_sections": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:03:11.365231+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "parse_evidence_extraction",
+            "status": "COMPLETED",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/iciteics64870.2025.11341392",
+              "extraction": {
+                "objective": "To develop a deep learning-based system for the automated detection and classification of leukemia using microscopic blood smear images.",
+                "methodology": "The model utilizes a Convolutional Neural Network (CNN) and incorporates advanced image preprocessing and augmentation techniques, as well as Stochastic Weight Averaging (SWA) for training stability. A stage estimation module categorizes leukemia progression into early, intermediate, or advanced stages based on prediction confidence.",
+                "dataset_sample": "A dataset of over 4000 images was used to train the model.",
+                "findings": "The model achieved a test accuracy of 90%, demonstrating its effectiveness in real-world scenarios.",
+                "limitations": "",
+                "supported_subquestions": [
+                  "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+                  "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+                  "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+                ],
+                "supporting_evidence": [
+                  "This project introduces a deep learning-based system for the automated detection and classification of leukemia using microscopic blood smear images.",
+                  "The model was trained on a dataset of over 4000 images and achieved a test accuracy of 90%, demonstrating its effectiveness in real-world scenarios."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:03:11.365326+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "validate_extraction_quality",
+            "status": "USABLE",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/iciteics64870.2025.11341392",
+              "quality": {
+                "usable": true,
+                "populated_fields": [
+                  "objective",
+                  "methodology",
+                  "dataset_sample",
+                  "findings"
+                ],
+                "populated_field_count": 4,
+                "total_fields": 5
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:03:11.365376+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "verify_supporting_evidence",
+            "status": "VERIFIED",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/iciteics64870.2025.11341392",
+              "title": "DeepL-DDCL: Deep Learning-Driven Detection and Classification of Leukemia Using Microscopic Blood Smear Images",
+              "grounding": {
+                "verified": true,
+                "verified_quotes": [
+                  "This project introduces a deep learning-based system for the automated detection and classification of leukemia using microscopic blood smear images.",
+                  "The model was trained on a dataset of over 4000 images and achieved a test accuracy of 90%, demonstrating its effectiveness in real-world scenarios."
+                ],
+                "unverified_quotes": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:05:13.408521+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "evidence_extraction",
+            "status": "FAILED_SAFELY",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/curroncol33080486",
+              "title": "Deep Learning-Based Detection Model for Leukemia Cells in Peripheral Blood Smears Using YOLOv11-Large",
+              "error": "timed out"
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:05:13.408589+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "screen_papers",
+            "status": "COMPLETED",
+            "details": {
+              "turn_retrieved": 10,
+              "turn_selected": 10,
+              "turn_excluded": 0,
+              "total_retrieved": 10,
+              "total_selected": 10,
+              "total_excluded": 0
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:05:13.408597+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "agent_turn",
+            "status": "RUNNING",
+            "details": {
+              "iteration": 1
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:05:13.409008+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "evaluate_evidence",
+            "status": "INSUFFICIENT",
+            "details": {
+              "sufficient": false,
+              "relevant_studies": 10,
+              "unique_relevant_studies": 10,
+              "unidentified_papers": 0,
+              "required_studies": 5,
+              "subquestion_coverage": {
+                "How do deep learning models perform in diagnosing leukemia from blood smear images?": 3,
+                "What are the specific deep learning architectures used for leukemia detection in blood smear images?": 2,
+                "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?": 3
+              },
+              "missing_field_rate": 0.7,
+              "missing_evidence_record_count": 0,
+              "missing_provenance_count": 0,
+              "invalid_provenance_count": 0,
+              "invalid_conflict_status_count": 0,
+              "invalid_claim_support_status_count": 0,
+              "unsupported_claim_count": 7,
+              "gaps": [
+                "Missing evidence field rate is 70.00%; maximum allowed is 20%.",
+                "7 evidence record(s) contain unsupported claims."
+              ]
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:05:29.220051+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "validate_replanning_response",
+            "status": "VALID",
+            "details": {
+              "valid": true,
+              "reason": "Replanning response has the required structure."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:05:29.220083+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "apply_revised_keywords",
+            "status": "COMPLETED",
+            "details": {
+              "revised_keywords": [
+                "Deep learning leukemia diagnosis from blood images",
+                "Applying deep learning to leukemia detection in peripheral smears",
+                "Convolutional neural networks for identifying leukemia in blood smears",
+                "Machine learning approaches for automated leukemia diagnosis in blood samples"
+              ]
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:05:29.220089+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 1,
+            "action": "replanning_requested",
+            "status": "ALLOWED",
+            "details": {
+              "attempt": 1,
+              "gaps": [
+                "Missing evidence field rate is 70.00%; maximum allowed is 20%.",
+                "7 evidence record(s) contain unsupported claims."
+              ],
+              "context": {
+                "current_keywords": [
+                  "Deep learning leukemia detection blood smear",
+                  "Convolutional neural networks for leukemia diagnosis",
+                  "Machine learning methods in blood smear analysis"
+                ],
+                "evidence_gaps": [
+                  "Missing evidence field rate is 70.00%; maximum allowed is 20%.",
+                  "7 evidence record(s) contain unsupported claims."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:05:30.602676+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "search_openalex",
+            "status": "COMPLETED",
+            "details": {
+              "query": "Deep learning leukemia diagnosis from blood images",
+              "results_count": 10
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:09:45.230483+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.1155/2021/9933481",
+              "title": "Machine Learning in Detection and Classification of Leukemia Using Smear Blood Images: A Systematic Review",
+              "reason": "Discusses the use of deep learning (DL) in leukemia detection from peripheral blood smear images."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:09:45.230511+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.1155/2022/2801227",
+              "title": "A Deep Learning Framework for Leukemia Cancer Detection in Microscopic Blood Samples Using Squeeze and Excitation Learning",
+              "reason": "Describes a deep learning framework for leukemia detection in microscopic blood samples."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:09:45.230517+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.3389/fped.2021.693676",
+              "title": "Development and Evaluation of a Leukemia Diagnosis System Using Deep Learning in Real Clinical Scenarios",
+              "reason": "Develops a deep learning system for leukemia diagnosis using real clinical data from blood smear images."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:09:45.230522+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.32604/csse.2023.029597",
+              "title": "Latent Space Representational Learning of Deep Features for Acute Lymphoblastic Leukemia Diagnosis",
+              "reason": "Proposes a hybrid deep learning system for acute lymphoblastic leukemia diagnosis in blood smear images."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:09:45.230527+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "semantic_screening",
+            "status": "EXCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/applbiosci4010009",
+              "title": "A Review of Deep Learning Techniques for Leukemia Cancer Classification Based on Blood Smear Images",
+              "reason": "Reviews deep learning techniques for leukemia classification but does not directly discuss their use in peripheral blood smear images."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:09:45.230532+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.1007/s10278-025-01474-x",
+              "title": "Deep Learning Neural Network Based on PSO for Leukemia Cell Disease Diagnosis from Microscope Images",
+              "reason": "The paper directly addresses the use of deep learning for leukemia detection in microscopic images, which is directly relevant to the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:09:45.230537+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/electronics11193168",
+              "title": "A Deep Learning-Based Approach for the Diagnosis of Acute Lymphoblastic Leukemia",
+              "reason": "The abstract directly addresses the use of deep learning for the diagnosis of acute lymphoblastic leukemia (ALL) using blood smear images, which is relevant to the research question on how deep learning is used for leukemia detection."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:09:45.230542+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "semantic_screening",
+            "status": "EXCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.3389/fonc.2023.1330977",
+              "title": "Deep learning enhances acute lymphoblastic leukemia diagnosis and classification using bone marrow images",
+              "reason": "The paper focuses on bone marrow images rather than peripheral blood smear images, which are specifically mentioned in the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:11:00.302476+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "validate_evidence_extraction",
+            "status": "VALID",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/conecct57959.2023.10234824",
+              "title": "Deep Learning-Based Analysis of Blood Smear Images for Detection of Acute Lymphoblastic Leukemia",
+              "validation": {
+                "valid": true,
+                "missing_sections": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:11:00.302891+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "parse_evidence_extraction",
+            "status": "COMPLETED",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/conecct57959.2023.10234824",
+              "extraction": {
+                "objective": "To develop a deep learning-based method for accurately detecting Acute Lymphoblastic Leukemia (ALL) from blood smear images.",
+                "methodology": "Subsequently, these images have then been trained on pre-trained Convolutional Neural Networks (CNNs): ResNet-50 and ResNet-101, with hyperparameter tuning to classify between benign and three stages of malignant ALL lymphoblast cells.",
+                "dataset_sample": "An open source four-class Acute Lymphoblastic Leukemia (ALL) dataset that has been segmented using color thresholding.",
+                "findings": "The results demonstrate that our proposed method achieved accuracies exceeding 98% in detecting ALL, indicating the potential of deep learning-based classifiers in aiding hematologists accurately detect ALL and improving patient outcomes.",
+                "limitations": "",
+                "supported_subquestions": [
+                  "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+                  "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+                  "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+                ],
+                "supporting_evidence": [
+                  "The results demonstrate that our proposed method achieved accuracies exceeding 98% in detecting ALL, indicating the potential of deep learning-based classifiers in aiding hematologists accurately detect ALL and improving patient outcomes."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:11:00.302950+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "validate_extraction_quality",
+            "status": "USABLE",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/conecct57959.2023.10234824",
+              "quality": {
+                "usable": true,
+                "populated_fields": [
+                  "objective",
+                  "methodology",
+                  "dataset_sample",
+                  "findings"
+                ],
+                "populated_field_count": 4,
+                "total_fields": 5
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:11:00.302990+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "verify_supporting_evidence",
+            "status": "VERIFIED",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/conecct57959.2023.10234824",
+              "title": "Deep Learning-Based Analysis of Blood Smear Images for Detection of Acute Lymphoblastic Leukemia",
+              "grounding": {
+                "verified": true,
+                "verified_quotes": [
+                  "The results demonstrate that our proposed method achieved accuracies exceeding 98% in detecting ALL, indicating the potential of deep learning-based classifiers in aiding hematologists accurately detect ALL and improving patient outcomes."
+                ],
+                "unverified_quotes": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:12:17.219989+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "validate_evidence_extraction",
+            "status": "VALID",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/aectsd65988.2025.11410831",
+              "title": "Deep Learning Approach for Leukemia Detection and Classification From Blood Smear Images Using DenseNet201",
+              "validation": {
+                "valid": true,
+                "missing_sections": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:12:17.220415+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "parse_evidence_extraction",
+            "status": "COMPLETED",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/aectsd65988.2025.11410831",
+              "extraction": {
+                "objective": "To develop a computer-aided diagnosis (CAD) system using a DenseNet201 deep convolutional neural network for five-class classification of microscopic blood cell images (Normal, ALL, AML, CLL, and CML).",
+                "methodology": "A DenseNet201 deep convolutional neural network was trained for a five-class classification task of microscopic blood cell images.",
+                "dataset_sample": "",
+                "findings": "The model achieved an exceptional classification with 97.5% overall accuracy, outperforming all other current methodologies with reliability.",
+                "limitations": "",
+                "supported_subquestions": [
+                  "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+                  "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+                  "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+                ],
+                "supporting_evidence": [
+                  "A computer-aided diagnosis (CAD) system was developed to close this void utilizing a DenseNet201 deep convolutional neural network that was trained for a five-class classification task of microscopic blood cell images (Normal, ALL, AML, CLL, and CML).",
+                  "After systematically controlling for variations of distribution of samples, the model achieved an exceptional classification with 97.5% overall accuracy, outperforming all other current methodologies with reliability."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:12:17.220461+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "validate_extraction_quality",
+            "status": "USABLE",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/aectsd65988.2025.11410831",
+              "quality": {
+                "usable": true,
+                "populated_fields": [
+                  "objective",
+                  "methodology",
+                  "findings"
+                ],
+                "populated_field_count": 3,
+                "total_fields": 5
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:12:17.220502+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "verify_supporting_evidence",
+            "status": "UNVERIFIED",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/aectsd65988.2025.11410831",
+              "title": "Deep Learning Approach for Leukemia Detection and Classification From Blood Smear Images Using DenseNet201",
+              "grounding": {
+                "verified": false,
+                "verified_quotes": [
+                  "A computer-aided diagnosis (CAD) system was developed to close this void utilizing a DenseNet201 deep convolutional neural network that was trained for a five-class classification task of microscopic blood cell images (Normal, ALL, AML, CLL, and CML)."
+                ],
+                "unverified_quotes": [
+                  "After systematically controlling for variations of distribution of samples, the model achieved an exceptional classification with 97.5% overall accuracy, outperforming all other current methodologies with reliability."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:14:19.294692+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "evidence_extraction",
+            "status": "FAILED_SAFELY",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/becithcon69222.2025.11504220",
+              "title": "Hybrid Deep Learning with Uncertainty Quantification for Robust Detection of Acute Lymphoblastic Leukemia in Blood Smear Images",
+              "error": "timed out"
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:16:21.352915+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "evidence_extraction",
+            "status": "FAILED_SAFELY",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/access.2024.3368031",
+              "title": "A Framework for Early Detection of Acute Lymphoblastic Leukemia and Its Subtypes From Peripheral Blood Smear Images Using Deep Ensemble Learning Technique",
+              "error": "timed out"
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:18:07.805845+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "validate_evidence_extraction",
+            "status": "VALID",
+            "details": {
+              "paper_id": "https://doi.org/10.31276/vjste.64(1).63-71",
+              "title": "A deep learning approach in detection of malaria and acute lymphoblastic leukemia diseases utilising blood smear microscopic images",
+              "validation": {
+                "valid": true,
+                "missing_sections": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:18:07.806461+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "parse_evidence_extraction",
+            "status": "COMPLETED",
+            "details": {
+              "paper_id": "https://doi.org/10.31276/vjste.64(1).63-71",
+              "extraction": {
+                "objective": "To propose a detection system for malaria and acute lymphoblastic leukemia (ALL) using blood smear microscopic images with the aid of deep learning algorithms.",
+                "methodology": "The proposed model was built into three stages including the first stage for segmentation-applied modified UNet pre-trained model, the second stage for classification based on the convolution neural network model, and the final stage for classification utilizing perceptron as the combining model.",
+                "dataset_sample": "The blood smear microscopic images consist of 1503 ALL images, 891 malaria images, and 1503 normal images that were divided into a training, validation, and testing sets in ratios of 50, 25, and 25%, respectively.",
+                "findings": "The proposed system provides an alternative and interpretable method to detect abnormal leukocytes for ALL and malaria-infected blood cells with a 93% overall accuracy including the detection rate for ALL of 95% and the detection rate for malaria of 92%.",
+                "limitations": "",
+                "supported_subquestions": [
+                  "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+                  "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+                  "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+                ],
+                "supporting_evidence": [
+                  "The proposed model was built into three stages including the first stage for segmentation-applied modified UNet pre-trained model, the second stage for classification based on the convolution neural network model, and the final stage for classification utilizing perceptron as the combining model.",
+                  "The blood smear microscopic images consist of 1503 ALL images, 891 malaria images, and 1503 normal images that were divided into a training, validation, and testing sets in ratios of 50, 25, and 25%, respectively.",
+                  "The proposed system provides an alternative and interpretable method to detect abnormal leukocytes for ALL and malaria-infected blood cells with a 93% overall accuracy including the detection rate for ALL of 95% and the detection rate for malaria of 92%."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:18:07.806547+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "validate_extraction_quality",
+            "status": "USABLE",
+            "details": {
+              "paper_id": "https://doi.org/10.31276/vjste.64(1).63-71",
+              "quality": {
+                "usable": true,
+                "populated_fields": [
+                  "objective",
+                  "methodology",
+                  "dataset_sample",
+                  "findings"
+                ],
+                "populated_field_count": 4,
+                "total_fields": 5
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:18:07.806610+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "verify_supporting_evidence",
+            "status": "VERIFIED",
+            "details": {
+              "paper_id": "https://doi.org/10.31276/vjste.64(1).63-71",
+              "title": "A deep learning approach in detection of malaria and acute lymphoblastic leukemia diseases utilising blood smear microscopic images",
+              "grounding": {
+                "verified": true,
+                "verified_quotes": [
+                  "The proposed model was built into three stages including the first stage for segmentation-applied modified UNet pre-trained model, the second stage for classification based on the convolution neural network model, and the final stage for classification utilizing perceptron as the combining model.",
+                  "The blood smear microscopic images consist of 1503 ALL images, 891 malaria images, and 1503 normal images that were divided into a training, validation, and testing sets in ratios of 50, 25, and 25%, respectively.",
+                  "The proposed system provides an alternative and interpretable method to detect abnormal leukocytes for ALL and malaria-infected blood cells with a 93% overall accuracy including the detection rate for ALL of 95% and the detection rate for malaria of 92%."
+                ],
+                "unverified_quotes": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:18:07.806633+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "screen_papers",
+            "status": "COMPLETED",
+            "details": {
+              "turn_retrieved": 10,
+              "turn_selected": 6,
+              "turn_excluded": 4,
+              "total_retrieved": 20,
+              "total_selected": 16,
+              "total_excluded": 4
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:18:07.806647+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "agent_turn",
+            "status": "RUNNING",
+            "details": {
+              "iteration": 2
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:18:07.806983+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "evaluate_evidence",
+            "status": "INSUFFICIENT",
+            "details": {
+              "sufficient": false,
+              "relevant_studies": 16,
+              "unique_relevant_studies": 16,
+              "unidentified_papers": 0,
+              "required_studies": 5,
+              "subquestion_coverage": {
+                "How do deep learning models perform in diagnosing leukemia from blood smear images?": 5,
+                "What are the specific deep learning architectures used for leukemia detection in blood smear images?": 4,
+                "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?": 5
+              },
+              "missing_field_rate": 0.675,
+              "missing_evidence_record_count": 0,
+              "missing_provenance_count": 0,
+              "invalid_provenance_count": 0,
+              "invalid_conflict_status_count": 0,
+              "invalid_claim_support_status_count": 0,
+              "unsupported_claim_count": 11,
+              "gaps": [
+                "Missing evidence field rate is 67.50%; maximum allowed is 20%.",
+                "11 evidence record(s) contain unsupported claims."
+              ]
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:18:26.857375+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "validate_replanning_response",
+            "status": "VALID",
+            "details": {
+              "valid": true,
+              "reason": "Replanning response has the required structure."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:18:26.857415+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "apply_revised_keywords",
+            "status": "COMPLETED",
+            "details": {
+              "revised_keywords": [
+                "Deep learning-based leukemia identification in peripheral blood imaging",
+                "Using deep learning for automated leukemia screening in blood smears",
+                "Convolutional neural networks applied to leukemia detection from peripheral blood",
+                "Artificial intelligence in leukemia diagnosis through blood smear analysis",
+                "Machine learning techniques for leukemia classification in blood images",
+                "Deep learning models for diagnosing leukemia from peripheral blood samples"
+              ]
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:18:26.857419+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 2,
+            "action": "replanning_requested",
+            "status": "ALLOWED",
+            "details": {
+              "attempt": 2,
+              "gaps": [
+                "Missing evidence field rate is 67.50%; maximum allowed is 20%.",
+                "11 evidence record(s) contain unsupported claims."
+              ],
+              "context": {
+                "current_keywords": [
+                  "Deep learning leukemia diagnosis from blood images",
+                  "Applying deep learning to leukemia detection in peripheral smears",
+                  "Convolutional neural networks for identifying leukemia in blood smears",
+                  "Machine learning approaches for automated leukemia diagnosis in blood samples"
+                ],
+                "evidence_gaps": [
+                  "Missing evidence field rate is 67.50%; maximum allowed is 20%.",
+                  "11 evidence record(s) contain unsupported claims."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:18:28.227903+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "search_openalex",
+            "status": "COMPLETED",
+            "details": {
+              "query": "Deep learning-based leukemia identification in peripheral blood imaging",
+              "results_count": 10
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:25:41.790236+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.55041/ijcope.v2i4.746",
+              "title": "Enhanced Deep Learning Framework for Segmentation and Classification of Acute Lymphoblastic Leukemia from Peripheral Blood Microscope Images",
+              "reason": "The abstract directly addresses the use of deep learning for leukemia detection in peripheral blood smear images, specifically mentioning the use of a Hybrid CNN-Transformer (HCT-Net) and Attention-driven Segmentation Networks (ASNet) for this purpose."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:25:41.790296+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.1038/s41598-023-29160-4",
+              "title": "Detection of acute promyelocytic leukemia in peripheral blood and bone marrow with annotation-free deep learning",
+              "reason": "The abstract directly mentions the use of deep learning for detecting acute promyelocytic leukemia (APL) in peripheral blood smear images, which is directly relevant to the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:25:41.790310+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/applbiosci4010009",
+              "title": "A Review of Deep Learning Techniques for Leukemia Cancer Classification Based on Blood Smear Images",
+              "reason": "The paper directly reviews deep learning techniques for leukemia diagnosis using blood smear images, which is directly relevant to the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:25:41.790322+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/app12136317",
+              "title": "Detecting Malignant Leukemia Cells Using Microscopic Blood Smear Images: A Deep Learning Approach",
+              "reason": "The abstract directly addresses the use of deep learning for detecting leukemia in blood smear images, which is directly relevant to the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:25:41.790334+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/healthcare10101812",
+              "title": "Customized Deep Learning Classifier for Detection of Acute Lymphoblastic Leukemia Using Blood Smear Images",
+              "reason": "The abstract directly addresses the use of deep learning for detecting acute lymphoblastic leukemia (ALL) in blood smear images, which is relevant to the research question about deep learning in leukemia detection."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:25:41.790346+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/curroncol33080486",
+              "title": "Deep Learning-Based Detection Model for Leukemia Cells in Peripheral Blood Smears Using YOLOv11-Large",
+              "reason": "The paper focuses on using YOLOv11-large for detecting leukemia cells in peripheral blood smears, which directly addresses the use of deep learning in leukemia detection."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:25:41.790358+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.1155/2021/9933481",
+              "title": "Machine Learning in Detection and Classification of Leukemia Using Smear Blood Images: A Systematic Review",
+              "reason": "The abstract directly mentions the use of machine learning, including deep learning, for the detection of leukemia in peripheral blood smear images, which is directly relevant to the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:25:41.790370+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.1109/iceccme57830.2023.10253397",
+              "title": "CellIdentifier: Classification of Peripheral Blood Cell Images using Deep Learning",
+              "reason": "The abstract mentions the use of deep learning with CNNs for classifying different kinds of peripheral blood cells, including white blood cells, which can be relevant to detecting leukemia."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:25:41.790383+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.48550/arxiv.2301.03367",
+              "title": "Leukemia detection based on microscopic blood smear images using deep learning",
+              "reason": "The paper directly addresses the use of deep learning for leukemia detection in microscopic blood smear images, which is relevant to the research question."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:25:41.790394+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "semantic_screening",
+            "status": "INCLUDE",
+            "details": {
+              "paper_id": "https://doi.org/10.3390/diagnostics12112815",
+              "title": "BCNet: A Deep Learning Computer-Aided Diagnosis Framework for Human Peripheral Blood Cell Identification",
+              "reason": "The abstract mentions a deep learning framework (BCNet) for the identification of blood cells, which is directly relevant to the use of deep learning in leukemia detection from peripheral blood smear images."
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:27:29.261276+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "validate_evidence_extraction",
+            "status": "VALID",
+            "details": {
+              "paper_id": "https://doi.org/10.1155/2021/9933481",
+              "title": "Machine Learning in Detection and Classification of Leukemia Using Smear Blood Images: A Systematic Review",
+              "validation": {
+                "valid": true,
+                "missing_sections": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:27:29.261852+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "parse_evidence_extraction",
+            "status": "COMPLETED",
+            "details": {
+              "paper_id": "https://doi.org/10.1155/2021/9933481",
+              "extraction": {
+                "objective": "To review the studies aiming to discover and classify leukemia by using machine learning.",
+                "methodology": "A systematic search in four databases (PubMed, Scopus, Web of Science, and ScienceDirect) and Google Scholar was performed via a search strategy using Machine Learning (ML), leukemia, peripheral blood smear (PBS) image, detection, diagnosis, and classification as the keywords.",
+                "dataset_sample": "",
+                "findings": "- The average accuracy of the ML methods applied in PBS image analysis to detect leukemia was >97%, indicating that the use of ML could lead to extraordinary outcomes in leukemia detection from PBS images.\n- Among all ML techniques, deep learning (DL) achieved higher precision and sensitivity in detecting different cases of leukemia, compared to its precedents.\n- ML has many applications in analyzing different types of leukemia images, but the use of ML algorithms to detect acute lymphoblastic leukemia (ALL) has attracted the greatest attention in the fields of hematology and artificial intelligence.\n- Using the ML method to process leukemia smear images can improve accuracy, reduce diagnosis time, and provide faster, cheaper, and safer diagnostic services.",
+                "limitations": "",
+                "supported_subquestions": [
+                  "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+                  "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+                ],
+                "supporting_evidence": [
+                  "Among all ML techniques, deep learning (DL) achieved higher precision and sensitivity in detecting different cases of leukemia, compared to its precedents.",
+                  "The average accuracy of the ML methods applied in PBS image analysis to detect leukemia was >97%, indicating that the use of ML could lead to extraordinary outcomes in leukemia detection from PBS images."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:27:29.263680+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "validate_extraction_quality",
+            "status": "USABLE",
+            "details": {
+              "paper_id": "https://doi.org/10.1155/2021/9933481",
+              "quality": {
+                "usable": true,
+                "populated_fields": [
+                  "objective",
+                  "methodology",
+                  "findings"
+                ],
+                "populated_field_count": 3,
+                "total_fields": 5
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:27:29.263886+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "verify_supporting_evidence",
+            "status": "VERIFIED",
+            "details": {
+              "paper_id": "https://doi.org/10.1155/2021/9933481",
+              "title": "Machine Learning in Detection and Classification of Leukemia Using Smear Blood Images: A Systematic Review",
+              "grounding": {
+                "verified": true,
+                "verified_quotes": [
+                  "Among all ML techniques, deep learning (DL) achieved higher precision and sensitivity in detecting different cases of leukemia, compared to its precedents.",
+                  "The average accuracy of the ML methods applied in PBS image analysis to detect leukemia was >97%, indicating that the use of ML could lead to extraordinary outcomes in leukemia detection from PBS images."
+                ],
+                "unverified_quotes": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:29:16.087654+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "validate_evidence_extraction",
+            "status": "VALID",
+            "details": {
+              "paper_id": "https://doi.org/10.1155/2022/2801227",
+              "title": "A Deep Learning Framework for Leukemia Cancer Detection in Microscopic Blood Samples Using Squeeze and Excitation Learning",
+              "validation": {
+                "valid": true,
+                "missing_sections": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:29:16.088222+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "parse_evidence_extraction",
+            "status": "COMPLETED",
+            "details": {
+              "paper_id": "https://doi.org/10.1155/2022/2801227",
+              "extraction": {
+                "objective": "To propose a new variant of deep learning algorithm to diagnose leukemia disease by analyzing the microscopic images of blood samples.",
+                "methodology": "The proposed deep learning architecture emphasizes the channel associations on all levels of feature representation by incorporating the squeeze and excitation learning that recursively performs recalibration on channel-wise feature outputs by modeling channel interdependencies explicitly. The incorporation of the squeeze-and-excitation process enhances the feature discriminability of leukemic and normal cells, and strategically assists in exposing informative features of leukemia cells while suppressing less valuable ones as well as improving feature representational power of deep learning algorithm.",
+                "dataset_sample": "The proposed model is tested on two publicly available datasets of blood samples of leukemia patients, namely, ALL_IDB1 and ALL_IDB2.",
+                "findings": "",
+                "limitations": "",
+                "supported_subquestions": [
+                  "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+                  "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+                  "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+                ],
+                "supporting_evidence": [
+                  "Therefore, a rapid and reliable cancer diagnosis is a critical requirement for successful therapy to raise survival rates.",
+                  "We show that piling these learning operations of squeeze and excite together in a deep learning model can improve the performance of the model in diagnosing leukemia from microscopic images based on blood samples of patients.",
+                  "Furthermore, an extensive set of experiments are performed on both cropped cells and full-size microscopic images as well as with data augmentation to address the problem of fewer data and to further boost their performance."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:29:16.088293+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "validate_extraction_quality",
+            "status": "USABLE",
+            "details": {
+              "paper_id": "https://doi.org/10.1155/2022/2801227",
+              "quality": {
+                "usable": true,
+                "populated_fields": [
+                  "objective",
+                  "methodology",
+                  "dataset_sample"
+                ],
+                "populated_field_count": 3,
+                "total_fields": 5
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:29:16.088396+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "verify_supporting_evidence",
+            "status": "VERIFIED",
+            "details": {
+              "paper_id": "https://doi.org/10.1155/2022/2801227",
+              "title": "A Deep Learning Framework for Leukemia Cancer Detection in Microscopic Blood Samples Using Squeeze and Excitation Learning",
+              "grounding": {
+                "verified": true,
+                "verified_quotes": [
+                  "Therefore, a rapid and reliable cancer diagnosis is a critical requirement for successful therapy to raise survival rates.",
+                  "We show that piling these learning operations of squeeze and excite together in a deep learning model can improve the performance of the model in diagnosing leukemia from microscopic images based on blood samples of patients.",
+                  "Furthermore, an extensive set of experiments are performed on both cropped cells and full-size microscopic images as well as with data augmentation to address the problem of fewer data and to further boost their performance."
+                ],
+                "unverified_quotes": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:31:10.435177+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "validate_evidence_extraction",
+            "status": "VALID",
+            "details": {
+              "paper_id": "https://doi.org/10.3389/fped.2021.693676",
+              "title": "Development and Evaluation of a Leukemia Diagnosis System Using Deep Learning in Real Clinical Scenarios",
+              "validation": {
+                "valid": true,
+                "missing_sections": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:31:10.437186+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "parse_evidence_extraction",
+            "status": "COMPLETED",
+            "details": {
+              "paper_id": "https://doi.org/10.3389/fped.2021.693676",
+              "extraction": {
+                "objective": "To develop and evaluate a leukemia diagnosis system using deep learning in real clinical scenarios.",
+                "methodology": "A convolutional neural network (CNN) was trained using 1,732 bone marrow images. New techniques of deep learning were integrated, and an end-to-end leukemia diagnosis system was developed by using raw images without pre-processing. The system was designed to imitate the workflow of a hematologist by detecting and excluding uncountable and crushed cells, then classifying and counting the remaining cells to make a diagnosis.",
+                "dataset_sample": "1,732 bone marrow images",
+                "findings": "- The system achieved an accuracy of 82.93%, precision of 86.07%, and F1 score of 82.02% in classifying WBCs.\n- The system achieved an accuracy of 89%, sensitivity of 86%, and specificity of 95% in diagnosing acute lymphoid leukemia.\n- The system performed well in detecting the bone marrow metastasis of lymphoma and neuroblastoma, achieving an average accuracy of 82.93%.\n- This is the first study to include a wider variety of cell types in leukemia diagnosis and achieved a relatively high performance in real clinical scenarios.",
+                "limitations": "",
+                "supported_subquestions": [
+                  "How do deep learning models perform in diagnosing leukemia from blood smear images?"
+                ],
+                "supporting_evidence": [
+                  "The system creatively imitated the workflow of a hematologist by detecting and excluding uncountable and crushed cells, then classifying and counting the remain cells to make a diagnosis.",
+                  "The performance of the CNN in classifying WBCs achieved an accuracy of 82.93%, precision of 86.07% and F1 score of 82.02%.",
+                  "And the performance in diagnosing acute lymphoid leukemia achieved an accuracy of 89%, sensitivity of 86% and specificity of 95%.",
+                  "The system also performs well at detecting the bone marrow metastasis of lymphoma and neuroblastoma, achieving an average accuracy of 82.93%."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:31:10.437408+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "validate_extraction_quality",
+            "status": "USABLE",
+            "details": {
+              "paper_id": "https://doi.org/10.3389/fped.2021.693676",
+              "quality": {
+                "usable": true,
+                "populated_fields": [
+                  "objective",
+                  "methodology",
+                  "dataset_sample",
+                  "findings"
+                ],
+                "populated_field_count": 4,
+                "total_fields": 5
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:31:10.437531+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "verify_supporting_evidence",
+            "status": "VERIFIED",
+            "details": {
+              "paper_id": "https://doi.org/10.3389/fped.2021.693676",
+              "title": "Development and Evaluation of a Leukemia Diagnosis System Using Deep Learning in Real Clinical Scenarios",
+              "grounding": {
+                "verified": true,
+                "verified_quotes": [
+                  "The system creatively imitated the workflow of a hematologist by detecting and excluding uncountable and crushed cells, then classifying and counting the remain cells to make a diagnosis.",
+                  "The performance of the CNN in classifying WBCs achieved an accuracy of 82.93%, precision of 86.07% and F1 score of 82.02%.",
+                  "And the performance in diagnosing acute lymphoid leukemia achieved an accuracy of 89%, sensitivity of 86% and specificity of 95%.",
+                  "The system also performs well at detecting the bone marrow metastasis of lymphoma and neuroblastoma, achieving an average accuracy of 82.93%."
+                ],
+                "unverified_quotes": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:32:49.293349+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "validate_evidence_extraction",
+            "status": "VALID",
+            "details": {
+              "paper_id": "https://doi.org/10.32604/csse.2023.029597",
+              "title": "Latent Space Representational Learning of Deep Features for Acute Lymphoblastic Leukemia Diagnosis",
+              "validation": {
+                "valid": true,
+                "missing_sections": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:32:49.294058+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "parse_evidence_extraction",
+            "status": "COMPLETED",
+            "details": {
+              "paper_id": "https://doi.org/10.32604/csse.2023.029597",
+              "extraction": {
+                "objective": "To propose a novel hybrid deep learning system for ALL diagnosis in blood smear images.",
+                "methodology": "The introduced system integrates the proficiency of autoencoder networks in feature representational learning in latent space with the superior feature extraction capability of standard pretrained convolutional neural networks (CNNs).",
+                "dataset_sample": "",
+                "findings": "The latent features improve the classification performance of the proposed ALL diagnosis system over the original image features. Moreover, the classification performance of the system with various sizes of the latent feature set is evaluated. The retrieved results reveal that the introduced ALL diagnosis system superiorly competes the state of the art.",
+                "limitations": "",
+                "supported_subquestions": [
+                  "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+                  "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+                  "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+                ],
+                "supporting_evidence": [
+                  "This paper proposes a novel hybrid deep learning system for ALL diagnosis in blood smear images.",
+                  "The introduced system integrates the proficiency of autoencoder networks in feature representational learning in latent space with the superior feature extraction capability of standard pretrained convolutional neural networks (CNNs) to identify the existence of ALL in blood smears.",
+                  "The obtained results show that the latent features improve the classification performance of the proposed ALL diagnosis system over the original image features. Moreover, the classification performance of the system with various sizes of the latent feature set is evaluated. The retrieved results reveal that the introduced ALL diagnosis system superiorly compete the state of the art."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:32:49.294138+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "validate_extraction_quality",
+            "status": "USABLE",
+            "details": {
+              "paper_id": "https://doi.org/10.32604/csse.2023.029597",
+              "quality": {
+                "usable": true,
+                "populated_fields": [
+                  "objective",
+                  "methodology",
+                  "findings"
+                ],
+                "populated_field_count": 3,
+                "total_fields": 5
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:32:49.294209+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "verify_supporting_evidence",
+            "status": "VERIFIED",
+            "details": {
+              "paper_id": "https://doi.org/10.32604/csse.2023.029597",
+              "title": "Latent Space Representational Learning of Deep Features for Acute Lymphoblastic Leukemia Diagnosis",
+              "grounding": {
+                "verified": true,
+                "verified_quotes": [
+                  "This paper proposes a novel hybrid deep learning system for ALL diagnosis in blood smear images.",
+                  "The introduced system integrates the proficiency of autoencoder networks in feature representational learning in latent space with the superior feature extraction capability of standard pretrained convolutional neural networks (CNNs) to identify the existence of ALL in blood smears.",
+                  "The obtained results show that the latent features improve the classification performance of the proposed ALL diagnosis system over the original image features. Moreover, the classification performance of the system with various sizes of the latent feature set is evaluated. The retrieved results reveal that the introduced ALL diagnosis system superiorly compete the state of the art."
+                ],
+                "unverified_quotes": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:34:39.288700+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "validate_evidence_extraction",
+            "status": "VALID",
+            "details": {
+              "paper_id": "https://doi.org/10.1007/s10278-025-01474-x",
+              "title": "Deep Learning Neural Network Based on PSO for Leukemia Cell Disease Diagnosis from Microscope Images",
+              "validation": {
+                "valid": true,
+                "missing_sections": []
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:34:39.289859+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "parse_evidence_extraction",
+            "status": "COMPLETED",
+            "details": {
+              "paper_id": "https://doi.org/10.1007/s10278-025-01474-x",
+              "extraction": {
+                "objective": "To develop a deep learning neural network approach that utilizes the Particle Swarm Optimization (PSO) method to diagnose leukemia cell disease from microscope images.",
+                "methodology": "The study employs a deep learning neural network approach that uses the Particle Swarm Optimization (PSO) method to optimize feature selection for machine learning algorithms. Three different machine learning algorithms, namely Decision Tree (DT), Support Vector Machine (SVM), and K-Nearest Neighbors (K-NN), are utilized to analyze the selected features.",
+                "dataset_sample": "",
+                "findings": "The proposed method achieved accuracies of 100%, 94.9%, and 92.3% for SVM, K-NN, and DT methods respectively, with Ant Colony Optimization (ACO) feature extraction and ResNet-50 employed as revealed by the experimental results.",
+                "limitations": "",
+                "supported_subquestions": [
+                  "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+                  "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+                  "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+                ],
+                "supporting_evidence": [
+                  "The paper presents a deep learning neural network approach that utilizes the Particle Swarm Optimization (PSO) method to diagnose leukemia cell disease from microscope images.",
+                  "The results of the experiments demonstrate PSO accuracies of 97.4%, 92.3%, and 85.9% for SVM, K-NN, and DT algorithms with GoogLeNet, respectively.",
+                  "The proposed method achieved accuracies of 100%, 94.9%, and 92.3% for SVM, K-NN, and DT methods respectively, with Ant Colony Optimization (ACO) feature extraction and ResNet-50 employed as revealed by the experimental results."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:34:39.290002+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "validate_extraction_quality",
+            "status": "USABLE",
+            "details": {
+              "paper_id": "https://doi.org/10.1007/s10278-025-01474-x",
+              "quality": {
+                "usable": true,
+                "populated_fields": [
+                  "objective",
+                  "methodology",
+                  "findings"
+                ],
+                "populated_field_count": 3,
+                "total_fields": 5
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:34:39.290131+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "verify_supporting_evidence",
+            "status": "UNVERIFIED",
+            "details": {
+              "paper_id": "https://doi.org/10.1007/s10278-025-01474-x",
+              "title": "Deep Learning Neural Network Based on PSO for Leukemia Cell Disease Diagnosis from Microscope Images",
+              "grounding": {
+                "verified": false,
+                "verified_quotes": [
+                  "The results of the experiments demonstrate PSO accuracies of 97.4%, 92.3%, and 85.9% for SVM, K-NN, and DT algorithms with GoogLeNet, respectively.",
+                  "The proposed method achieved accuracies of 100%, 94.9%, and 92.3% for SVM, K-NN, and DT methods respectively, with Ant Colony Optimization (ACO) feature extraction and ResNet-50 employed as revealed by the experimental results."
+                ],
+                "unverified_quotes": [
+                  "The paper presents a deep learning neural network approach that utilizes the Particle Swarm Optimization (PSO) method to diagnose leukemia cell disease from microscope images."
+                ]
+              }
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:34:39.290170+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "screen_papers",
+            "status": "COMPLETED",
+            "details": {
+              "turn_retrieved": 10,
+              "turn_selected": 10,
+              "turn_excluded": 0,
+              "total_retrieved": 25,
+              "total_selected": 22,
+              "total_excluded": 4
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:34:39.290226+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "agent_turn",
+            "status": "RUNNING",
+            "details": {
+              "iteration": 3
+            }
+          },
+          {
+            "timestamp": "2026-10-10T04:34:39.291736+00:00",
+            "run_id": "80c3a774-4ca6-4851-9079-4f457e098cb3",
+            "turn": 3,
+            "action": "evaluate_evidence",
+            "status": "INSUFFICIENT",
+            "details": {
+              "sufficient": false,
+              "relevant_studies": 22,
+              "unique_relevant_studies": 22,
+              "unidentified_papers": 0,
+              "required_studies": 5,
+              "subquestion_coverage": {
+                "How do deep learning models perform in diagnosing leukemia from blood smear images?": 8,
+                "What are the specific deep learning architectures used for leukemia detection in blood smear images?": 5,
+                "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?": 7
+              },
+              "missing_field_rate": 0.6181818181818182,
+              "missing_evidence_record_count": 0,
+              "missing_provenance_count": 0,
+              "invalid_provenance_count": 0,
+              "invalid_conflict_status_count": 0,
+              "invalid_claim_support_status_count": 0,
+              "unsupported_claim_count": 14,
+              "gaps": [
+                "Missing evidence field rate is 61.82%; maximum allowed is 20%.",
+                "14 evidence record(s) contain unsupported claims."
+              ]
+            }
+          }
+        ],
+        "gaps": [
+          "Missing evidence field rate is 61.82%; maximum allowed is 20%.",
+          "14 evidence record(s) contain unsupported claims."
+        ],
+        "evidence": [
+          {
+            "paper_id": "https://doi.org/10.3390/healthcare10101812",
+            "study_type": "unknown",
+            "objective": "To aid in the early detection of acute lymphoblastic leukemia (ALL) by proposing an intelligent method to screen white blood cells using microscopic images of blood smears.",
+            "methodology": "The proposed intelligent deep learning algorithm uses a convolutional neural network (CNN) to predict leukemic cells from healthy blood cells. The custom ALLNET model was trained and tested using open-source microscopic images. Model training was carried out on Google Collaboratory using the Nvidia Tesla P-100 GPU method.",
+            "dataset_sample": "The model was trained and tested using microscopic images available as open-source data.",
+            "findings": "Maximum accuracy of 95.54%, specificity of 95.81%, sensitivity of 95.91%, F1-score of 95.43%, and precision of 96% were obtained by this accurate classifier.",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported",
+            "supporting_evidence": [
+              "The proposed intelligent deep learning algorithm uses the microscopic images of blood smears as the input data.\" (Abstract)",
+              "This algorithm is implemented with a convolutional neural network (CNN) to predict the leukemic cells from the healthy blood cells.\" (Abstract)",
+              "The custom ALLNET model was trained and tested using the microscopic images available as open-source data.\" (Abstract)",
+              "Maximum accuracy of 95.54%, specificity of 95.81%, sensitivity of 95.91%, F1-score of 95.43%, and precision of 96% were obtained by this accurate classifier.\" (Abstract)"
+            ]
+          },
+          {
+            "paper_id": "https://doi.org/10.48550/arxiv.2301.03367",
+            "study_type": "unknown",
+            "objective": "To detect leukemia in microscopic blood smear images using deep neural networks to diagnose leukemia early in blood.",
+            "methodology": "Computer vision classification technique using deep learning.",
+            "dataset_sample": "",
+            "findings": "The system for leukemia detection provides 97.3 % accuracy in classifying samples as cancerous or normal samples.",
+            "limitations": "",
+            "supported_subquestions": [
+              "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+              "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+            ],
+            "conflict_status": "none",
+            "claim_support_status": "supported",
+            "supporting_evidence": [
+              "our system for leukemia detection provides 97.3 % accuracy in classifying samples as cancerous or normal samples by taking a shot of blood smear and passing it as an input to the system that will check whether it contains cancer or not."
+            ]
+          },
+          {
+            "paper_id": "https://doi.org/10.1109/access.2025.3565546",
+            "study_type": "unknown",
+            "objective": "To investigate the integration of deep learning (DL) architectures with Recurrent Neural Networks (RNNs) for automated leukemia detection in Peripheral Blood Smear (PBS) images.",
+            "methodology": "Models such as DenseNet201, EfficientNetB3, Inception v3, InceptionResNetV2, MobileNetV2, ResNet50, VGG16, and Xception, each enhanced with a Gated Recurrent Unit (GRU) layer, were employed to capture spatial and temporal dependencies in image data. Through extensive experimentation on a standard leukemia dataset, the performance of each model was evaluated based on accuracy and computational efficiency.",
+            "dataset_sample": "A standard leukemia dataset was used for experimentation.",
+            "findings": "The Xception + GRU model achieved the highest classification accuracy, attaining an impressive 99.69%.",
+            "limitations": "",
+            "supported_subquestions": [
+              "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+              "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+              "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+            ],
+            "conflict_status": "none",
+            "claim_support_status": "supported",
+            "supporting_evidence": [
+              "This paper investigates the integration of deep learning (DL) architectures with Recurrent Neural Networks (RNNs) for automated leukemia detection in Peripheral Blood Smear (PBS) images.",
+              "Models such as DenseNet201, EfficientNetB3, Inception v3, InceptionResNetV2, MobileNetV2, ResNet50, VGG16, and Xception, each enhanced with a Gated Recurrent Unit (GRU) layer, are employed to capture spatial and temporal dependencies in image data.",
+              "Through extensive experimentation on a standard leukemia dataset, the performance of each model is evaluated based on accuracy and computational efficiency.",
+              "Among these, the Xception + GRU model achieves the highest classification accuracy, attaining an impressive 99.69%."
+            ]
+          },
+          {
+            "paper_id": "https://doi.org/10.1109/iciteics64870.2025.11341392",
+            "study_type": "unknown",
+            "objective": "To develop a deep learning-based system for the automated detection and classification of leukemia using microscopic blood smear images.",
+            "methodology": "The model utilizes a Convolutional Neural Network (CNN) and incorporates advanced image preprocessing and augmentation techniques, as well as Stochastic Weight Averaging (SWA) for training stability. A stage estimation module categorizes leukemia progression into early, intermediate, or advanced stages based on prediction confidence.",
+            "dataset_sample": "A dataset of over 4000 images was used to train the model.",
+            "findings": "The model achieved a test accuracy of 90%, demonstrating its effectiveness in real-world scenarios.",
+            "limitations": "",
+            "supported_subquestions": [
+              "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+              "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+              "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+            ],
+            "conflict_status": "none",
+            "claim_support_status": "supported",
+            "supporting_evidence": [
+              "This project introduces a deep learning-based system for the automated detection and classification of leukemia using microscopic blood smear images.",
+              "The model was trained on a dataset of over 4000 images and achieved a test accuracy of 90%, demonstrating its effectiveness in real-world scenarios."
+            ]
+          },
+          {
+            "paper_id": "https://doi.org/10.3390/curroncol33080486",
+            "study_type": "unknown",
+            "objective": "",
+            "methodology": "",
+            "dataset_sample": "",
+            "findings": "",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported"
+          },
+          {
+            "paper_id": "https://doi.org/10.1109/conecct57959.2023.10234824",
+            "study_type": "unknown",
+            "objective": "To develop a deep learning-based method for accurately detecting Acute Lymphoblastic Leukemia (ALL) from blood smear images.",
+            "methodology": "Subsequently, these images have then been trained on pre-trained Convolutional Neural Networks (CNNs): ResNet-50 and ResNet-101, with hyperparameter tuning to classify between benign and three stages of malignant ALL lymphoblast cells.",
+            "dataset_sample": "An open source four-class Acute Lymphoblastic Leukemia (ALL) dataset that has been segmented using color thresholding.",
+            "findings": "The results demonstrate that our proposed method achieved accuracies exceeding 98% in detecting ALL, indicating the potential of deep learning-based classifiers in aiding hematologists accurately detect ALL and improving patient outcomes.",
+            "limitations": "",
+            "supported_subquestions": [
+              "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+              "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+              "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+            ],
+            "conflict_status": "none",
+            "claim_support_status": "supported",
+            "supporting_evidence": [
+              "The results demonstrate that our proposed method achieved accuracies exceeding 98% in detecting ALL, indicating the potential of deep learning-based classifiers in aiding hematologists accurately detect ALL and improving patient outcomes."
+            ]
+          },
+          {
+            "paper_id": "https://doi.org/10.1109/aectsd65988.2025.11410831",
+            "study_type": "unknown",
+            "objective": "To develop a computer-aided diagnosis (CAD) system using a DenseNet201 deep convolutional neural network for five-class classification of microscopic blood cell images (Normal, ALL, AML, CLL, and CML).",
+            "methodology": "A DenseNet201 deep convolutional neural network was trained for a five-class classification task of microscopic blood cell images.",
+            "dataset_sample": "",
+            "findings": "The model achieved an exceptional classification with 97.5% overall accuracy, outperforming all other current methodologies with reliability.",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported",
+            "supporting_evidence": [
+              "A computer-aided diagnosis (CAD) system was developed to close this void utilizing a DenseNet201 deep convolutional neural network that was trained for a five-class classification task of microscopic blood cell images (Normal, ALL, AML, CLL, and CML).",
+              "After systematically controlling for variations of distribution of samples, the model achieved an exceptional classification with 97.5% overall accuracy, outperforming all other current methodologies with reliability."
+            ]
+          },
+          {
+            "paper_id": "https://doi.org/10.1109/becithcon69222.2025.11504220",
+            "study_type": "unknown",
+            "objective": "",
+            "methodology": "",
+            "dataset_sample": "",
+            "findings": "",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported"
+          },
+          {
+            "paper_id": "https://doi.org/10.1109/access.2024.3368031",
+            "study_type": "unknown",
+            "objective": "",
+            "methodology": "",
+            "dataset_sample": "",
+            "findings": "",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported"
+          },
+          {
+            "paper_id": "https://doi.org/10.31276/vjste.64(1).63-71",
+            "study_type": "unknown",
+            "objective": "To propose a detection system for malaria and acute lymphoblastic leukemia (ALL) using blood smear microscopic images with the aid of deep learning algorithms.",
+            "methodology": "The proposed model was built into three stages including the first stage for segmentation-applied modified UNet pre-trained model, the second stage for classification based on the convolution neural network model, and the final stage for classification utilizing perceptron as the combining model.",
+            "dataset_sample": "The blood smear microscopic images consist of 1503 ALL images, 891 malaria images, and 1503 normal images that were divided into a training, validation, and testing sets in ratios of 50, 25, and 25%, respectively.",
+            "findings": "The proposed system provides an alternative and interpretable method to detect abnormal leukocytes for ALL and malaria-infected blood cells with a 93% overall accuracy including the detection rate for ALL of 95% and the detection rate for malaria of 92%.",
+            "limitations": "",
+            "supported_subquestions": [
+              "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+              "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+              "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+            ],
+            "conflict_status": "none",
+            "claim_support_status": "supported",
+            "supporting_evidence": [
+              "The proposed model was built into three stages including the first stage for segmentation-applied modified UNet pre-trained model, the second stage for classification based on the convolution neural network model, and the final stage for classification utilizing perceptron as the combining model.",
+              "The blood smear microscopic images consist of 1503 ALL images, 891 malaria images, and 1503 normal images that were divided into a training, validation, and testing sets in ratios of 50, 25, and 25%, respectively.",
+              "The proposed system provides an alternative and interpretable method to detect abnormal leukocytes for ALL and malaria-infected blood cells with a 93% overall accuracy including the detection rate for ALL of 95% and the detection rate for malaria of 92%."
+            ]
+          },
+          {
+            "paper_id": "https://doi.org/10.1155/2021/9933481",
+            "study_type": "unknown",
+            "objective": "To review the studies aiming to discover and classify leukemia by using machine learning.",
+            "methodology": "A systematic search in four databases (PubMed, Scopus, Web of Science, and ScienceDirect) and Google Scholar was performed via a search strategy using Machine Learning (ML), leukemia, peripheral blood smear (PBS) image, detection, diagnosis, and classification as the keywords.",
+            "dataset_sample": "",
+            "findings": "- The average accuracy of the ML methods applied in PBS image analysis to detect leukemia was >97%, indicating that the use of ML could lead to extraordinary outcomes in leukemia detection from PBS images.\n- Among all ML techniques, deep learning (DL) achieved higher precision and sensitivity in detecting different cases of leukemia, compared to its precedents.\n- ML has many applications in analyzing different types of leukemia images, but the use of ML algorithms to detect acute lymphoblastic leukemia (ALL) has attracted the greatest attention in the fields of hematology and artificial intelligence.\n- Using the ML method to process leukemia smear images can improve accuracy, reduce diagnosis time, and provide faster, cheaper, and safer diagnostic services.",
+            "limitations": "",
+            "supported_subquestions": [
+              "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+              "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+            ],
+            "conflict_status": "none",
+            "claim_support_status": "supported",
+            "supporting_evidence": [
+              "Among all ML techniques, deep learning (DL) achieved higher precision and sensitivity in detecting different cases of leukemia, compared to its precedents.",
+              "The average accuracy of the ML methods applied in PBS image analysis to detect leukemia was >97%, indicating that the use of ML could lead to extraordinary outcomes in leukemia detection from PBS images."
+            ]
+          },
+          {
+            "paper_id": "https://doi.org/10.1155/2022/2801227",
+            "study_type": "unknown",
+            "objective": "To propose a new variant of deep learning algorithm to diagnose leukemia disease by analyzing the microscopic images of blood samples.",
+            "methodology": "The proposed deep learning architecture emphasizes the channel associations on all levels of feature representation by incorporating the squeeze and excitation learning that recursively performs recalibration on channel-wise feature outputs by modeling channel interdependencies explicitly. The incorporation of the squeeze-and-excitation process enhances the feature discriminability of leukemic and normal cells, and strategically assists in exposing informative features of leukemia cells while suppressing less valuable ones as well as improving feature representational power of deep learning algorithm.",
+            "dataset_sample": "The proposed model is tested on two publicly available datasets of blood samples of leukemia patients, namely, ALL_IDB1 and ALL_IDB2.",
+            "findings": "",
+            "limitations": "",
+            "supported_subquestions": [
+              "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+              "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+              "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+            ],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported",
+            "supporting_evidence": [
+              "Therefore, a rapid and reliable cancer diagnosis is a critical requirement for successful therapy to raise survival rates.",
+              "We show that piling these learning operations of squeeze and excite together in a deep learning model can improve the performance of the model in diagnosing leukemia from microscopic images based on blood samples of patients.",
+              "Furthermore, an extensive set of experiments are performed on both cropped cells and full-size microscopic images as well as with data augmentation to address the problem of fewer data and to further boost their performance."
+            ]
+          },
+          {
+            "paper_id": "https://doi.org/10.3389/fped.2021.693676",
+            "study_type": "unknown",
+            "objective": "To develop and evaluate a leukemia diagnosis system using deep learning in real clinical scenarios.",
+            "methodology": "A convolutional neural network (CNN) was trained using 1,732 bone marrow images. New techniques of deep learning were integrated, and an end-to-end leukemia diagnosis system was developed by using raw images without pre-processing. The system was designed to imitate the workflow of a hematologist by detecting and excluding uncountable and crushed cells, then classifying and counting the remaining cells to make a diagnosis.",
+            "dataset_sample": "1,732 bone marrow images",
+            "findings": "- The system achieved an accuracy of 82.93%, precision of 86.07%, and F1 score of 82.02% in classifying WBCs.\n- The system achieved an accuracy of 89%, sensitivity of 86%, and specificity of 95% in diagnosing acute lymphoid leukemia.\n- The system performed well in detecting the bone marrow metastasis of lymphoma and neuroblastoma, achieving an average accuracy of 82.93%.\n- This is the first study to include a wider variety of cell types in leukemia diagnosis and achieved a relatively high performance in real clinical scenarios.",
+            "limitations": "",
+            "supported_subquestions": [
+              "How do deep learning models perform in diagnosing leukemia from blood smear images?"
+            ],
+            "conflict_status": "none",
+            "claim_support_status": "supported",
+            "supporting_evidence": [
+              "The system creatively imitated the workflow of a hematologist by detecting and excluding uncountable and crushed cells, then classifying and counting the remain cells to make a diagnosis.",
+              "The performance of the CNN in classifying WBCs achieved an accuracy of 82.93%, precision of 86.07% and F1 score of 82.02%.",
+              "And the performance in diagnosing acute lymphoid leukemia achieved an accuracy of 89%, sensitivity of 86% and specificity of 95%.",
+              "The system also performs well at detecting the bone marrow metastasis of lymphoma and neuroblastoma, achieving an average accuracy of 82.93%."
+            ]
+          },
+          {
+            "paper_id": "https://doi.org/10.32604/csse.2023.029597",
+            "study_type": "unknown",
+            "objective": "To propose a novel hybrid deep learning system for ALL diagnosis in blood smear images.",
+            "methodology": "The introduced system integrates the proficiency of autoencoder networks in feature representational learning in latent space with the superior feature extraction capability of standard pretrained convolutional neural networks (CNNs).",
+            "dataset_sample": "",
+            "findings": "The latent features improve the classification performance of the proposed ALL diagnosis system over the original image features. Moreover, the classification performance of the system with various sizes of the latent feature set is evaluated. The retrieved results reveal that the introduced ALL diagnosis system superiorly competes the state of the art.",
+            "limitations": "",
+            "supported_subquestions": [
+              "How do deep learning models perform in diagnosing leukemia from blood smear images?",
+              "What are the specific deep learning architectures used for leukemia detection in blood smear images?",
+              "How effective are deep learning methods compared to traditional approaches in leukemia detection from blood smear images?"
+            ],
+            "conflict_status": "none",
+            "claim_support_status": "supported",
+            "supporting_evidence": [
+              "This paper proposes a novel hybrid deep learning system for ALL diagnosis in blood smear images.",
+              "The introduced system integrates the proficiency of autoencoder networks in feature representational learning in latent space with the superior feature extraction capability of standard pretrained convolutional neural networks (CNNs) to identify the existence of ALL in blood smears.",
+              "The obtained results show that the latent features improve the classification performance of the proposed ALL diagnosis system over the original image features. Moreover, the classification performance of the system with various sizes of the latent feature set is evaluated. The retrieved results reveal that the introduced ALL diagnosis system superiorly compete the state of the art."
+            ]
+          },
+          {
+            "paper_id": "https://doi.org/10.1007/s10278-025-01474-x",
+            "study_type": "unknown",
+            "objective": "To develop a deep learning neural network approach that utilizes the Particle Swarm Optimization (PSO) method to diagnose leukemia cell disease from microscope images.",
+            "methodology": "The study employs a deep learning neural network approach that uses the Particle Swarm Optimization (PSO) method to optimize feature selection for machine learning algorithms. Three different machine learning algorithms, namely Decision Tree (DT), Support Vector Machine (SVM), and K-Nearest Neighbors (K-NN), are utilized to analyze the selected features.",
+            "dataset_sample": "",
+            "findings": "The proposed method achieved accuracies of 100%, 94.9%, and 92.3% for SVM, K-NN, and DT methods respectively, with Ant Colony Optimization (ACO) feature extraction and ResNet-50 employed as revealed by the experimental results.",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported",
+            "supporting_evidence": [
+              "The paper presents a deep learning neural network approach that utilizes the Particle Swarm Optimization (PSO) method to diagnose leukemia cell disease from microscope images.",
+              "The results of the experiments demonstrate PSO accuracies of 97.4%, 92.3%, and 85.9% for SVM, K-NN, and DT algorithms with GoogLeNet, respectively.",
+              "The proposed method achieved accuracies of 100%, 94.9%, and 92.3% for SVM, K-NN, and DT methods respectively, with Ant Colony Optimization (ACO) feature extraction and ResNet-50 employed as revealed by the experimental results."
+            ]
+          },
+          {
+            "paper_id": "https://doi.org/10.3390/electronics11193168",
+            "study_type": "unknown",
+            "objective": "",
+            "methodology": "",
+            "dataset_sample": "",
+            "findings": "",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported"
+          },
+          {
+            "paper_id": "https://doi.org/10.55041/ijcope.v2i4.746",
+            "study_type": "unknown",
+            "objective": "",
+            "methodology": "",
+            "dataset_sample": "",
+            "findings": "",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported"
+          },
+          {
+            "paper_id": "https://doi.org/10.1038/s41598-023-29160-4",
+            "study_type": "unknown",
+            "objective": "",
+            "methodology": "",
+            "dataset_sample": "",
+            "findings": "",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported"
+          },
+          {
+            "paper_id": "https://doi.org/10.3390/applbiosci4010009",
+            "study_type": "unknown",
+            "objective": "",
+            "methodology": "",
+            "dataset_sample": "",
+            "findings": "",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported"
+          },
+          {
+            "paper_id": "https://doi.org/10.3390/app12136317",
+            "study_type": "unknown",
+            "objective": "",
+            "methodology": "",
+            "dataset_sample": "",
+            "findings": "",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported"
+          },
+          {
+            "paper_id": "https://doi.org/10.1109/iceccme57830.2023.10253397",
+            "study_type": "unknown",
+            "objective": "",
+            "methodology": "",
+            "dataset_sample": "",
+            "findings": "",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported"
+          },
+          {
+            "paper_id": "https://doi.org/10.3390/diagnostics12112815",
+            "study_type": "unknown",
+            "objective": "",
+            "methodology": "",
+            "dataset_sample": "",
+            "findings": "",
+            "limitations": "",
+            "supported_subquestions": [],
+            "conflict_status": "none",
+            "claim_support_status": "unsupported"
+          }
+        ],
+        "selected_papers": [
+          {
+            "id": "https://openalex.org/W4296745041",
+            "title": "Customized Deep Learning Classifier for Detection of Acute Lymphoblastic Leukemia Using Blood Smear Images",
+            "year": 2022,
+            "doi": "https://doi.org/10.3390/healthcare10101812",
+            "abstract": "Acute lymphoblastic leukemia (ALL) is a rare type of blood cancer caused due to the overproduction of lymphocytes by the bone marrow in the human body. It is one of the common types of cancer in children, which has a fair chance of being cured. However, this may even occur in adults, and the chances of a cure are slim if diagnosed at a later stage. To aid in the early detection of this deadly disease, an intelligent method to screen the white blood cells is proposed in this study. The proposed intelligent deep learning algorithm uses the microscopic images of blood smears as the input data. This algorithm is implemented with a convolutional neural network (CNN) to predict the leukemic cells from the healthy blood cells. The custom ALLNET model was trained and tested using the microscopic images available as open-source data. The model training was carried out on Google Collaboratory using the Nvidia Tesla P-100 GPU method. Maximum accuracy of 95.54%, specificity of 95.81%, sensitivity of 95.91%, F1-score of 95.43%, and precision of 96% were obtained by this accurate classifier. The proposed technique may be used during the pre-screening to detect the leukemia cells during complete blood count (CBC) and peripheral blood tests.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract directly addresses the use of deep learning for the detection of leukemia in blood smear images, specifically mentioning the application of a convolutional neural network (CNN) for this purpose."
+          },
+          {
+            "id": "https://openalex.org/W4315588960",
+            "title": "Leukemia detection based on microscopic blood smear images using deep learning",
+            "year": 2022,
+            "doi": "https://doi.org/10.48550/arxiv.2301.03367",
+            "abstract": "In this paper we discuss a new method for detecting leukemia in microscopic blood smear images using deep neural networks to diagnose leukemia early in blood. leukemia is considered one of the most dangerous mortality causes for a human being, the traditional process of diagnosis of leukemia in blood is complex, costly, and time-consuming, so patients could not receive medical treatment on time; Computer vision classification technique using deep learning can overcome the problems of traditional analysis of blood smears, our system for leukemia detection provides 97.3 % accuracy in classifying samples as cancerous or normal samples by taking a shot of blood smear and passing it as an input to the system that will check whether it contains cancer or not. In case of containing cancer cells, then the hematological expert passes the sample to a more complex device such as flow cytometry to generate complete information about the progress of cancer in the blood.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract directly addresses the use of deep learning for leukemia detection in microscopic blood smear images, which aligns with the research question."
+          },
+          {
+            "id": "https://openalex.org/W4409917133",
+            "title": "Integration of Deep Learning Architectures With GRU for Automated Leukemia Detection in Peripheral Blood Smear Images",
+            "year": 2025,
+            "doi": "https://doi.org/10.1109/access.2025.3565546",
+            "abstract": "This paper investigates the integration of deep learning (DL) architectures with Recurrent Neural Networks (RNNs) for automated leukemia detection in Peripheral Blood Smear (PBS) images. Models such as DenseNet201, EfficientNetB3, Inception v3, InceptionResNetV2, MobileNetV2, ResNet50, VGG16, and Xception, each enhanced with a Gated Recurrent Unit (GRU) layer, are employed to capture spatial and temporal dependencies in image data. Through extensive experimentation on a standard leukemia dataset, the performance of each model is evaluated based on accuracy and computational efficiency. Among these, the Xception + GRU model achieves the highest classification accuracy, attaining an impressive 99.69%. This exceptional result underscores the efficacy of combining Convolutional Neural Networks (CNNs) with RNNs, particularly GRUs, in the accurate detection of leukemia from PBS images. The findings offer valuable contributions to the field of medical image analysis, demonstrating the potential of DL techniques to enhance automated disease diagnosis. By advancing the precision of leukemia detection, this study provides promising implications for improving patient care and treatment outcomes.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The paper directly investigates the use of deep learning architectures, including DenseNet201, EfficientNetB3, Inception v3, InceptionResNetV2, MobileNetV2, ResNet50, VGG16, and Xception, for leukemia detection in peripheral blood smear images, which is directly relevant to the research question."
+          },
+          {
+            "id": "https://openalex.org/W7125599008",
+            "title": "DeepL-DDCL: Deep Learning-Driven Detection and Classification of Leukemia Using Microscopic Blood Smear Images",
+            "year": 2025,
+            "doi": "https://doi.org/10.1109/iciteics64870.2025.11341392",
+            "abstract": "This project introduces a deep learning-based system for the automated detection and classification of leukemia using microscopic blood smear images. Utilizing a Convolutional Neural Network (CNN), the model classifies samples into five categories: Acute Lymphoblastic Leukemia (ALL), Acute Myeloid Leukemia (AML), Chronic Lymphocytic Leukemia (CLL), Chronic Myeloid Leukemia (CML), and Healthy. Advanced image preprocessing and augmentation techniques enhance model generalization, while Stochastic Weight Averaging (SWA) ensures training stability. A stage estimation module categorizes leukemia progression into early, intermediate, or advanced stages based on prediction confidence. The model was trained on a dataset of over 4000 images and achieved a test accuracy of 90%, demonstrating its effectiveness in real-world scenarios. A user-friendly web interface was developed for real- time deployment, allowing medical professionals to upload images and receive immediate results. This system offers a reliable, efficient, and scalable solution for early leukemia detection, aiding timely diagnosis and improving clinical decision-making.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract directly states that the paper uses deep learning for the detection and classification of leukemia using microscopic blood smear images, which directly addresses the research question."
+          },
+          {
+            "id": "https://openalex.org/W7203715637",
+            "title": "Deep Learning-Based Detection Model for Leukemia Cells in Peripheral Blood Smears Using YOLOv11-Large",
+            "year": 2026,
+            "doi": "https://doi.org/10.3390/curroncol33080486",
+            "abstract": "Background: Accurate identification and classification of white blood cell (WBC) subtypes in peripheral blood smears (PBS) is essential for the diagnosis and monitoring of hematological malignancies, including leukemia. Conventional manual microscopy, although clinically established, is labor-intensive and subject to inter- and intra-observer variability. Deep learning-based object detection offers a route to automation, yet most prior studies are limited by small datasets, restricted cell taxonomies, or single-microscope acquisition. This study evaluates a YOLOv11-large (YOLOv11L) detector for simultaneous localization and classification of 13 leukemia-relevant WBC subtypes plus an artifact class (14 classes total), trained on the large-scale, multi-domain, open-source LeukemiaAttri dataset. Methods: From the LeukemiaAttri dataset, 18,664 annotated images (67,347 objects) acquired at 40× and 100× magnification were partitioned by stratified sampling into training (70%), validation (15%), and test (15%) sets. The training set was expanded to 65,785 images through extensive geometric, photometric, and AugMix augmentation. A YOLOv11L model pretrained on MS COCO was fine-tuned for 250 epochs (640 × 640 input) on a single NVIDIA H200 SXM GPU, using an auto-selected optimizer (momentum 0.9; weight decay 5 × 10−4), automatic mixed precision (AMP), and mosaic augmentation for the first 240 epochs. Results: On an internal held-out test set, the model achieved an mAP50 of 93.9%, mAP50-95 of 77.9%, precision of 94.1%, recall of 88.8%, and an F1 score of 0.913, with similar performance in the validation and test sets. Class-wise average precision (AP) ranged from 89.3% (monocyte) to 98.2% (monoblast), confirming consistent detection across morphologically diverse subtypes. Conclusions: The YOLOv11L detector achieved high performance across all 14 categories on the internal test set, with metrics exceeding those previously reported for subset-specific baselines. These findings support further evaluation of the model as a decision-support tool for peripheral blood smear analysis. External validation is required to determine its clinical utility and generalizability.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract directly addresses the use of deep learning for leukemia detection in peripheral blood smear images, specifically mentioning the YOLOv11-large model and its application to 13 leukemia-relevant WBC subtypes."
+          },
+          {
+            "id": "https://openalex.org/W4386427014",
+            "title": "Deep Learning-Based Analysis of Blood Smear Images for Detection of Acute Lymphoblastic Leukemia",
+            "year": 2023,
+            "doi": "https://doi.org/10.1109/conecct57959.2023.10234824",
+            "abstract": "Leukemia, a type of cancer affecting the blood and bone marrow, involves the abnormal production of leukocytes and can impact the immune system. While more prevalent among children, it can also affect adults. Early detection plays a critical role in effective treatment and patient recovery. In this paper, we have used an open source four-class Acute Lymphoblastic Leukemia (ALL) dataset that has been segmented using color thresholding. Subsequently, these images have then been trained on pre-trained Convolutional Neural Networks (CNNs): ResNet-50 and ResNet-101, with hyperparameter tuning to classify between benign and three stages of malignant ALL lymphoblast cells. The results demonstrate that our proposed method achieved accuracies exceeding 98% in detecting ALL, indicating the potential of deep learning-based classifiers in aiding hematologists accurately detect ALL and improving patient outcomes.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract directly addresses the use of deep learning for the detection of Acute Lymphoblastic Leukemia in blood smear images, which is relevant to the research question."
+          },
+          {
+            "id": "https://openalex.org/W7133327297",
+            "title": "Deep Learning Approach for Leukemia Detection and Classification From Blood Smear Images Using DenseNet201",
+            "year": 2025,
+            "doi": "https://doi.org/10.1109/aectsd65988.2025.11410831",
+            "abstract": "Leukemia comprises multiple types including, Acute Lymphoblastic Leukemia (ALL), Acute Myeloid Leukemia (AML), Chronic Lymphocytic Leukemia (CLL), and Chronic Myeloid Leukemia (CML) [1], [2]. Timely and consistent diagnosis is paramount in these conditions and is frequently not achieved through current subjective and timeconsuming pathways [3]. A computer-aided diagnosis (CAD) system was developed to close this void utilizing a DenseNet201 deep convolutional neural network that was trained for a five-class classification task of microscopic blood cell images (Normal, ALL, AML, CLL, and CML). After systematically controlling for variations of distribution of samples, the model achieved an exceptional classification with 97.5% overall accuracy, outperforming all other current methodologies with reliability [4], [5], [6]. Not only is the approach robust it can be scaled for use by healthcare professionals which will help eliminate diagnostic delays and drastically reduce the chance for human error in an important area of hematology.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The paper uses deep learning (specifically DenseNet201) for leukemia detection from blood smear images, which directly addresses the research question."
+          },
+          {
+            "id": "https://openalex.org/W7160667528",
+            "title": "Hybrid Deep Learning with Uncertainty Quantification for Robust Detection of Acute Lymphoblastic Leukemia in Blood Smear Images",
+            "year": 2025,
+            "doi": "https://doi.org/10.1109/becithcon69222.2025.11504220",
+            "abstract": "The diagnosis of acute lymphoblastic leukemia (ALL) is extremely difficult because of the very aggressive course wreaking severe havoc on the economy. A very rapid recognition is important in order to lower the mortality. In this work we present a complete deep learning pipeline with the aim of detecting leukemia from the blood smear microscopy as images. Different CNN architectures using pretrained convolutional networks are provided in this work, MobileNetV2, InceptionV3 and EfficientNetB3 are provided. Gated recurrent units (GRU) are also incorporated to extract not only spatial aspects, but temporal characteristics as well. A very important difficulty in this area is the great imbalance of the classes in open public data sets. We employ strategic data augmentation and leverage deep ensemble methods with uncertainty quantification to increase model confidence and improve interpretability. The preprocessing pipeline incorporates standard techniques such as resizing and normalization and different geometric transformations to improve robustness. We evaluate our methodology on the ALL-IDB1 and ALL-IDB2 datasets, each separately and in combination, to show consistent improvement over baseline applications. The EfficientNetB3-GRU variant having ensemble uncertainty estimation achieves 99.67% accuracy and 99.45% F1 quality measures on the combined dataset, outperforming competitive hybrid methods and published results. Our framework offers both high diagnostic quality and reliable confidence scores as a potential clinical aid. Our main contributions are the hybrid CNN-GRU design, methods to overcome data imbalance, and the introduction of uncertainty quantification methods to enhance automation of ALL diagnosis.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract directly addresses the use of deep learning for leukemia detection in blood smear images, specifically mentioning the use of CNN architectures and GRU units, and evaluating the method on relevant datasets."
+          },
+          {
+            "id": "https://openalex.org/W4392007319",
+            "title": "A Framework for Early Detection of Acute Lymphoblastic Leukemia and Its Subtypes From Peripheral Blood Smear Images Using Deep Ensemble Learning Technique",
+            "year": 2024,
+            "doi": "https://doi.org/10.1109/access.2024.3368031",
+            "abstract": "Acute lymphoblastic leukemia (ALL), one of the prevalent types of carcinogenic disease, has been seen a deadly illness exposing numerous patients across the world to potential threats of lives. It impacts both adults and children providing a narrow range of chances of being cured if diagnosed at a later stage. A definitive diagnosis often demands highly invasive diagnostic procedures thereby proving time-consuming and expensive. Peripheral Blood Smear (PBS) images have been playing a crucial role in the initial screening of ALL in suspected individuals. However, the nonspecific nature of ALL poses a substantial challenge in the analysis of these images thus leaving space for misdiagnosis. Aiming at contribute to the early diagnoses of this life-threatening disease, we put forward automated platform for screening the presence of ALL concerning its specific subtypes (benign, Early Pro-B, Pro-B and Pre-B) using PBS images. The proposed web based platform follows weighted ensemble learning technique using a Residual Convolutional Neural Network (ResNet-152) as the base learner to identify ALL from hematogone cases and then determine ALL subtypes. This is likely to save both diagnosis time and the efforts of clinicians and patients. Experimental results are obtained and comparative analysis among 7 well-known CNN Network architectures (AlexNet, VGGNet, Inception, ResNet-50, ResNet-18, Inception and DenseNet-121) is also performed that demonstrated that the proposed platform achieved comparatively high accuracy (99.95%), precision (99.92%), recall (99.92%), F1-Score (99.90%), sensitivity (99.92%) and specificity (99.97%). The promising results demonstrate that the proposed platform has the potential to be used as a reliable tool for early diagnosis of ALL and its sub-types. Furthermore, this provides references for pathologists and healthcare providers, aiding them in producing specific guidelines and more informed choices about patient and disease management.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract directly mentions the use of deep learning techniques, specifically a Residual Convolutional Neural Network (ResNet-152), for the detection of acute lymphoblastic leukemia (ALL) from peripheral blood smear images, which aligns with the research question."
+          },
+          {
+            "id": "https://openalex.org/W4220886708",
+            "title": "A deep learning approach in detection of malaria and acute lymphoblastic leukemia diseases utilising blood smear microscopic images",
+            "year": 2022,
+            "doi": "https://doi.org/10.31276/vjste.64(1).63-71",
+            "abstract": "The numerous rising infections and deaths of malaria and acute lymphoblastic leukaemia (ALL) highlights the urgent need for early, useful, and efficient diagnosis methods. Recently, the framework of artificial intelligence has been applied to minimize time-consuming tasks, to increase the accuracy and flexibility of clinical diagnoses, and to reduce the pressure on physicians, diagnosticians, and clinical experts. In this study, a detection system for malaria and ALL is proposed that utilizes blood smear microscopic images with the aid of deep learning algorithms to identify and classify these two diseases automatically. The blood smear microscopic images consist of 1503 ALL images, 891 malaria images, and 1503 normal images that were divided into a training, validation, and testing sets in ratios of 50, 25, and 25%, respectively. The proposed model was built into three stages including the first stage for segmentation-applied modified UNet pre-trained model, the second stage for classification based on the convolution neural network model, and the final stage for classification utilizing perceptron as the combining model. As a result, the proposed system provides an alternative and interpretable method to detect abnormal leukocytes for ALL and malaria-infected blood cells with a 93% overall accuracy including the detection rate for ALL of 95% and the detection rate for malaria of 92%.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The paper proposes a deep learning approach for detecting both malaria and acute lymphoblastic leukemia using blood smear microscopic images, directly addressing the use of deep learning in leukemia detection as part of the research question."
+          },
+          {
+            "id": "https://openalex.org/W3173704035",
+            "title": "Machine Learning in Detection and Classification of Leukemia Using Smear Blood Images: A Systematic Review",
+            "year": 2021,
+            "doi": "https://doi.org/10.1155/2021/9933481",
+            "abstract": "Introduction. The early detection and diagnosis of leukemia, i.e., the precise differentiation of malignant leukocytes with minimum costs in the early stages of the disease, is a major problem in the domain of disease diagnosis. Despite the high prevalence of leukemia, there is a shortage of flow cytometry equipment, and the methods available at laboratory diagnostic centers are time-consuming. Motivated by the capabilities of machine learning (machine learning (ML)) in disease diagnosis, the present systematic review was conducted to review the studies aiming to discover and classify leukemia by using machine learning. Methods. A systematic search in four databases (PubMed, Scopus, Web of Science, and ScienceDirect) and Google Scholar was performed via a search strategy using Machine Learning (ML), leukemia, peripheral blood smear (PBS) image, detection, diagnosis, and classification as the keywords. Initially, 116 articles were retrieved. After applying the inclusion and exclusion criteria, 16 articles remained as the population of the study. Results. This review study presents a comprehensive and systematic view of the status of all published ML-based leukemia detection and classification models that process PBS images. The average accuracy of the ML methods applied in PBS image analysis to detect leukemia was >97%, indicating that the use of ML could lead to extraordinary outcomes in leukemia detection from PBS images. Among all ML techniques, deep learning (DL) achieved higher precision and sensitivity in detecting different cases of leukemia, compared to its precedents. ML has many applications in analyzing different types of leukemia images, but the use of ML algorithms to detect acute lymphoblastic leukemia (ALL) has attracted the greatest attention in the fields of hematology and artificial intelligence. Conclusion. Using the ML method to process leukemia smear images can improve accuracy, reduce diagnosis time, and provide faster, cheaper, and safer diagnostic services. In addition to the current diagnostic methods, clinical and laboratory experts can also adopt ML methods in laboratory applications and tools.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "Discusses the use of deep learning (DL) in leukemia detection from peripheral blood smear images."
+          },
+          {
+            "id": "https://openalex.org/W4210460174",
+            "title": "A Deep Learning Framework for Leukemia Cancer Detection in Microscopic Blood Samples Using Squeeze and Excitation Learning",
+            "year": 2022,
+            "doi": "https://doi.org/10.1155/2022/2801227",
+            "abstract": "Leukemia is a fatal category of cancer-related disease that affects individuals of all ages, including children and adults, and is a significant cause of death worldwide. Particularly, it is associated with White Blood Cells (WBC), which is accompanied by a rise in the number of immature lymphocytes and cause damage to the bone marrow and/or blood. Therefore, a rapid and reliable cancer diagnosis is a critical requirement for successful therapy to raise survival rates. Currently, a manual analysis of blood samples obtained through microscopic images is done to diagnose this disease, which is often very slow, time-consuming, and less accurate. Furthermore, in microscopic analysis, the appearance and shape of leukemic cells seem very similar to normal cells which make detection more difficult. In the past decades, deep learning utilizing Convolutional Neural Networks (CNN) has provided state-of-the-art approaches for image classification problems; however, there is still a gap to improve their efficacy, learning procedure, and performance. Therefore, in this research study, we proposed a new variant of deep learning algorithm to diagnose leukemia disease by analyzing the microscopic images of blood samples. The proposed deep learning architecture emphasizes the channel associations on all levels of feature representation by incorporating the squeeze and excitation learning that recursively performs recalibration on channel-wise feature outputs by modeling channel interdependencies explicitly. In addition, the incorporation of the squeeze-and-excitation process enhances the feature discriminability of leukemic and normal cells, and strategically assists in exposing informative features of leukemia cells while suppressing less valuable ones as well as improving feature representational power of deep learning algorithm. We show that piling these learning operations of squeeze and excite together in a deep learning model can improve the performance of the model in diagnosing leukemia from microscopic images based on blood samples of patients. Furthermore, an extensive set of experiments are performed on both cropped cells and full-size microscopic images as well as with data augmentation to address the problem of fewer data and to further boost their performance. The proposed model is tested on two publicly available datasets of blood samples of leukemia patients, namely, ALL_IDB1 and ALL_IDB2. The suggested deep learning model exhibits good results and can be utilized to make a reliable computer-aided diagnosis for leukemia cancer.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "Describes a deep learning framework for leukemia detection in microscopic blood samples."
+          },
+          {
+            "id": "https://openalex.org/W3173992087",
+            "title": "Development and Evaluation of a Leukemia Diagnosis System Using Deep Learning in Real Clinical Scenarios",
+            "year": 2021,
+            "doi": "https://doi.org/10.3389/fped.2021.693676",
+            "abstract": "Leukemia is the most common malignancy affecting children. The morphologic analysis of bone marrow smears is an important initial step for diagnosis. Recent publications demonstrated that artificial intelligence is able to classify blood cells but a long way from clinical use. A total of 1,732 bone marrow images were used for the training of a convolutional neural network (CNN). New techniques of deep learning were integrated and an end-to-end leukemia diagnosis system was developed by using raw images without pre-processing. The system creatively imitated the workflow of a hematologist by detecting and excluding uncountable and crushed cells, then classifying and counting the remain cells to make a diagnosis. The performance of the CNN in classifying WBCs achieved an accuracy of 82.93%, precision of 86.07% and F1 score of 82.02%. And the performance in diagnosing acute lymphoid leukemia achieved an accuracy of 89%, sensitivity of 86% and specificity of 95%. The system also performs well at detecting the bone marrow metastasis of lymphoma and neuroblastoma, achieving an average accuracy of 82.93%. This is the first study which included a wider variety of cell types in leukemia diagnosis, and achieved a relatively high performance in real clinical scenarios.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "Develops a deep learning system for leukemia diagnosis using real clinical data from blood smear images."
+          },
+          {
+            "id": "https://openalex.org/W4292059725",
+            "title": "Latent Space Representational Learning of Deep Features for Acute Lymphoblastic Leukemia Diagnosis",
+            "year": 2022,
+            "doi": "https://doi.org/10.32604/csse.2023.029597",
+            "abstract": "Acute Lymphoblastic Leukemia (ALL) is a fatal malignancy that is featured by the abnormal increase of immature lymphocytes in blood or bone marrow. Early prognosis of ALL is indispensable for the effectual remediation of this disease. Initial screening of ALL is conducted through manual examination of stained blood smear microscopic images, a process which is time-consuming and prone to errors. Therefore, many deep learning-based computer-aided diagnosis (CAD) systems have been established to automatically diagnose ALL. This paper proposes a novel hybrid deep learning system for ALL diagnosis in blood smear images. The introduced system integrates the proficiency of autoencoder networks in feature representational learning in latent space with the superior feature extraction capability of standard pretrained convolutional neural networks (CNNs) to identify the existence of ALL in blood smears. An augmented set of deep image features are formed from the features extracted by GoogleNet and Inception-v3 CNNs from a hybrid dataset of microscopic blood smear images. A sparse autoencoder network is designed to create an abstract set of significant latent features from the enlarged image feature set. The latent features are used to perform image classification using Support Vector Machine (SVM) classifier. The obtained results show that the latent features improve the classification performance of the proposed ALL diagnosis system over the original image features. Moreover, the classification performance of the system with various sizes of the latent feature set is evaluated. The retrieved results reveal that the introduced ALL diagnosis system superiorly compete the state of the art.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "Proposes a hybrid deep learning system for acute lymphoblastic leukemia diagnosis in blood smear images."
+          },
+          {
+            "id": "https://openalex.org/W4408714323",
+            "title": "Deep Learning Neural Network Based on PSO for Leukemia Cell Disease Diagnosis from Microscope Images",
+            "year": 2025,
+            "doi": "https://doi.org/10.1007/s10278-025-01474-x",
+            "abstract": "Leukemia is a kind of cancer characterized by the proliferation of abnormal, immature White Blood Cells (WBCs) produced in the bone marrow, which subsequently circulate throughout the body. Prompt leukemia diagnosis is vital in determining the optimal treatment plan, as different types of leukemia require distinct treatments. Early detection is therefore instrumental in facilitating the use of the most effective therapies. The identification of leukemia cells from microscopic images is considered a challenging task due to the complexity of the image features. This paper presents a deep learning neural network approach that utilizes the Particle Swarm Optimization (PSO) method to diagnose leukemia cell disease from microscope images. Initially, deep learning is employed to extract features from the leukemia images, which are then optimized by the PSO method to select the most relevant features for machine learning. Three different machine learning algorithms, namely Decision Tree (DT), Support Vector Machine (SVM), and K-Nearest Neighbors (K-NN) methods, are utilized to analyze the selected features. The results of the experiments demonstrate PSO accuracies of 97.4%, 92.3%, and 85.9% for SVM, K-NN, and DT algorithms with GoogLeNet, respectively. The proposed method achieved accuracies of 100%, 94.9%, and 92.3% for SVM, K-NN, and DT methods respectively, with Ant Colony Optimization (ACO) feature extraction and ResNet-50 employed as revealed by the experimental results. These findings suggest that the proposed approach is a promising tool for accurate diagnosis of leukemia cell disease using microscopic images.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The paper directly addresses the use of deep learning for leukemia detection in microscopic images, which is directly relevant to the research question."
+          },
+          {
+            "id": "https://openalex.org/W4303627723",
+            "title": "A Deep Learning-Based Approach for the Diagnosis of Acute Lymphoblastic Leukemia",
+            "year": 2022,
+            "doi": "https://doi.org/10.3390/electronics11193168",
+            "abstract": "Leukemia is a deadly disease caused by the overproduction of immature white blood cells (WBS) in the bone marrow. If leukemia is detected at the initial stages, the chances of recovery are better. Typically, morphological analysis for the identification of acute lymphoblastic leukemia (ALL) is performed manually on blood cells by skilled medical personnel, which has several disadvantages, including a lack of medical personnel, sluggish analysis, and prediction that is dependent on the medical personnel’s expertise. Therefore, we proposed the Multi-Attention EfficientNetV2S and EfficientNetB3 state-of-the-art deep learning architectures using transfer learning-based fine-tuning approach to distinguish the normal and blast cells from microscopic blood smear images that both are pretrained on large-scale ImageNet database. We simply modified the last block of both models and added additional layers to both models. After including this Multi-Attention Mechanism, it not only reduces the model’s complexities but also generalizes its network quite well. By using the proposed technique, the accuracy has improved and the overall loss is also minimized. Our Multi-Attention EfficientNetV2S and EfficientNetB3 models achieved 99.73% and 99.25% accuracy, respectively. We have further compared the proposed model’s performance to other individual and ensemble models. Upon comparison, the proposed model outclassed the existing literature and other benchmark models, thus proving its efficiency.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract directly addresses the use of deep learning for the diagnosis of acute lymphoblastic leukemia (ALL) using blood smear images, which is relevant to the research question on how deep learning is used for leukemia detection."
+          },
+          {
+            "id": "https://openalex.org/W7157258168",
+            "title": "Enhanced Deep Learning Framework for Segmentation and Classification of Acute Lymphoblastic Leukemia from Peripheral Blood Microscope Images",
+            "year": 2026,
+            "doi": "https://doi.org/10.55041/ijcope.v2i4.746",
+            "abstract": "Early and accurate detection of Acute Lymphoblastic Leukemia (ALL) from peripheral blood images can significantly enhance survival rates and clinical outcomes. Conventional image segmentation techniques and initial Convolutional Neural Network (CNN)-based models have produced encouraging outcomes; however, they encounter difficulties in managing stain variations, overlapping cells, and data imbalance. This study introduces an advanced deep learning framework that combines Hybrid CNN–Transformer (HCT-Net) and Attention-driven Segmentation Networks (ASNet) to enhance the identification of leukemia-affected areas. The suggested method uses transfer learning from pretrained biomedical foundations, a dual-branch encoder–decoder architecture, and spatial-channel attention to highlight features that are specific to leukemia. Using the ALL-IDB1 and ALL-IDB2 datasets for experimental testing shows that the Jaccard Index, Tanimoto coefficient, and segmentation error are all much better than they were with CNN, Fuzzy C-Means, and K-Means methods. Keywords— Leukemia Detection; Hybrid CNN-Transformer; Attention Mechanism; Deep Learning, Medical Image Segmentation.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract directly addresses the use of deep learning for leukemia detection in peripheral blood smear images, specifically mentioning the use of a Hybrid CNN-Transformer (HCT-Net) and Attention-driven Segmentation Networks (ASNet) for this purpose."
+          },
+          {
+            "id": "https://openalex.org/W4320484575",
+            "title": "Detection of acute promyelocytic leukemia in peripheral blood and bone marrow with annotation-free deep learning",
+            "year": 2023,
+            "doi": "https://doi.org/10.1038/s41598-023-29160-4",
+            "abstract": "While optical microscopy inspection of blood films and bone marrow aspirates by a hematologist is a crucial step in establishing diagnosis of acute leukemia, especially in low-resource settings where other diagnostic modalities are not available, the task remains time-consuming and prone to human inconsistencies. This has an impact especially in cases of Acute Promyelocytic Leukemia (APL) that require urgent treatment. Integration of automated computational hematopathology into clinical workflows can improve the throughput of these services and reduce cognitive human error. However, a major bottleneck in deploying such systems is a lack of sufficient cell morphological object-labels annotations to train deep learning models. We overcome this by leveraging patient diagnostic labels to train weakly-supervised models that detect different types of acute leukemia. We introduce a deep learning approach, Multiple Instance Learning for Leukocyte Identification (MILLIE), able to perform automated reliable analysis of blood films with minimal supervision. Without being trained to classify individual cells, MILLIE differentiates between acute lymphoblastic and myeloblastic leukemia in blood films. More importantly, MILLIE detects APL in blood films (AUC 0.94 ± 0.04) and in bone marrow aspirates (AUC 0.99 ± 0.01). MILLIE is a viable solution to augment the throughput of clinical pathways that require assessment of blood film microscopy.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract directly mentions the use of deep learning for detecting acute promyelocytic leukemia (APL) in peripheral blood smear images, which is directly relevant to the research question."
+          },
+          {
+            "id": "https://openalex.org/W4407174495",
+            "title": "A Review of Deep Learning Techniques for Leukemia Cancer Classification Based on Blood Smear Images",
+            "year": 2025,
+            "doi": "https://doi.org/10.3390/applbiosci4010009",
+            "abstract": "This research reviews deep learning methodologies for detecting leukemia, a critical cancer diagnosis and treatment aspect. Using a systematic mapping study (SMS) and systematic literature review (SLR), thirty articles published between 2019 and 2023 were analyzed to explore the advancements in deep learning techniques for leukemia diagnosis using blood smear images. The analysis reveals that state-of-the-art models, such as Convolutional Neural Networks (CNNs), transfer learning, Vision Transformers (ViTs), ensemble methods, and hybrid models, achieved excellent classification accuracies. Preprocessing methods, including normalization, edge enhancement, and data augmentation, significantly improved model performance. Despite these advancements, challenges such as dataset limitations, the lack of model interpretability, and ethical concerns regarding data privacy and bias remain critical barriers to widespread adoption. The review highlights the need for diverse, well-annotated datasets and the development of explainable AI models to enhance clinical trust and usability. Additionally, addressing regulatory and integration challenges is essential for the safe deployment of these technologies in healthcare. This review aims to guide researchers in overcoming these challenges and advancing deep learning applications to improve leukemia diagnostics and patient outcomes.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The paper directly reviews deep learning techniques for leukemia diagnosis using blood smear images, which is directly relevant to the research question."
+          },
+          {
+            "id": "https://openalex.org/W4283259222",
+            "title": "Detecting Malignant Leukemia Cells Using Microscopic Blood Smear Images: A Deep Learning Approach",
+            "year": 2022,
+            "doi": "https://doi.org/10.3390/app12136317",
+            "abstract": "Leukemia is a form of blood cancer that develops when the human body’s bone marrow contains too many white blood cells. This medical condition affects adults and is considered a prevalent form of cancer in children. Treatment for leukaemia is determined by the type and the extent to which cancer has developed across the body. It is crucial to diagnose leukaemia early in order to provide adequate care and to cure patients. Researchers have been working on advanced diagnostics systems based on Machine Learning (ML) approaches to diagnose leukaemia early. In this research, we employ deep learning (DL) based convolutional neural network (CNN) and hybridized two individual blocks of CNN named CNN-1 and CNN-2 to detect acute lymphoblastic leukaemia (ALL), acute myeloid leukaemia (AML), and multiple myeloma (MM). The proposed model detects malignant leukaemia cells using microscopic blood smear images. We construct a dataset of about 4150 images from a public directory. The main challenges were background removal, ripping out un-essential blood components of blood supplies, reduce the noise and blurriness and minimal method for image segmentation. To accomplish the pre-processing and segmentation, we transform RGB color-space into the greyscale 8-bit mode, enhancing the contrast of images using the image intensity adjustment method and adaptive histogram equalisation (AHE) method. We increase the structure and sharpness of images by multiplication of binary image with the output of enhanced images. In the next step, complement is done to get the background in black colour and nucleus of blood in white colour. Thereafter, we applied area operation and closing operation to remove background noise. Finally, we multiply the final output to source image to regenerate the images dataset in RGB colour space, and we resize dataset images to [400, 400]. After applying all methods and techniques, we have managed to get noiseless, non-blurred, sharped and segmented images of the lesion. In next step, enhanced segmented images are given as input to CNNs. Two parallel CCN models are trained, which extract deep features. The extracted features are further combined using the Canonical Correlation Analysis (CCA) fusion method to get more prominent features. We used five classification algorithms, namely, SVM, Bagging ensemble, total boosts, RUSBoost, and fine KNN, to evaluate the performance of feature extraction algorithms. Among the classification algorithms, Bagging ensemble outperformed the other algorithms by achieving the highest accuracy of 97.04%.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract directly addresses the use of deep learning for detecting leukemia in blood smear images, which is directly relevant to the research question."
+          },
+          {
+            "id": "https://openalex.org/W4386952665",
+            "title": "CellIdentifier: Classification of Peripheral Blood Cell Images using Deep Learning",
+            "year": 2023,
+            "doi": "https://doi.org/10.1109/iceccme57830.2023.10253397",
+            "abstract": "Diagnosis and Identification of cells and disease infected cells are considered as very important in medical science all over the world. There are health implications which can often be identified by observing the morphological changes of cells. The traditional methods of identifying such issues can be expensive and time consuming to the extent that only certain medical centers can perform the task at hand, or take days to receive a report of. However, deep Learning with convolutional neural networks (CNNs) can take over most of this tedious process. This paper aims towards creating a custom CNN model that can quickly classify different kinds of peripheral blood cells such as different white blood cell times and platelets. Such a model can be used in blood cell counts which can be used to identify cases like leukemia. Moreover, such a method can be extended into other fields such as red blood cell detection or even infected cell detection, which includes identifying diseases from Sickle Cell Anemia to cells affected by COVID19. For this research, a total of 32768 images were used. Eventually, the custom CNN model has performed exceptionally well, achieving accuracies as high as 99.1% and 98.9% in training and validation respectively, which is significantly higher than using pretrained models such as DenseNet or NasNet. The result also proves to be higher compared to the previously completed similar tasks to the best of our knowledge. The performance of the model has also been evaluated based upon confusion matrix and classification report.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract mentions the use of deep learning with CNNs for classifying different kinds of peripheral blood cells, including white blood cells, which can be relevant to detecting leukemia."
+          },
+          {
+            "id": "https://openalex.org/W4309269102",
+            "title": "BCNet: A Deep Learning Computer-Aided Diagnosis Framework for Human Peripheral Blood Cell Identification",
+            "year": 2022,
+            "doi": "https://doi.org/10.3390/diagnostics12112815",
+            "abstract": "Blood cells carry important information that can be used to represent a person's current state of health. The identification of different types of blood cells in a timely and precise manner is essential to cutting the infection risks that people face on a daily basis. The BCNet is an artificial intelligence (AI)-based deep learning (DL) framework that was proposed based on the capability of transfer learning with a convolutional neural network to rapidly and automatically identify the blood cells in an eight-class identification scenario: Basophil, Eosinophil, Erythroblast, Immature Granulocytes, Lymphocyte, Monocyte, Neutrophil, and Platelet. For the purpose of establishing the dependability and viability of BCNet, exhaustive experiments consisting of five-fold cross-validation tests are carried out. Using the transfer learning strategy, we conducted in-depth comprehensive experiments on the proposed BCNet's architecture and test it with three optimizers of ADAM, RMSprop (RMSP), and stochastic gradient descent (SGD). Meanwhile, the performance of the proposed BCNet is directly compared using the same dataset with the state-of-the-art deep learning models of DensNet, ResNet, Inception, and MobileNet. When employing the different optimizers, the BCNet framework demonstrated better classification performance with ADAM and RMSP optimizers. The best evaluation performance was achieved using the RMSP optimizer in terms of 98.51% accuracy and 96.24% F1-score. Compared with the baseline model, the BCNet clearly improved the prediction accuracy performance 1.94%, 3.33%, and 1.65% using the optimizers of ADAM, RMSP, and SGD, respectively. The proposed BCNet model outperformed the AI models of DenseNet, ResNet, Inception, and MobileNet in terms of the testing time of a single blood cell image by 10.98, 4.26, 2.03, and 0.21 msec. In comparison to the most recent deep learning models, the BCNet model could be able to generate encouraging outcomes. It is essential for the advancement of healthcare facilities to have such a recognition rate improving the detection performance of the blood cells.",
+            "screening_status": "semantically_relevant",
+            "screening_reason": "The abstract mentions a deep learning framework (BCNet) for the identification of blood cells, which is directly relevant to the use of deep learning in leukemia detection from peripheral blood smear images."
+          }
+        ],
+        "excluded_papers": [
+          {
+            "id": "https://openalex.org/W3016457468",
+            "title": "Deep Transfer Learning in Diagnosing Leukemia in Blood Cells",
+            "year": 2020,
+            "doi": "https://doi.org/10.3390/computers9020029",
+            "abstract": "Leukemia is a fatal disease that threatens the lives of many patients. Early detection can effectively improve its rate of remission. This paper proposes two automated classification models based on blood microscopic images to detect leukemia by employing transfer learning, rather than traditional approaches that have several disadvantages. In the first model, blood microscopic images are pre-processed; then, features are extracted by a pre-trained deep convolutional neural network named AlexNet, which makes classifications according to numerous well-known classifiers. In the second model, after pre-processing the images, AlexNet is fine-tuned for both feature extraction and classification. Experiments were conducted on a dataset consisting of 2820 images confirming that the second model performs better than the first because of 100% classification accuracy.",
+            "exclusion_reason": "Publication year outside allowed range."
+          },
+          {
+            "id": "https://openalex.org/W3093302510",
+            "title": "Deep Learning for Acute Myeloid Leukemia Diagnosis",
+            "year": 2020,
+            "doi": "https://doi.org/10.25122/jml-2019-0090",
+            "abstract": "By changing the lifestyle and increasing the cancer incidence, accurate diagnosis becomes a significant medical action. Today, DNA microarray is widely used in cancer diagnosis and screening since it is able to measure gene expression levels. Analyzing them by using common statistical methods is not suitable because of the high gene expression data dimensions. So, this study aims to use new techniques to diagnose acute myeloid leukemia. In this study, the leukemia microarray gene data, contenting 22283 genes, was extracted from the Gene Expression Omnibus repository. Initial preprocessing was applied by using a normalization test and principal component analysis in Python. Then DNNs neural network designed and implemented to the data and finally results cross-validated by classifiers. The normalization test was significant (P>0.05) and the results show the PCA gene segregation potential and independence of cancer and healthy cells. The results accuracy for single-layer neural network and DNNs deep learning network with three hidden layers are 63.33 and 96.67, respectively. Using new methods such as deep learning can improve diagnosis accuracy and performance compared to the old methods. It is recommended to use these methods in cancer diagnosis and effective gene selection in various types of cancer.",
+            "exclusion_reason": "Publication year outside allowed range."
+          },
+          {
+            "id": "https://openalex.org/W4407174495",
+            "title": "A Review of Deep Learning Techniques for Leukemia Cancer Classification Based on Blood Smear Images",
+            "year": 2025,
+            "doi": "https://doi.org/10.3390/applbiosci4010009",
+            "abstract": "This research reviews deep learning methodologies for detecting leukemia, a critical cancer diagnosis and treatment aspect. Using a systematic mapping study (SMS) and systematic literature review (SLR), thirty articles published between 2019 and 2023 were analyzed to explore the advancements in deep learning techniques for leukemia diagnosis using blood smear images. The analysis reveals that state-of-the-art models, such as Convolutional Neural Networks (CNNs), transfer learning, Vision Transformers (ViTs), ensemble methods, and hybrid models, achieved excellent classification accuracies. Preprocessing methods, including normalization, edge enhancement, and data augmentation, significantly improved model performance. Despite these advancements, challenges such as dataset limitations, the lack of model interpretability, and ethical concerns regarding data privacy and bias remain critical barriers to widespread adoption. The review highlights the need for diverse, well-annotated datasets and the development of explainable AI models to enhance clinical trust and usability. Additionally, addressing regulatory and integration challenges is essential for the safe deployment of these technologies in healthcare. This review aims to guide researchers in overcoming these challenges and advancing deep learning applications to improve leukemia diagnostics and patient outcomes.",
+            "screening_status": "eligible",
+            "exclusion_reason": "Reviews deep learning techniques for leukemia classification but does not directly discuss their use in peripheral blood smear images."
+          },
+          {
+            "id": "https://openalex.org/W4389397838",
+            "title": "Deep learning enhances acute lymphoblastic leukemia diagnosis and classification using bone marrow images",
+            "year": 2023,
+            "doi": "https://doi.org/10.3389/fonc.2023.1330977",
+            "abstract": "Acute lymphoblastic leukemia (ALL) poses a significant health challenge, particularly in pediatric cases, requiring precise and rapid diagnostic approaches. This comprehensive review explores the transformative capacity of deep learning (DL) in enhancing ALL diagnosis and classification, focusing on bone marrow image analysis. Examining ten studies conducted between 2013 and 2023 across various countries, including India, China, KSA, and Mexico, the synthesis underscores the adaptability and proficiency of DL methodologies in detecting leukemia. Innovative DL models, notably Convolutional Neural Networks (CNNs) with Cat-Boosting, XG-Boosting, and Transfer Learning techniques, demonstrate notable approaches. Some models achieve outstanding accuracy, with one CNN reaching 100% in cancer cell classification. The incorporation of novel algorithms like Cat-Swarm Optimization and specialized CNN architectures contributes to superior classification accuracy. Performance metrics highlight these achievements, with models consistently outperforming traditional diagnostic methods. For instance, a CNN with Cat-Boosting attains 100% accuracy, while others hover around 99%, showcasing DL models' robustness in ALL diagnosis. Despite acknowledged challenges, such as the need for larger and more diverse datasets, these findings underscore DL's transformative potential in reshaping leukemia diagnostics. The high numerical accuracies accentuate a promising trajectory toward more efficient and accurate ALL diagnosis in clinical settings, prompting ongoing research to address challenges and refine DL models for optimal clinical integration.",
+            "screening_status": "eligible",
+            "exclusion_reason": "The paper focuses on bone marrow images rather than peripheral blood smear images, which are specifically mentioned in the research question."
+          }
+        ],
+        "synthesis": null,
+        "review_request": null
+      }
+    }
+  ]
+}
