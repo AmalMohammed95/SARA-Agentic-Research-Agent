@@ -299,3 +299,93 @@ These checks support consistent review retrieval and reduce the risk of invalid 
 SARA provides structured execution tracing and persistent review records as separate mechanisms.
 
 Together, these components support research workflow inspection, human oversight, and subsequent evaluation.
+## Installation and Usage
+
+### Requirements
+
+- Python with a virtual environment
+- Ollama installed locally
+- Ollama model: `qwen2.5:7b`
+- Internet access for OpenAlex research searches
+
+### Installation (Windows PowerShell)
+
+From the project root directory:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+ollama pull qwen2.5:7b
+```
+
+Ensure the Ollama service is running and the model is available locally.
+
+### Run the Application
+
+```powershell
+streamlit run app.py
+```
+
+In the Streamlit interface, enter a research question, select the maximum number of agent turns (1–3), and click **Run Research Agent**.
+
+### Run Automated Tests
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m pytest tests -q
+```
+
+The latest local test run completed successfully: **84 passed**. This verifies the automated test suite, not the scientific sufficiency of every research result.
+## Evaluation and Limitations
+
+### Evaluation Design
+
+SARA is evaluated against a non-agentic academic search baseline using a frozen set of five research questions (E01–E05), stored in `evaluation/research_questions.csv`.
+
+The comparison considers execution status, runtime, evidence support, and research workflow behavior. The baseline performs a simpler search and screening process, whereas SARA uses bounded agentic execution, evidence verification, and explicit termination conditions.
+
+### Recorded Evaluation Results
+
+The following results were recorded for evaluation case E01:
+
+**Research question:** How is deep learning used for leukemia detection in peripheral blood smear images?
+
+| Metric | Baseline | SARA |
+|---|---|---|
+| Execution status | COMPLETED | INSUFFICIENT_EVIDENCE |
+| Duration (seconds) | 1.328 | 2695.436 |
+| Execution exception | None | None |
+
+The baseline retrieved and included five papers. SARA completed its bounded execution without a reported exception but did not satisfy its evidence-sufficiency criteria.
+
+These results represent one recorded evaluation case and should not be interpreted as a complete five-case performance comparison.
+
+### Limitations
+
+- **Execution cost:** Local CPU-based LLM inference can substantially increase execution time.
+- **Evidence sufficiency:** Retrieved papers and extracted claims may not satisfy strict evidence-verification requirements.
+- **Evaluation coverage:** The documented E01 result does not establish performance across all five frozen evaluation cases.
+- **External dependency:** Academic search requires access to OpenAlex, while local model execution depends on Ollama availability.
+- **Model sensitivity:** Extraction quality and agent decisions may vary with the local language model.
+
+### Testing and Reproducibility
+
+The latest automated test run completed with **84 passing tests**.
+
+To run the tests:
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m pytest tests -q
+```
+
+Evaluation artifacts are stored in the `evaluation/` directory. The recorded E01 comparison is available in `evaluation/comparison_results_batch_v1.json`.
+
+Passing software tests demonstrates that the tested components behave as expected; it does not independently establish research accuracy, evidence sufficiency, or scientific superiority.
+
+### Evaluation Conclusion
+
+SARA demonstrates an implemented agentic research workflow with bounded execution, evidence verification, human oversight, and explicit failure handling. The recorded E01 experiment highlights a trade-off between research workflow complexity, strict evidence requirements, and execution cost.
+
+Further evaluation across the frozen research questions is required before making broader claims about comparative performance.
