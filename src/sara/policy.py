@@ -45,7 +45,7 @@ def validate_tool_call(tool_name: str, arguments: dict) -> dict:
                 "reason": "OpenAlex search query must not be empty.",
             }
 
-        if not isinstance(max_results, int) or not 1 <= max_results <= 20:
+        if type(max_results) is not int or not 1 <= max_results <= 20:
             return {
                 "allowed": False,
                 "reason": "max_results must be an integer between 1 and 20.",
