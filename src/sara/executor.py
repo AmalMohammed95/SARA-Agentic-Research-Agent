@@ -6,7 +6,7 @@ The model never executes tools directly.
 """
 
 from .policy import validate_tool_call
-from .tools import search_openalex
+from .tools import search_openalex, search_scholarly
 
 
 def execute_tool(tool_name: str, arguments: dict) -> dict:
@@ -31,9 +31,9 @@ def execute_tool(tool_name: str, arguments: dict) -> dict:
             "result": None,
         }
 
-    if tool_name == "search_openalex":
+    if tool_name in {"search_openalex", "search_scholarly"}:
         try:
-            result = search_openalex(
+            result = (search_scholarly if tool_name == "search_scholarly" else search_openalex)(
                 query=arguments["query"],
                 max_results=arguments.get("max_results", 5),
             )

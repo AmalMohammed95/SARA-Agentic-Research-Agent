@@ -98,3 +98,114 @@ def search_openalex(query: str, max_results: int = 5) -> list[dict]:
         ordered = candidates
 
     return [paper for paper, _, _, _ in ordered[:max_results]]
+
+
+SEMANTIC_SCHOLAR_API_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
+
+
+def search_semantic_scholar(query: str, max_results: int = 5) -> list[dict]:
+    """Return source-grounded Semantic Scholar metadata in SARA's paper schema.
+
+    A failed request raises an exception; the multi-source wrapper isolates it.
+    """
+    import os
+    import urllib.error
+    if not isinstance(query, str) or not query.strip() or type(max_results) is not int or not 1 <= max_results <= 20:
+        return []
+    params = urllib.parse.urlencode({
+        "query": query.strip(), "limit": max_results,
+        "fields": "paperId,title,year,abstract,externalIds",
+    })
+    headers = {"User-Agent": "SARA-Academic-Research-Agent"}
+    api_key = os.environ.get("SEMANTIC_SCHOLAR_API_KEY", "").strip()
+    if api_key:
+        headers["x-api-key"] = api_key
+    request = urllib.request.Request(f"{SEMANTIC_SCHOLAR_API_URL}?{params}", headers=headers)
+    try:
+        with urllib.request.urlopen(request, timeout=15) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+
+    except urllib.error.HTTPError as exc:
+        print(f"[Semantic Scholar] HTTP error: {exc.code}")
+        return []
+
+    except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
+        print(f"[Semantic Scholar] Connection error: {exc}")
+        return []
+    papers = []
+    for item in payload.get("data", []):
+        if not isinstance(item, dict) or not item.get("title"):
+            continue
+        paper_id = item.get("paperId")
+        ids = item.get("externalIds") or {}
+        doi = ids.get("DOI") if isinstance(ids, dict) else None
+        papers.append({
+            "id": f"https://www.semanticscholar.org/paper/{paper_id}" if paper_id else None,
+            "title": item["title"], "year": item.get("year"),
+            "doi": f"https://doi.org/{doi}" if doi else None,
+            "abstract": item.get("abstract") or "",
+            "source": "semantic_scholar",
+        })
+    return papers
+
+
+def _canonical_doi(value):
+    if not value:
+        return None
+    value = str(value).strip().lower()
+    for prefix in ("https://doi.org/", "http://doi.org/", "doi:"):
+        if value.startswith(prefix):
+            value = value[len(prefix):]
+    return value.strip() or None
+
+
+def search_scholarly(query: str, max_results: int = 10) -> list[dict]:
+    """Search both sources independently; deduplicate and preserve provenance.
+
+    Return at most max_results papers total, with usable abstracts prioritized.
+    Raise only if both providers fail (not if either returns zero results).
+    """
+    if not isinstance(query, str) or not query.strip() or type(max_results) is not int or not 1 <= max_results <= 20:
+        return []
+    sources = (("openalex", search_openalex), ("semantic_scholar", search_semantic_scholar))
+    collected, errors, successes = [], [], 0
+    for name, function in sources:
+        try:
+            papers = function(query, max_results=max_results)
+            successes += 1
+            for paper in papers:
+                if isinstance(paper, dict):
+                    collected.append({**paper, "source": paper.get("source") or name})
+        except Exception as exc:
+            errors.append(f"{name}: {type(exc).__name__}")
+    if not successes:
+        raise RuntimeError("Both scholarly providers failed: " + "; ".join(errors))
+    unique, by_doi, by_id = [], {}, {}
+    for paper in collected:
+        doi = _canonical_doi(paper.get("doi"))
+        identifier = str(paper.get("id") or "").strip().lower()
+        index = by_doi.get(doi) if doi else None
+        if index is None and identifier:
+            index = by_id.get(identifier)
+        if index is not None:
+            previous = unique[index]
+            # Prefer a longer source abstract, without replacing a stable DOI.
+            if len(paper.get("abstract") or "") > len(previous.get("abstract") or ""):
+                previous["abstract"] = paper["abstract"]
+            if not previous.get("doi") and paper.get("doi"):
+                previous["doi"] = paper["doi"]
+            previous["sources"] = sorted(set(previous["sources"] + [paper["source"]]))
+            if doi:
+                by_doi[doi] = index
+            if identifier:
+                by_id[identifier] = index
+            continue
+        index = len(unique)
+        unique.append({**paper, "sources": [paper["source"]]})
+        if doi:
+            by_doi[doi] = index
+        if identifier:
+            by_id[identifier] = index
+    # Prioritize usable abstracts, while keeping original provider order within bands.
+    unique.sort(key=lambda paper: not bool((paper.get("abstract") or "").strip()))
+    return unique[:max_results]

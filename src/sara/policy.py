@@ -8,6 +8,7 @@ The language model is not allowed to execute tools directly.
 
 ALLOWED_TOOLS = {
     "search_openalex",
+    "search_scholarly",
 }
 
 
@@ -35,14 +36,18 @@ def validate_tool_call(tool_name: str, arguments: dict) -> dict:
             "reason": "Tool arguments must be a dictionary.",
         }
 
-    if tool_name == "search_openalex":
+    if tool_name in {"search_openalex", "search_scholarly"}:
         query = arguments.get("query", "")
         max_results = arguments.get("max_results", 5)
 
         if not isinstance(query, str) or not query.strip():
             return {
                 "allowed": False,
-                "reason": "OpenAlex search query must not be empty.",
+                "reason": (
+                    "OpenAlex search query must not be empty."
+                    if tool_name == "search_openalex"
+                    else "Semantic Scholar search query must not be empty."
+),
             }
 
         if type(max_results) is not int or not 1 <= max_results <= 20:

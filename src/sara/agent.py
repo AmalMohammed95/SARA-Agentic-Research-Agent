@@ -368,7 +368,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
 
         search_result = execute_tool(
 
-            "search_openalex",
+            "search_scholarly",
 
             {
 
@@ -390,7 +390,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
 
                 turn=turn,
 
-                action="search_openalex",
+                action="search_scholarly",
 
                 status=search_result["status"],
 
@@ -412,7 +412,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
 
             state.status = "FAILED_SAFELY"
 
-            state.stopping_reason = "OpenAlex search did not complete successfully."
+            state.stopping_reason = "Scholarly search did not complete successfully."
 
             break
 
