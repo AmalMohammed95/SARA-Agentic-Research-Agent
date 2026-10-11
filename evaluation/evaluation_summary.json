@@ -1,14 +1,14 @@
 {
   "total_cases": 5,
   "expected_pairs": 10,
-  "recorded_pairs": 2,
-  "missing_pairs": 8,
+  "recorded_pairs": 10,
+  "missing_pairs": 0,
   "status_counts": {
     "Baseline": {
-      "COMPLETED": 1
+      "COMPLETED": 5
     },
     "SARA": {
-      "INSUFFICIENT_EVIDENCE": 1
+      "INSUFFICIENT_EVIDENCE": 5
     }
   },
   "rows": [
@@ -34,72 +34,72 @@
       "case_id": "E02",
       "category": "broad",
       "system": "Baseline",
-      "recorded": false,
-      "status": null,
-      "duration_seconds": null,
+      "recorded": true,
+      "status": "COMPLETED",
+      "duration_seconds": 1.694,
       "exception": null
     },
     {
       "case_id": "E02",
       "category": "broad",
       "system": "SARA",
-      "recorded": false,
-      "status": null,
-      "duration_seconds": null,
+      "recorded": true,
+      "status": "INSUFFICIENT_EVIDENCE",
+      "duration_seconds": 2009.224,
       "exception": null
     },
     {
       "case_id": "E03",
       "category": "specific",
       "system": "Baseline",
-      "recorded": false,
-      "status": null,
-      "duration_seconds": null,
+      "recorded": true,
+      "status": "COMPLETED",
+      "duration_seconds": 1.534,
       "exception": null
     },
     {
       "case_id": "E03",
       "category": "specific",
       "system": "SARA",
-      "recorded": false,
-      "status": null,
-      "duration_seconds": null,
+      "recorded": true,
+      "status": "INSUFFICIENT_EVIDENCE",
+      "duration_seconds": 2204.578,
       "exception": null
     },
     {
       "case_id": "E04",
       "category": "broad",
       "system": "Baseline",
-      "recorded": false,
-      "status": null,
-      "duration_seconds": null,
+      "recorded": true,
+      "status": "COMPLETED",
+      "duration_seconds": 1.562,
       "exception": null
     },
     {
       "case_id": "E04",
       "category": "broad",
       "system": "SARA",
-      "recorded": false,
-      "status": null,
-      "duration_seconds": null,
+      "recorded": true,
+      "status": "INSUFFICIENT_EVIDENCE",
+      "duration_seconds": 2158.813,
       "exception": null
     },
     {
       "case_id": "E05",
       "category": "uncertain_evidence",
       "system": "Baseline",
-      "recorded": false,
-      "status": null,
-      "duration_seconds": null,
+      "recorded": true,
+      "status": "COMPLETED",
+      "duration_seconds": 1.398,
       "exception": null
     },
     {
       "case_id": "E05",
       "category": "uncertain_evidence",
       "system": "SARA",
-      "recorded": false,
-      "status": null,
-      "duration_seconds": null,
+      "recorded": true,
+      "status": "INSUFFICIENT_EVIDENCE",
+      "duration_seconds": 944.34,
       "exception": null
     }
   ],

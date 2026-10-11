@@ -6,7 +6,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "evaluation"))
-from analyze_results import summarize
+from evaluation.analyze_results import summarize
 
 
 def _fixture(tmp_path, records):
@@ -43,10 +43,22 @@ def test_missing_status_rejected(tmp_path):
         summarize(*_fixture(tmp_path, [{"case_id": "E01", "system": "SARA"}]))
 
 
-def test_real_recorded_case_has_only_two_pairs():
-    result = summarize(ROOT / "evaluation" / "research_questions.csv", ROOT / "evaluation" / "comparison_results_batch_v1.json")
+def test_real_recorded_case_has_consistent_counts():
+    result = summarize(
+        ROOT / "evaluation" / "research_questions.csv",
+        ROOT / "evaluation" / "comparison_results_batch_v1.json"
+    )
+
     assert result["total_cases"] == 5
-    assert result["recorded_pairs"] == 2
-    assert result["missing_pairs"] == 8
-    assert result["status_counts"]["Baseline"] == {"COMPLETED": 1}
-    assert result["status_counts"]["SARA"] == {"INSUFFICIENT_EVIDENCE": 1}
+    assert result["expected_pairs"] == 10
+
+    assert result["recorded_pairs"] == 10
+    assert result["missing_pairs"] == 0
+
+    assert result["status_counts"]["Baseline"] == {
+        "COMPLETED": 5
+    }
+
+    assert result["status_counts"]["SARA"] == {
+        "INSUFFICIENT_EVIDENCE": 5
+    }
