@@ -99,9 +99,14 @@ if result:
                     reviewer = st.text_input("Reviewer name")
                     decision = st.selectbox(
                         "Decision",
-                        ["APPROVE", "REJECT", "REQUEST_REVISION"],
+                        ["APPROVE", "EDIT", "REJECT", "REQUEST_REVISION"],
                     )
                     reason = st.text_area("Reason")
+                    edited_text = st.text_area(
+                        "Edited synthesis (required for EDIT only)",
+                        value=review.get("synthesis", {}).get("text", ""),
+                        height=240,
+                    )
                     review_submitted = st.form_submit_button(
                         "Submit review decision"
                     )
@@ -113,6 +118,7 @@ if result:
                             decision,
                             reviewer,
                             reason,
+                            edited_text=edited_text if decision == "EDIT" else None,
                         )
                         st.success(
                             f"Review decision recorded: {updated['status']}"
@@ -122,6 +128,10 @@ if result:
                         st.error(str(exc))
 
             else:
+                if review.get("edited_synthesis"):
+                    st.subheader("Human-edited synthesis")
+                    st.warning("Human edited; citation labels checked structurally, not semantically verified.")
+                    st.text(review["edited_synthesis"])
                 st.info(
                     f"Decision: {review.get('decision')} "
                     f"by {review.get('reviewer')}"

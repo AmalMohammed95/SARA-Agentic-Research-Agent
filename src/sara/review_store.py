@@ -59,6 +59,7 @@ def decide_review(
     reviewer: str,
     reason: str = "",
     directory: str | Path = "data/reviews",
+    edited_text: str | None = None,
 ) -> dict:
     """Apply a human decision and persist the result."""
 
@@ -69,6 +70,7 @@ def decide_review(
         decision,
         reviewer,
         reason,
+        edited_text=edited_text,
     )
 
     save_review(updated_review, directory)
