@@ -1,0 +1,112 @@
+{
+  "total_cases": 5,
+  "expected_pairs": 10,
+  "recorded_pairs": 2,
+  "missing_pairs": 8,
+  "status_counts": {
+    "Baseline": {
+      "COMPLETED": 1
+    },
+    "SARA": {
+      "INSUFFICIENT_EVIDENCE": 1
+    }
+  },
+  "rows": [
+    {
+      "case_id": "E01",
+      "category": "specific",
+      "system": "Baseline",
+      "recorded": true,
+      "status": "COMPLETED",
+      "duration_seconds": 1.328,
+      "exception": null
+    },
+    {
+      "case_id": "E01",
+      "category": "specific",
+      "system": "SARA",
+      "recorded": true,
+      "status": "INSUFFICIENT_EVIDENCE",
+      "duration_seconds": 2695.436,
+      "exception": null
+    },
+    {
+      "case_id": "E02",
+      "category": "broad",
+      "system": "Baseline",
+      "recorded": false,
+      "status": null,
+      "duration_seconds": null,
+      "exception": null
+    },
+    {
+      "case_id": "E02",
+      "category": "broad",
+      "system": "SARA",
+      "recorded": false,
+      "status": null,
+      "duration_seconds": null,
+      "exception": null
+    },
+    {
+      "case_id": "E03",
+      "category": "specific",
+      "system": "Baseline",
+      "recorded": false,
+      "status": null,
+      "duration_seconds": null,
+      "exception": null
+    },
+    {
+      "case_id": "E03",
+      "category": "specific",
+      "system": "SARA",
+      "recorded": false,
+      "status": null,
+      "duration_seconds": null,
+      "exception": null
+    },
+    {
+      "case_id": "E04",
+      "category": "broad",
+      "system": "Baseline",
+      "recorded": false,
+      "status": null,
+      "duration_seconds": null,
+      "exception": null
+    },
+    {
+      "case_id": "E04",
+      "category": "broad",
+      "system": "SARA",
+      "recorded": false,
+      "status": null,
+      "duration_seconds": null,
+      "exception": null
+    },
+    {
+      "case_id": "E05",
+      "category": "uncertain_evidence",
+      "system": "Baseline",
+      "recorded": false,
+      "status": null,
+      "duration_seconds": null,
+      "exception": null
+    },
+    {
+      "case_id": "E05",
+      "category": "uncertain_evidence",
+      "system": "SARA",
+      "recorded": false,
+      "status": null,
+      "duration_seconds": null,
+      "exception": null
+    }
+  ],
+  "limitations": [
+    "Missing runs are not failures or successes; they were not recorded.",
+    "COMPLETED is a workflow status, not a verified scientific correctness score.",
+    "No gold-standard paper relevance labels or claim-level annotations are supplied; retrieval, screening, extraction, and citation accuracy cannot be computed.",
+    "Elapsed times are single-run observations, not repeated-run latency estimates."
+  ]
+}
