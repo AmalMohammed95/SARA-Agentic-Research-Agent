@@ -27,6 +27,7 @@ def prepare_synthesis_evidence(
 
     verified = []
     seen_ids = set()
+    missing_markers = {"", "N/A", "NONE", "NULL", "UNKNOWN", "NOT_AVAILABLE", "NOT APPLICABLE"}
 
     for record in evidence:
         paper_id = record.get("paper_id")
@@ -42,8 +43,9 @@ def prepare_synthesis_evidence(
 
         quotes = record["supporting_evidence"]
 
-        if not isinstance(quotes, list) or not all(
+        if not isinstance(quotes, list) or not quotes or not all(
             isinstance(quote, str) and quote.strip()
+            and quote.strip().upper() not in missing_markers
             for quote in quotes
         ):
             continue

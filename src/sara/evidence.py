@@ -195,6 +195,13 @@ def evaluate_evidence_sufficiency(
         "NONE",
         "NULL",
         "UNKNOWN",
+        "NOT_APPLICABLE",
+        "NOT APPLICABLE",
+        "NOT REPORTED",
+        "NOT PROVIDED",
+        "NOT SPECIFIED",
+        "UNAVAILABLE",
+        "NO INFORMATION",
     }
 
     def is_missing(value):
@@ -211,7 +218,9 @@ def evaluate_evidence_sufficiency(
             normalized = normalized.lstrip("-*• ").strip()
             normalized = normalized.strip("`'\"").strip()
 
-            return normalized in missing_markers
+            return normalized in missing_markers or normalized.startswith((
+                "NOT AVAILABLE:", "NOT REPORTED:", "UNKNOWN:",
+            ))
 
         return False
    
