@@ -204,14 +204,20 @@ SARA implements a controlled tool-execution architecture that separates language
 
 ### Registered Tools
 
-The current implementation permits one external scholarly retrieval tool:
+SARA uses a controlled scholarly search interface that integrates
+OpenAlex and Semantic Scholar.
 
-| Tool | Source | Purpose |
+| Tool | Source File | Purpose |
 |---|---|---|
-| `search_openalex` | `tools.py` | Retrieves scholarly publication information from OpenAlex. |
+| `search_scholarly` | `tools.py` | Searches OpenAlex and Semantic Scholar, combines results, removes duplicates, and preserves source provenance. |
+| `search_openalex` | `tools.py` | Retrieves scholarly metadata and abstracts from OpenAlex. |
 
-The tool is explicitly registered in the `ALLOWED_TOOLS` collection in `policy.py`.
+Both tools are validated through the allowlist in `policy.py`
+before execution by `executor.py`.
 
+Semantic Scholar access is optional and may be affected by
+HTTP 429 rate limits. SARA can continue using OpenAlex when
+Semantic Scholar is unavailable.
 ### Tool Validation
 
 Before a proposed tool call is executed, SARA applies the `validate_tool_call()` function.
@@ -220,7 +226,7 @@ The validation process checks:
 
 - Whether the requested tool belongs to the allowed-tool collection.
 - Whether the supplied arguments are structured as a dictionary.
-- Whether the OpenAlex search query is non-empty.
+- Whether the scholarly search query is non-empty before executing the authorized search tools.
 - Whether `max_results` is an integer between 1 and 20.
 
 Requests that fail validation are rejected.
@@ -240,7 +246,7 @@ The tool-execution design follows these principles:
 - **Allowlist-based access:** Only explicitly registered tools may be executed.
 - **Argument validation:** Tool inputs must satisfy defined constraints.
 - **Separation of responsibilities:** Tool authorization is handled independently of model-generated decisions.
-- **Controlled scholarly retrieval:** The authorized external retrieval capability is limited to OpenAlex search.
+- **Controlled scholarly retrieval:** The authorized external retrieval capability is limited to scholarly searches through OpenAlex and Semantic Scholar, subject to the configured tool allowlist and execution policies.
 - **Explicit rejection:** Invalid or unauthorized requests are rejected before execution.
 
 These controls reduce the risk of unauthorized tool use and support bounded agent autonomy.
@@ -303,14 +309,34 @@ Together, these components support research workflow inspection, human oversight
 
 ### Requirements
 
-- Python with a virtual environment
-- Ollama installed locally
-- Ollama model: `qwen2.5:7b`
-- Internet access for OpenAlex research searches
+SARA was developed and tested in the following local environment:
+
+- Python 3.13.7
+- Windows with PowerShell
+- Git for cloning the repository
+- Ollama installed and running locally
+- Ollama model: `qwen2.5:7b` (approximately 4.7 GB)
+- Internet access for scholarly retrieval through OpenAlex
+  and Semantic Scholar
+
+SARA currently uses Ollama as its local LLM provider.
+Switching between LLM providers through environment variables
+is not implemented in the current version.
+
+A Semantic Scholar API key is optional. The repository includes
+an `.env.example` file documenting the supported key name.
 
 ### Installation (Windows PowerShell)
 
-From the project root directory:
+Clone the SARA repository from GitHub:
+
+```powershell
+git clone https://github.com/AmalMohammed95/SARA-Agentic-Research-Agent.git
+cd SARA-Agentic-Research-Agent
+```
+
+Then create and activate a Python virtual environment
+from the project root directory:
 
 ```powershell
 python -m venv .venv
@@ -320,6 +346,29 @@ ollama pull qwen2.5:7b
 ```
 
 Ensure the Ollama service is running and the model is available locally.
+
+### Optional Semantic Scholar API Configuration
+
+SARA can search OpenAlex without an API key.
+
+For Semantic Scholar, an API key is optional. The supported
+environment variable is `SEMANTIC_SCHOLAR_API_KEY`.
+
+To set the key for the current Windows PowerShell session:
+
+```powershell
+$env:SEMANTIC_SCHOLAR_API_KEY = "YOUR_API_KEY"
+```
+
+Replace `YOUR_API_KEY` with your actual key.
+
+The `.env.example` file documents this variable. The current
+implementation reads the environment variable directly and does
+not automatically load values from a `.env` file.
+
+If no key is provided, SARA attempts Semantic Scholar requests
+without authentication. Requests may be rate-limited, and
+OpenAlex remains available as an alternative source.
 
 ### Run the Application
 
@@ -336,56 +385,126 @@ $env:PYTHONPATH = "src"
 python -m pytest tests -q
 ```
 
-The latest local test run completed successfully: **84 passed**. This verifies the automated test suite, not the scientific sufficiency of every research result.
+The latest local test run completed successfully: **132 passed**. This verifies the automated test suite, not the scientific sufficiency of every research result.
 ## Evaluation and Limitations
 
 ### Evaluation Design
 
-SARA is evaluated against a non-agentic academic search baseline using a frozen set of five research questions (E01–E05), stored in `evaluation/research_questions.csv`.
+SARA was evaluated against a non-agentic academic search baseline using a frozen set of five research questions (E01–E05), stored in `evaluation/research_questions.csv`.
 
-The comparison considers execution status, runtime, evidence support, and research workflow behavior. The baseline performs a simpler search and screening process, whereas SARA uses bounded agentic execution, evidence verification, and explicit termination conditions.
+The evaluation compares execution status, runtime, evidence support, and research workflow behavior. The baseline follows a simpler search and screening process, while SARA incorporates bounded agentic execution, evidence verification, limited replanning, and explicit termination conditions.
+
+The evaluation records are treated as frozen experimental artifacts. Reported execution outcomes are distinguished from scientific validity and evidence quality.
 
 ### Recorded Evaluation Results
 
-The following results were recorded for evaluation case E01:
-
-**Research question:** How is deep learning used for leukemia detection in peripheral blood smear images?
+The frozen evaluation includes five paired experiments, producing ten execution records: five baseline runs and five SARA runs.
 
 | Metric | Baseline | SARA |
 |---|---|---|
-| Execution status | COMPLETED | INSUFFICIENT_EVIDENCE |
-| Duration (seconds) | 1.328 | 2695.436 |
-| Execution exception | None | None |
+| Evaluation cases | 5 (E01–E05) | 5 (E01–E05) |
+| Recorded execution status | 5 COMPLETED | 5 INSUFFICIENT_EVIDENCE |
+| Mean runtime (seconds) | 1.50 | 2002.48 |
+| Top-level execution crashes | 0 | 0 |
+| Bounded replanning | Not applicable | 2 replanning attempts per run |
 
-The baseline retrieved and included five papers. SARA completed its bounded execution without a reported exception but did not satisfy its evidence-sufficiency criteria.
+All five baseline executions reached the `COMPLETED` state. However, this status indicates workflow completion and does not establish that the resulting claims are scientifically valid or adequately supported.
 
-These results represent one recorded evaluation case and should not be interpreted as a complete five-case performance comparison.
+All five SARA executions terminated with `INSUFFICIENT_EVIDENCE`. This indicates that SARA did not satisfy its configured evidence-sufficiency conditions within the permitted execution limits. These outcomes demonstrate explicit stopping behavior, not successful completion of the research tasks.
+
+The evaluation also identified limitations involving incomplete evidence fields, unsupported claims, and insufficient retrieval coverage, including a sparse-retrieval case in E05.
+
+The substantial runtime difference reflects the computational cost of SARA's local LLM-based workflow and additional verification steps. The recorded results do not establish that SARA is more accurate or scientifically superior to the baseline.
 
 ### Limitations
 
-- **Execution cost:** Local CPU-based LLM inference can substantially increase execution time.
-- **Evidence sufficiency:** Retrieved papers and extracted claims may not satisfy strict evidence-verification requirements.
-- **Evaluation coverage:** The documented E01 result does not establish performance across all five frozen evaluation cases.
-- **External dependency:** Academic search requires access to OpenAlex, while local model execution depends on Ollama availability.
-- **Model sensitivity:** Extraction quality and agent decisions may vary with the local language model.
+- **Execution cost:** Local CPU-based LLM inference substantially increases execution time compared with the simpler baseline.
+- **Evidence sufficiency:** None of the five evaluated SARA runs satisfied the configured evidence-sufficiency criteria.
+- **Evidence quality:** Missing extraction fields and unsupported claims limit the reliability of automatically generated research findings.
+- **Retrieval coverage:** Scholarly search may return insufficient relevant evidence for some research questions, as observed in E05.
+- **External dependencies:** Scholarly retrieval requires internet connectivity. Semantic Scholar may impose HTTP 429 rate limits, and SARA's local model execution depends on Ollama availability.
+- **Model sensitivity:** Extraction quality, reasoning behavior, and agent decisions may vary with the local language model.
+- **Evaluation scope:** Five frozen research questions provide a bounded experimental comparison, not evidence of general performance across all research domains.
+- **Reference validation:** Automated evidence checks do not replace independent expert assessment against a hand-checked reference set.
 
 ### Testing and Reproducibility
 
-The latest automated test run completed with **84 passing tests**.
+The latest complete automated test run reported **132 passing tests**.
 
-To run the tests:
+To run the automated tests:
 
 ```powershell
 $env:PYTHONPATH = "src"
 python -m pytest tests -q
 ```
 
-Evaluation artifacts are stored in the `evaluation/` directory. The recorded E01 comparison is available in `evaluation/comparison_results_batch_v1.json`.
+The frozen research questions are stored in `evaluation/research_questions.csv`, and the recorded comparison results are stored in `evaluation/comparison_results_batch_v1.json`.
+#### Reproducing the Recorded Evaluation Analysis
 
-Passing software tests demonstrates that the tested components behave as expected; it does not independently establish research accuracy, evidence sufficiency, or scientific superiority.
+The frozen evaluation contains five research questions (E01–E05)
+and ten recorded executions: five baseline runs and five SARA runs.
+
+To regenerate the evaluation summary from the saved results,
+run the following command from the project root:
+
+```powershell
+python evaluation/analyze_results.py
+```
+
+The script reads:
+
+- `evaluation/research_questions.csv`
+- `evaluation/comparison_results_batch_v1.json`
+
+It writes the summary to:
+
+- `evaluation/evaluation_summary.json`
+
+This command analyzes previously recorded results. It does not
+rerun the research agent, call scholarly APIs, or invoke Ollama.
+
+Reproducing the recorded analysis is different from repeating
+the live experiments, which may take substantially longer and
+produce different results.
+#### Rerunning the Live Evaluation
+
+The evaluation runner is available at `evaluation/run_comparison.py`.
+
+To run a specific evaluation case:
+
+```powershell
+python evaluation/run_comparison.py E01
+```
+
+To run all evaluation cases:
+
+```powershell
+python evaluation/run_comparison.py
+```
+
+**Important:** These commands are provided for documentation and
+should not be executed against the frozen evaluation artifacts
+without first creating a separate working copy of the project.
+
+The runner reads and writes
+`evaluation/comparison_results_batch_v1.json`. It skips recorded
+case-system pairs whose status is not `EXCEPTION`, and it may rerun
+and replace records that previously ended with `EXCEPTION`.
+
+Therefore, these commands do not necessarily rerun all experiments
+when existing results are present. A fresh evaluation requires an
+isolated copy of the project with a separate results file.
+
+Live evaluation requires Ollama and scholarly API connectivity,
+may take considerable time, and may produce different outcomes.
+The evaluation results should be interpreted as recorded experimental observations. Repeating live experiments may produce different outcomes because of model variability, scholarly API responses, and execution environment differences.
+
+Passing automated software tests demonstrates that the tested components meet their specified checks. It does not independently establish scientific accuracy, evidence sufficiency, or research superiority.
 
 ### Evaluation Conclusion
 
-SARA demonstrates an implemented agentic research workflow with bounded execution, evidence verification, human oversight, and explicit failure handling. The recorded E01 experiment highlights a trade-off between research workflow complexity, strict evidence requirements, and execution cost.
+SARA implements an agentic academic research workflow with controlled scholarly retrieval, bounded execution, evidence verification, limited replanning, human oversight, and explicit failure handling.
 
-Further evaluation across the frozen research questions is required before making broader claims about comparative performance.
+Across the five frozen evaluation cases, SARA consistently terminated without a top-level crash but did not obtain sufficient verified evidence to complete the research tasks. The baseline completed its simpler workflow substantially faster, although completion alone does not establish scientific correctness.
+
+These findings highlight a measurable trade-off between agentic workflow controls, evidence requirements, and computational cost. Further improvements in retrieval coverage, evidence extraction, and independent reference-based validation are necessary before claims of improved research quality can be supported.
