@@ -1,5 +1,6 @@
 """Bounded, auditable search expansion. This module never generates evidence."""
 import re
+import os
 
 _RELIABILITY_TERMS = re.compile(r"\b(?:reliab\w*|robust\w*|consisten\w*|benchmark\w*|evaluat\w*|verif\w*)\b", re.I)
 _AGENT_TERMS = re.compile(r"\b(?:llm[- ]based\s+)?agents?\b", re.I)
@@ -31,8 +32,14 @@ def choose_turn_queries(keywords: list[str], research_question: str, used: set[s
     """
     if type(limit) is not int or not 1 <= limit <= 3:
         raise ValueError('Search-query limit must be between 1 and 3')
-    candidates = ([*keywords[:1], *reliability_search_variants(research_question), *keywords[1:]]
-                  if limit > 1 else list(keywords))
+    variants = reliability_search_variants(research_question)
+    if os.getenv("SARA_DIVERSIFIED_SEARCH", "0") == "1" and limit == 3 and variants:
+        # Same bounded query set across repeated benchmark runs; each phrase
+        # targets a different dimension, without rewriting the original RQ.
+        candidates = [*variants, *keywords]
+    else:
+        candidates = ([*keywords[:1], *variants, *keywords[1:]]
+                      if limit > 1 else list(keywords))
     queries = []
     for raw in candidates:
         if not isinstance(raw, str):

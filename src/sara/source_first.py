@@ -16,11 +16,11 @@ _INTENT_CUES = {
                 'evaluation protocol', 'task completion', 'experiment', 'measure',
                 'test set', 'accuracy', 'robustness', 'human rating', 'rubric'),
     'validation': ('human judg', 'human evaluat', 'human annotat', 'human rat',
-                   'agreement', 'correlation', 'calibrat', 'reproduc', 'gold standard',
+                   'agreement', 'correlation', 'calibrat', 'reproduc', 'repeat', 'variance', 'gold standard',
                    'ground truth', 'reference label', 'benchmark', 'inter-rater'),
     'challenges': ('limitation', 'challenge', 'bias', 'failure', 'contaminat',
                    'robustness', 'unreliab', 'shortcoming', 'cost', 'scalab',
-                   'generaliz', 'risk', 'uncertain'),
+                   'generaliz', 'risk', 'uncertain', 'reproduc', 'repeat'),
 }
 
 
@@ -39,10 +39,10 @@ def _tokens(value: str) -> set[str]:
 
 def _intent(question: str) -> str | None:
     q = question.lower()
-    if re.search(r'\b(validat\w*|human judg\w*|reproduc\w*|calibrat\w*|agreement)\b', q):
-        return 'validation'
     if re.search(r'\b(challenge\w*|limitation\w*|difficult\w*|weakness\w*|failure modes?|risks?)\b', q):
         return 'challenges'
+    if re.search(r'\b(validat\w*|human judg\w*|reproduc\w*|calibrat\w*|agreement|consisten\w*|repeat\w*)\b', q):
+        return 'validation'
     if re.search(r'\b(method\w*|measur\w*|assess\w*|evaluat\w*|metric\w*|benchmark\w*)\b', q):
         return 'methods'
     return None

@@ -11,7 +11,9 @@ terminate in a defined state rather than running indefinitely.
 """
 
 
-from .deterministic_evidence import extract_abstract_json
+from .deterministic_evidence import extract_abstract_json, extract_open_text_json, classify_study_type
+from .source_enrichment import enrich_papers
+from .research_report import build_evidence_audit
 from .topic_guard import anchor_agent_query, anchor_agent_subquestions, flag_scope_drift, repair_reliability_plan
 from .batch_screening import screen_papers_in_batches
 from .batch_extraction import extract_batch
@@ -29,6 +31,7 @@ from .extraction import (
 )
 from .semantic_verification import verify_semantic_batch, verify_semantic_candidates, verify_semantic_with_budget
 from .source_first import build_source_first_mapping, build_multi_source_mapping
+from .evidence_orchestrator import review_papers
 from .screening import screen_agent_papers
 from .search_strategy import choose_turn_queries
 
@@ -155,7 +158,7 @@ def select_search_query(keywords, used_queries):
 
 
 
-def run_agent(research_question: str, max_turns: int = 3) -> dict:
+def run_agent(research_question: str, max_turns: int = 3, provider: str | None = None) -> dict:
 
     """Run a bounded SARA agent loop."""
 
@@ -208,7 +211,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
     semantic_calls_used = 0
 
 
-    model_provider = os.getenv("SARA_MODEL_PROVIDER", "ollama").lower()
+    model_provider = (provider or os.getenv("SARA_MODEL_PROVIDER", "ollama")).strip().lower()
 
     if model_provider == "gemini":
         model_client = GeminiModelClient()
@@ -219,6 +222,14 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             f"Unsupported model provider: {model_provider}"
         )
 
+    # V3: Verification across papers prevents per-paper API calls from
+    # exhausting the budget before the remaining selected studies are reviewed.
+    batched_semantic = (
+        model_provider == "gemini"
+        and os.getenv("SARA_EXTRACTIVE_MODE", "0") == "1"
+        and os.getenv("SARA_SEMANTIC_VERIFICATION", "0") == "1"
+        and os.getenv("SARA_BATCH_SEMANTIC_VERIFICATION", "1") == "1"
+    )
 
     turn = 0
 
@@ -352,6 +363,20 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
 
     state.subquestions = anchor_agent_subquestions(parsed_plan["subquestions"], research_question)
     state.subquestions, repaired_questions = repair_reliability_plan(state.subquestions, research_question)
+    if model_provider == "gemini" and os.getenv("SARA_STABLE_RELIABILITY_PLAN", "1") == "1":
+        from .topic_guard import stable_reliability_subquestions
+        original_questions = list(state.subquestions)
+        stable = stable_reliability_subquestions(research_question)
+        if stable:
+            state.subquestions = stable
+            trace.append(create_trace_event(
+                run_id=run_id, turn=0, action="stable_research_plan",
+                status="LOCKED", details={
+                    "original_questions": original_questions,
+                    "fixed_subquestions": list(stable),
+                    "note": "Stable dimensions for reproducible evaluation; not inferred findings",
+                },
+            ))
 
     state.keywords = [anchor_agent_query(k, research_question) for k in parsed_plan["keywords"]]
 
@@ -408,9 +433,13 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
 
         retrieved_batch = []
         completed_queries = 0
+        try:
+            results_per_query = max(1, min(10, int(os.getenv("SARA_SEARCH_RESULTS_PER_QUERY", "10"))))
+        except ValueError:
+            results_per_query = 10
         for query in search_queries:
             search_result = execute_tool(
-                "search_scholarly", {"query": query, "max_results": 10},
+                "search_scholarly", {"query": query, "max_results": results_per_query},
             )
             trace.append(create_trace_event(
                 run_id=run_id, turn=turn, action="search_scholarly",
@@ -682,6 +711,16 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         except ValueError:
             extract_limit = default_extract_limit
         papers_with_abstract = papers_with_abstract[:extract_limit]
+        if os.getenv("SARA_FULLTEXT_MODE", "0") == "1":
+            papers_with_abstract = enrich_papers(papers_with_abstract)
+            trace.append(create_trace_event(
+                run_id=run_id, turn=turn, action="open_access_enrichment",
+                status="COMPLETED", details={
+                    "attempted": len(papers_with_abstract),
+                    "full_text": sum(p.get("source_scope") == "open_access_full_text" for p in papers_with_abstract),
+                    "abstract_only": sum(p.get("source_scope") != "open_access_full_text" for p in papers_with_abstract),
+                },
+            ))
         trace.append(create_trace_event(
             run_id=run_id, turn=turn, action="extraction_queue",
             status="SCHEDULED", details={"pending": pending_count,
@@ -756,8 +795,10 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             if deterministic_extraction:
                 use_json_extraction = True
             try:
-                extraction_response = (extract_abstract_json(
-                    paper_with_abstract.get("abstract", "")
+                extraction_response = ((
+                    extract_open_text_json(paper_with_abstract.get("abstract", ""))
+                    if paper_with_abstract.get("source_scope") == "open_access_full_text"
+                    else extract_abstract_json(paper_with_abstract.get("abstract", ""))
                 ) if deterministic_extraction else batch_responses.get(paper_id))
 
                 if extraction_response is None:
@@ -985,8 +1026,39 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
 
             extracted_record.update(parsed_extraction)
             extracted_record["extraction_status"] = "completed"
+            extracted_record["study_type"] = classify_study_type(
+                paper_with_abstract.get("title", ""),
+                paper_with_abstract.get("abstract", ""),
+            )
+            extracted_record["evidence_source_scope"] = paper_with_abstract.get("source_scope", "abstract_only")
+            extracted_record["evidence_source_url"] = paper_with_abstract.get("source_url")
+            # A narrative review does not have an empirical participant/sample
+            # requirement unless the abstract explicitly reports a sample.
+            # Preserve N/A as a transparent study-design label, not invented data.
+            if (extracted_record["study_type"] == "narrative_review"
+                    and not extracted_record.get("dataset_sample")):
+                extracted_record["dataset_sample"] = "NOT_APPLICABLE"
+                extracted_record["field_applicability"] = {"dataset_sample": "not_applicable_to_narrative_review"}
+            # Every nonempty field records the exact source span. These
+            # metadata fields remain distinct from question-level proof.
+            extracted_record["field_source_spans"] = {
+                field: locate_abstract_quotes(
+                    paper_with_abstract.get("abstract", ""),
+                    [parsed_extraction.get(field, "")],
+                )
+                for field in ("objective", "methodology", "dataset_sample", "findings", "limitations")
+                if parsed_extraction.get(field)
+            }
 
 
+
+            extracted_record["field_availability"] = {
+                field: ("NOT_APPLICABLE" if extracted_record.get(field) == "NOT_APPLICABLE"
+                        else "REPORTED" if extracted_record.get(field) and extracted_record["field_source_spans"].get(field)
+                        else "NOT_REPORTED_IN_AVAILABLE_TEXT" if extracted_record["evidence_source_scope"] == "open_access_full_text"
+                        else "NOT_ACCESSED_FULL_TEXT")
+                for field in ("objective", "methodology", "dataset_sample", "findings", "limitations")
+            }
 
             raw_quotes = parsed_extraction.get("supporting_evidence", [])
             cleaned_quotes = [unwrap_evidence_quote(q) for q in raw_quotes]
@@ -1030,7 +1102,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                 ))
                 # Opt-in: one model call per paper for all grounded pairs.
                 # A missing/invalid verdict never grants coverage.
-                if os.getenv("SARA_SEMANTIC_VERIFICATION", "0") == "1":
+                if os.getenv("SARA_SEMANTIC_VERIFICATION", "0") == "1" and not batched_semantic:
                     remaining_semantic_calls = (
                         max(0, max_semantic_calls - semantic_calls_used)
                         if max_semantic_calls else None
@@ -1087,7 +1159,11 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             # Per-question model verdicts must be accompanied by the specific
             # verified source quotations, not just a paper-level SUPPORTED flag.
             if is_json_extraction:
-                if os.getenv("SARA_SEMANTIC_VERIFICATION", "0") == "1":
+                if batched_semantic:
+                    # The quotation-first, cross-paper verifier updates this
+                    # evidence record after all local extraction is complete.
+                    accepted_quote_map = {}
+                elif os.getenv("SARA_SEMANTIC_VERIFICATION", "0") == "1":
                     accepted_quote_map = semantic_check.get("supported_quotes", {})
                 else:
                     accepted_quote_map = {
@@ -1122,15 +1198,10 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
 
                 and validated_subquestions
 
-                and "objective" in quality_check["populated_fields"]
-
-                and (
-
-                    "findings" in quality_check["populated_fields"]
-
-                     or "limitations" in quality_check["populated_fields"]
-
-                    )
+                # A source-exact quotation that semantically answers the
+                # question is evidence even if the abstract does not report
+                # methodology/sample/results. Metadata completeness is a
+                # separate conservative sufficiency gate.
 
 
 
@@ -1158,7 +1229,8 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                     action="verify_supporting_evidence",
 
                     status=(
-                        "VERIFIED" if verified_spans else "UNVERIFIED"
+                        "DEFERRED" if batched_semantic
+                        else "VERIFIED" if verified_spans else "UNVERIFIED"
                     ),
 
                     details={
@@ -1218,6 +1290,81 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
 
 
 
+
+        # V3: All local source extraction precedes batched semantic review.
+        # Only exact, model-endorsed spans become supported evidence; both
+        # unreviewed and unsupported candidates remain unasserted.
+        if batched_semantic:
+            work = []
+            for paper in papers_with_abstract:
+                paper_id = paper.get("doi") or paper.get("id")
+                if any(rec.get("paper_id") == paper_id
+                       and rec.get("extraction_status") == "completed"
+                       for rec in state.evidence):
+                    work.append({"paper_id": paper_id,
+                                 "title": paper.get("title", ""),
+                                 "abstract": paper.get("abstract", "")})
+            # Bound the actual Gemini calls; zero/unset adopts a safe
+            # six-call profile instead of unlimited API usage.
+            budget = max_semantic_calls if max_semantic_calls else 6
+            try:
+                batch_size = max(1, min(6, int(os.getenv("SARA_SEMANTIC_BATCH_SIZE", "3"))))
+            except ValueError:
+                batch_size = 3
+            verification = review_papers(
+                model_client, work, state.subquestions,
+                max_calls=max(0, budget - semantic_calls_used),
+                batch_size=batch_size,
+            )
+            semantic_calls_used += verification["model_calls"]
+            source_by_id = {p["paper_id"]: p["abstract"] for p in work}
+            for record in state.evidence:
+                paper_id = record.get("paper_id")
+                if record.get("extraction_status") != "completed" or paper_id not in source_by_id:
+                    continue
+                abstract = source_by_id[paper_id]
+                approved = verification["supported"].get(paper_id, {})
+                mapped, spans = {}, []
+                for question in state.subquestions:
+                    raw_quotes = approved.get(question, [])
+                    located = locate_abstract_quotes(abstract, raw_quotes)
+                    if located:
+                        mapped[question] = [span["quote"] for span in located]
+                        spans.extend(located)
+                distinct_spans = list({(span["start_char"], span["end_char"]): span
+                                       for span in spans}.values())
+                record["question_evidence"] = mapped
+                record["supported_subquestions"] = list(mapped)
+                record["source_spans"] = distinct_spans
+                record["supporting_evidence"] = [span["quote"] for span in distinct_spans]
+                record["claim_support_status"] = (
+                    "supported" if mapped else "insufficient_data"
+                )
+                record["verification_method"] = (
+                    "gemini_pairwise_entailment_plus_exact_source_span"
+                    if mapped else "unverified_no_direct_support"
+                )
+                trace.append(create_trace_event(
+                    run_id=run_id, turn=turn, action="verify_supporting_evidence_final",
+                    status="VERIFIED" if mapped else "UNVERIFIED",
+                    details={"paper_id": paper_id,
+                             "supported_subquestions": list(mapped),
+                             "verified_quote_count": len(distinct_spans)},
+                ))
+            trace.append(create_trace_event(
+                run_id=run_id, turn=turn, action="batch_semantic_verification",
+                status=("BUDGET_EXHAUSTED" if verification["budget_exhausted"]
+                        else "COMPLETED"),
+                details={
+                    "model_calls": verification["model_calls"],
+                    "semantic_calls_used": semantic_calls_used,
+                    "semantic_calls_budget": budget,
+                    "candidate_papers": verification["candidate_papers"],
+                    "reviewed_papers": verification["reviewed_papers"],
+                    "unreviewed_papers": verification["unreviewed_papers"],
+                    "batches": verification["batches"],
+                },
+            ))
 
         trace.append(
 
@@ -1311,6 +1458,13 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         )
 
         state.gaps = evidence_check["gaps"]
+        state.evidence_audit = build_evidence_audit(state.selected_papers, state.evidence, evidence_check)
+        trace.append(create_trace_event(run_id=run_id, turn=turn, action="evidence_audit",
+            status="PRELIMINARY", details={
+                "research_coverage_met": state.evidence_audit["research_coverage_met"],
+                "metadata_quality_met": state.evidence_audit["metadata_quality_met"],
+                "source_distribution": state.evidence_audit["source_distribution"],
+            }))
 
 
 
@@ -1739,11 +1893,10 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         else:
 
             state.stopping_reason = (
-
-                "Evidence is insufficient and the replanning limit "
-
-                "has been reached."
-
+                "Evidence remains insufficient after the configured single turn; "
+                "no replanning was attempted."
+                if max_turns == 1 and model_provider == "gemini"
+                else "Evidence is insufficient and the replanning limit has been reached."
             )
 
 
@@ -1781,6 +1934,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
         "excluded_papers": state.excluded_papers,
         "deferred_papers": state.deferred_papers,
 
+        "evidence_audit": getattr(state, "evidence_audit", None),
         "synthesis": synthesis_result,
 
         "review_request": review_request,

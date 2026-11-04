@@ -83,3 +83,25 @@ def repair_reliability_plan(subquestions: list[str], research_question: str) -> 
             key = replacement.casefold()
         seen.add(key)
     return repaired, warnings
+
+
+_STABLE_RELIABILITY_DIMENSIONS = [
+    'Which evaluation metrics and benchmarks assess the reliability of LLM agents?',
+    'How is consistency and robustness of LLM agents tested across repeated tasks?',
+    'Which limitations and reproducibility challenges affect reliability evaluation of LLM agents?',
+]
+
+
+def stable_reliability_subquestions(research_question: str) -> list[str]:
+    """Return transparent, reproducible dimensions for broad agent-reliability evaluation.
+
+    Never alter a narrow question such as one specifically about finance or a
+    named benchmark. This is an experimental fixed plan, not a scientific fact.
+    """
+    q = (research_question or '').lower()
+    broad = (requires_agent_scope(research_question)
+             and bool(re.search(r'\breliab\w*\b', q))
+             and bool(re.search(r'\b(?:evaluat\w*|assess\w*|measur\w*|method\w*)\b', q))
+             and bool(re.match(r'^\s*(?:what|how|which)\b', q)))
+    narrow = bool(re.search(r'\b(?:financial|finance|healthcare|clinical|mobile|voice|trading|medical|security patch|named benchmark)\b', q))
+    return list(_STABLE_RELIABILITY_DIMENSIONS) if broad and not narrow else []

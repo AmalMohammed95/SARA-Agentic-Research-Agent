@@ -255,6 +255,9 @@ def evaluate_evidence_sufficiency(
     # assessable fields. Unprocessed/failed studies are separate blocking gaps,
     # never silently ignored in the sufficiency decision.
     missing_fields = 0
+    applicable_field_count = 0
+    not_applicable_field_count = 0
+    missing_by_field = {field: 0 for field in REQUIRED_EVIDENCE_FIELDS}
     processed_studies_count = 0
     pending_studies_count = 0
     failed_studies_count = 0
@@ -280,10 +283,22 @@ def evaluate_evidence_sufficiency(
             continue
         processed_studies_count += 1
         for field in REQUIRED_EVIDENCE_FIELDS:
+            # Design-aware applicability never changes the 20% ceiling.
+            # An explicit non-empirical study designation may remove the
+            # sample field from the denominator, never infer its value.
+            if field == "dataset_sample" and any(
+                record.get("study_type") == "narrative_review"
+                and record.get("dataset_sample") == "NOT_APPLICABLE"
+                for record in completed_records
+            ):
+                not_applicable_field_count += 1
+                continue
+            applicable_field_count += 1
             if all(is_missing(record.get(field)) for record in completed_records):
                 missing_fields += 1
+                missing_by_field[field] += 1
 
-    processed_required_fields = processed_studies_count * len(REQUIRED_EVIDENCE_FIELDS)
+    processed_required_fields = applicable_field_count
     # No processed evidence is 100% unavailable for reporting purposes; the
     # pending/failed flags prevent sufficiency independently.
     missing_field_rate = (
@@ -410,6 +425,19 @@ def evaluate_evidence_sufficiency(
         "pending_studies_count": pending_studies_count,
         "failed_studies_count": failed_studies_count,
         "assessed_required_fields": processed_required_fields,
+        "not_applicable_fields_count": not_applicable_field_count,
+        "missing_by_field": missing_by_field,
+        "abstract_only_records": sum(
+            record.get("evidence_source_scope") == "abstract_only"
+            and record.get("extraction_status") == "completed"
+            for record in evidence
+        ),
+        "verified_supported_records": sum(
+            record.get("claim_support_status") == "supported"
+            and bool(record.get("supporting_evidence"))
+            and bool(record.get("source_spans"))
+            for record in evidence
+        ),
         "missing_evidence_record_count": missing_evidence_record_count,
         "missing_provenance_count": missing_provenance_count,
         "invalid_provenance_count": invalid_provenance_count,
