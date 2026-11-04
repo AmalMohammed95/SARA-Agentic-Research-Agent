@@ -1,0 +1,126 @@
+{
+  "project": "SARA V3",
+  "evaluation_set": "E01-E05",
+  "implementation_commit": "5d24455",
+  "results": [
+    {
+      "case_id": "E01",
+      "category": "specific",
+      "research_question": "How is deep learning used for leukemia detection in peripheral blood smear images?",
+      "system": "Baseline",
+      "status": "COMPLETED",
+      "duration_seconds": 1.433,
+      "error": null,
+      "evidence_gaps": []
+    },
+    {
+      "case_id": "E01",
+      "category": "specific",
+      "research_question": "How is deep learning used for leukemia detection in peripheral blood smear images?",
+      "system": "SARA",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "duration_seconds": 46.918,
+      "error": null,
+      "evidence_gaps": [
+        "Missing evidence field rate is 42.59%; maximum allowed is 20%.",
+        "12 completed evidence record(s) do not have verified support; these are not asserted claims."
+      ]
+    },
+    {
+      "case_id": "E02",
+      "category": "broad",
+      "research_question": "What are the applications of machine learning in academic student performance prediction?",
+      "system": "Baseline",
+      "status": "COMPLETED",
+      "duration_seconds": 1.525,
+      "error": null,
+      "evidence_gaps": []
+    },
+    {
+      "case_id": "E02",
+      "category": "broad",
+      "research_question": "What are the applications of machine learning in academic student performance prediction?",
+      "system": "SARA",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "duration_seconds": 114.614,
+      "error": null,
+      "evidence_gaps": [
+        "Missing evidence field rate is 42.16%; maximum allowed is 20%.",
+        "28 completed evidence record(s) do not have verified support; these are not asserted claims."
+      ]
+    },
+    {
+      "case_id": "E03",
+      "category": "specific",
+      "research_question": "How is federated learning applied to privacy-preserving healthcare systems?",
+      "system": "Baseline",
+      "status": "COMPLETED",
+      "duration_seconds": 1.43,
+      "error": null,
+      "evidence_gaps": []
+    },
+    {
+      "case_id": "E03",
+      "category": "specific",
+      "research_question": "How is federated learning applied to privacy-preserving healthcare systems?",
+      "system": "SARA",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "duration_seconds": 142.697,
+      "error": null,
+      "evidence_gaps": [
+        "Missing evidence field rate is 49.70%; maximum allowed is 20%.",
+        "21 completed evidence record(s) do not have verified support; these are not asserted claims."
+      ]
+    },
+    {
+      "case_id": "E04",
+      "category": "broad",
+      "research_question": "What are the challenges of using large language models for academic literature reviews?",
+      "system": "Baseline",
+      "status": "COMPLETED",
+      "duration_seconds": 2.137,
+      "error": null,
+      "evidence_gaps": []
+    },
+    {
+      "case_id": "E04",
+      "category": "broad",
+      "research_question": "What are the challenges of using large language models for academic literature reviews?",
+      "system": "SARA",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "duration_seconds": 231.966,
+      "error": null,
+      "evidence_gaps": [
+        "Missing evidence field rate is 45.13%; maximum allowed is 20%.",
+        "13 completed evidence record(s) do not have verified support; these are not asserted claims."
+      ]
+    },
+    {
+      "case_id": "E05",
+      "category": "uncertain_evidence",
+      "research_question": "How can quantum machine learning improve the accuracy of predicting earthquakes from social media sentiment?",
+      "system": "Baseline",
+      "status": "COMPLETED",
+      "duration_seconds": 1.721,
+      "error": null,
+      "evidence_gaps": []
+    },
+    {
+      "case_id": "E05",
+      "category": "uncertain_evidence",
+      "research_question": "How can quantum machine learning improve the accuracy of predicting earthquakes from social media sentiment?",
+      "system": "SARA",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "duration_seconds": 494.411,
+      "error": null,
+      "evidence_gaps": [
+        "At least 5 unique identifiable relevant studies are required.",
+        "Subquestion 'How do quantum-enhanced classification algorithms perform compared to classical machine learning models in sentiment analysis tasks?' has only 0 supporting studies; at least 2 are required.",
+        "Subquestion 'To what extent can social media sentiment act as a reliable feature for seismic event prediction?' has only 0 supporting studies; at least 2 are required.",
+        "Subquestion 'What are the computational advantages of applying quantum kernels to large-scale, unstructured social media datasets for geophysical forecasting?' has only 0 supporting studies; at least 2 are required.",
+        "Missing evidence field rate is 40.00%; maximum allowed is 20%.",
+        "1 completed evidence record(s) do not have verified support; these are not asserted claims."
+      ]
+    }
+  ]
+}
