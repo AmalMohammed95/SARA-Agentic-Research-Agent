@@ -30,6 +30,8 @@ VALID_CONFLICT_STATUSES = (
 VALID_CLAIM_SUPPORT_STATUSES = (
     "supported",
     "unsupported",
+    "not_assessed",
+    "insufficient_data",
 )
 def get_paper_identifier(paper: dict) -> str | None:
     """
@@ -162,11 +164,18 @@ def evaluate_evidence_sufficiency(
     for record in evidence
     if record.get("conflict_status") not in VALID_CONFLICT_STATUSES
 )
+    # A selected paper awaiting extraction is NOT an unsupported scientific claim.
     unsupported_claim_count = sum(
-    1
-    for record in evidence
-    if record.get("claim_support_status") == "unsupported"
-)
+        1 for record in evidence
+        if record.get("claim_support_status") == "unsupported"
+        and record.get("extraction_status") not in ("pending", "failed")
+    )
+
+    unverified_evidence_count = sum(
+        1 for record in evidence
+        if record.get("extraction_status") == "completed"
+        and record.get("claim_support_status") in ("not_assessed", "insufficient_data")
+    )
 
     missing_provenance_count = sum(
     1
@@ -242,38 +251,44 @@ def evaluate_evidence_sufficiency(
 
         evidence_by_paper[paper_id].append(record)
 
+    # Keep the denominator honest: only completed extractions have five
+    # assessable fields. Unprocessed/failed studies are separate blocking gaps,
+    # never silently ignored in the sufficiency decision.
     missing_fields = 0
+    processed_studies_count = 0
+    pending_studies_count = 0
+    failed_studies_count = 0
 
     for paper in selected_papers:
-        paper_ids = {
-            paper.get("doi"),
-            paper.get("id"),
-        }
-        paper_ids.discard(None)
-
+        paper_ids = {paper.get("doi"), paper.get("id")} - {None}
         matching_records = [
-            record
-            for paper_id in paper_ids
+            record for paper_id in paper_ids
             for record in evidence_by_paper.get(paper_id, [])
         ]
-
-        if not matching_records:
-            missing_fields += len(REQUIRED_EVIDENCE_FIELDS)
+        if not matching_records or all(
+            record.get("extraction_status") == "pending"
+            for record in matching_records
+        ):
+            pending_studies_count += 1
             continue
-
+        completed_records = [
+            record for record in matching_records
+            if record.get("extraction_status", "completed") == "completed"
+        ]
+        if not completed_records:
+            failed_studies_count += 1
+            continue
+        processed_studies_count += 1
         for field in REQUIRED_EVIDENCE_FIELDS:
-            field_is_missing = all(
-                is_missing(record.get(field))
-                for record in matching_records
-            )
-
-            if field_is_missing:
+            if all(is_missing(record.get(field)) for record in completed_records):
                 missing_fields += 1
 
+    processed_required_fields = processed_studies_count * len(REQUIRED_EVIDENCE_FIELDS)
+    # No processed evidence is 100% unavailable for reporting purposes; the
+    # pending/failed flags prevent sufficiency independently.
     missing_field_rate = (
-        min(1.0, missing_fields / total_required_fields)
-        if total_required_fields > 0
-        else 1.0
+        missing_fields / processed_required_fields
+        if processed_required_fields else 1.0
     )
     subquestions = subquestions or []
     subquestion_coverage = {}
@@ -295,6 +310,10 @@ def evaluate_evidence_sufficiency(
                 and subquestion in record.get(
                     "supported_subquestions", []
                 )
+                and (
+                    record.get("extraction_status") is None  # legacy records
+                    or bool(record.get("supporting_evidence"))
+                )
                 for record in evidence
             )
 
@@ -312,6 +331,16 @@ def evaluate_evidence_sufficiency(
 
     
     gaps = []
+    if pending_studies_count:
+        gaps.append(
+            f"{pending_studies_count} selected study/studies are pending extraction; "
+            "they are not unsupported claims."
+        )
+    if failed_studies_count:
+        gaps.append(
+            f"{failed_studies_count} selected study/studies failed extraction "
+            "or validation; their content was not assessed."
+        )
     if missing_evidence_record_count > 0:
         gaps.append(
             f"{missing_evidence_record_count} selected study/studies "
@@ -356,6 +385,12 @@ def evaluate_evidence_sufficiency(
             "a missing or invalid claim support status."
         )
 
+    if unverified_evidence_count:
+        gaps.append(
+            f"{unverified_evidence_count} completed evidence record(s) "
+            "do not have verified support; these are not asserted claims."
+        )
+
     if unsupported_claim_count > 0:
         gaps.append(
             f"{unsupported_claim_count} evidence record(s) contain "
@@ -370,6 +405,11 @@ def evaluate_evidence_sufficiency(
         "required_studies": MIN_RELEVANT_STUDIES,
         "subquestion_coverage": subquestion_coverage,
         "missing_field_rate": missing_field_rate,
+        "missing_fields_count": missing_fields,
+        "processed_studies_count": processed_studies_count,
+        "pending_studies_count": pending_studies_count,
+        "failed_studies_count": failed_studies_count,
+        "assessed_required_fields": processed_required_fields,
         "missing_evidence_record_count": missing_evidence_record_count,
         "missing_provenance_count": missing_provenance_count,
         "invalid_provenance_count": invalid_provenance_count,
@@ -378,5 +418,6 @@ def evaluate_evidence_sufficiency(
             invalid_claim_support_status_count
         ),
         "unsupported_claim_count": unsupported_claim_count,
+        "unverified_evidence_count": unverified_evidence_count,
         "gaps": gaps,
     }

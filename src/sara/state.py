@@ -28,6 +28,7 @@ class AgentState:
     retrieved_papers: list[dict] = field(default_factory=list)
     selected_papers: list[dict] = field(default_factory=list)
     excluded_papers: list[dict] = field(default_factory=list)
+    deferred_papers: list[dict] = field(default_factory=list)
 
     evidence: list[dict] = field(default_factory=list)
     gaps: list[str] = field(default_factory=list)

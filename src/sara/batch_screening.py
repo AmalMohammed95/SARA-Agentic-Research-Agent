@@ -1,4 +1,6 @@
 import json
+import re
+import os
 
 from .prompts import (
     BATCH_SEMANTIC_SCREENING_PROMPT,
@@ -23,9 +25,39 @@ def screen_papers_in_batches(
         raise ValueError("batch_size must be a positive integer.")
 
     results = []
+    # Conservative: only bypass LLM when the title directly says that agent
+    # reliability/robustness is being evaluated. Generic "agent evaluation" is
+    # NOT enough, and chatbot/LLM-judge-only papers remain ambiguous.
+    fast_enabled = os.getenv("SARA_FAST_SCREENING", "1") == "1"
+    def obvious_agent_evaluation(paper):
+        title = str(paper.get("title") or "")
+        abstract = str(paper.get("abstract") or "")
+        agent = re.search(r"\b(?:LLM[- ]based |LLM |language model )?agents?\b", title, re.I)
+        reliability = re.search(r"\b(?:reliab\w*|robust\w*|failure\w*|consisten\w*)\b", title, re.I)
+        evaluation = re.search(r"\b(?:evaluat\w*|benchmark\w*|assess\w*|measur\w*)\b", title, re.I)
+        strict = os.getenv("SARA_STRICT_FAST_SCREENING", "0") == "1"
+        corroborated = bool(re.search(
+            r"\b(?:agents?|agentic)\b.*\b(?:evaluat\w*|benchmark\w*|reliab\w*|robust\w*)\b"
+            r"|\b(?:evaluat\w*|benchmark\w*|reliab\w*|robust\w*)\b.*\b(?:agents?|agentic)\b",
+            abstract, re.I | re.S))
+        return bool(agent and evaluation and len(abstract.strip()) >= 100 and (
+            not strict or (reliability and corroborated)
+        ))
 
     for start in range(0, len(papers), batch_size):
-        batch = papers[start:start + batch_size]
+        original_batch = papers[start:start + batch_size]
+        batch = []
+        for paper in original_batch:
+            if fast_enabled and obvious_agent_evaluation(paper):
+                results.append({
+                    "paper": paper, "decision": "INCLUDE",
+                    "reason": "Explicit agent evaluation topic in title; evidence remains subject to verification.",
+                    "status": "INCLUDE",
+                })
+            else:
+                batch.append(paper)
+        if not batch:
+            continue
 
         paper_items = [
             {
@@ -51,8 +83,13 @@ def screen_papers_in_batches(
 
             try:
                 response = model_client.generate(prompt)
-                validation = validate_batch_semantic_screening(
-                    response, expected_ids
+                validation = validate_batch_semantic_screening(response, expected_ids)
+
+                print(
+                    f"[BATCH SCREENING] papers={len(batch)} "
+                    f"valid={validation['valid']} "
+                    f"reason={validation.get('reason', 'OK')}",
+                    flush=True,
                 )
 
                 if validation["valid"]:
@@ -74,8 +111,22 @@ def screen_papers_in_batches(
                 })
             continue
 
-        # Fall back to the original single-paper screening rules.
-        for paper in batch:
+        # Bound the expensive individual fallback after malformed batch output.
+        # Remaining papers fail closed, not silently included as relevant.
+        try:
+            fallback_limit = max(0, min(len(batch), int(os.getenv(
+                "SARA_SCREENING_FALLBACK_LIMIT", str(len(batch))))))
+        except ValueError:
+            fallback_limit = len(batch)
+        for index, paper in enumerate(batch):
+            if index >= fallback_limit:
+                results.append({
+                    "paper": paper,
+                    "decision": "EXCLUDE",
+                    "reason": "Batch screening failed; individual verification deferred by the call budget.",
+                    "status": "BUDGET_EXHAUSTED",
+                })
+                continue
             prompt = SEMANTIC_SCREENING_PROMPT.format(
                 research_question=research_question,
                 title=paper.get("title", ""),

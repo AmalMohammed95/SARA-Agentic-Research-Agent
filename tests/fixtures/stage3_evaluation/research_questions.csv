@@ -1,0 +1,6 @@
+case_id,research_question,category
+E01,How is deep learning used for leukemia detection in peripheral blood smear images?,specific
+E02,What are the applications of machine learning in academic student performance prediction?,broad
+E03,How is federated learning applied to privacy-preserving healthcare systems?,specific
+E04,What are the challenges of using large language models for academic literature reviews?,broad
+E05,How can quantum machine learning improve the accuracy of predicting earthquakes from social media sentiment?,uncertain_evidence

@@ -5,6 +5,7 @@ search_openalex(query, max_results) interface and output fields.
 """
 
 import json
+from concurrent.futures import ThreadPoolExecutor
 import urllib.parse
 import urllib.request
 
@@ -169,15 +170,20 @@ def search_scholarly(query: str, max_results: int = 10) -> list[dict]:
         return []
     sources = (("openalex", search_openalex), ("semantic_scholar", search_semantic_scholar))
     collected, errors, successes = [], [], 0
-    for name, function in sources:
-        try:
-            papers = function(query, max_results=max_results)
-            successes += 1
-            for paper in papers:
-                if isinstance(paper, dict):
-                    collected.append({**paper, "source": paper.get("source") or name})
-        except Exception as exc:
-            errors.append(f"{name}: {type(exc).__name__}")
+    # Independent network requests run concurrently; consume in source order
+    # to preserve deterministic ranking and DOI merge precedence.
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures = [pool.submit(function, query, max_results=max_results)
+                   for _, function in sources]
+        for (name, _), future in zip(sources, futures):
+            try:
+                papers = future.result()
+                successes += 1
+                for paper in papers:
+                    if isinstance(paper, dict):
+                        collected.append({**paper, "source": paper.get("source") or name})
+            except Exception as exc:
+                errors.append(f"{name}: {type(exc).__name__}")
     if not successes:
         raise RuntimeError("Both scholarly providers failed: " + "; ".join(errors))
     unique, by_doi, by_id = [], {}, {}

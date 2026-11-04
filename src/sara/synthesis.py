@@ -38,6 +38,8 @@ def prepare_synthesis_evidence(
             or paper_id in seen_ids
             or record.get("claim_support_status") != "supported"
             or not record.get("supporting_evidence")
+            or (record.get("extraction_status") == "completed"
+                and not record.get("source_spans"))
         ):
             continue
 

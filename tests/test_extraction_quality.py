@@ -133,3 +133,81 @@ def test_parse_evidence_extraction_rejects_missing_list_items():
 
     assert result["supported_subquestions"] == []
     assert result["supporting_evidence"] == []
+def test_question_evidence_requires_verified_quote():
+    from sara.extraction import verify_question_evidence
+
+    abstract = (
+        "The proposed CNN achieved 95% accuracy "
+        "on a dataset of 100 images."
+    )
+
+    questions = [
+        "What accuracy was achieved?",
+        "What were the study limitations?",
+    ]
+
+    mapping = {
+        "What accuracy was achieved?": "CNN achieved 95% accuracy",
+        "What were the study limitations?": "The study had major limitations",
+    }
+
+    result = verify_question_evidence(
+        abstract,
+        mapping,
+        questions,
+    )
+
+    assert result["verified_subquestions"] == [
+        "What accuracy was achieved?"
+    ]
+
+    assert "What were the study limitations?" in result["rejected_mapping"]
+def test_semantic_verification_rejects_irrelevant_quote():
+    from sara.extraction import verify_semantic_support
+
+    question = "What accuracy did the model achieve?"
+    quote = "The study used a CNN to classify medical images."
+
+    result = verify_semantic_support(question, quote)
+
+    assert result["status"] != "SUPPORTED"
+def test_semantic_verification_rejects_wrong_model_accuracy():
+    from sara.extraction import verify_semantic_support
+
+    question = "What accuracy did the CNN achieve?"
+
+    quote = (
+        "The CNN was evaluated on medical images. "
+        "The SVM achieved an accuracy of 95%."
+    )
+
+    result = verify_semantic_support(question, quote)
+
+    assert result["status"] != "SUPPORTED"
+def test_semantic_verification_rejects_different_model():
+    from sara.extraction import verify_semantic_support
+
+    question = "What accuracy did the CNN achieve?"
+    quote = "The SVM achieved an accuracy of 95%."
+
+    result = verify_semantic_support(question, quote)
+
+    assert result["status"] != "SUPPORTED"
+def test_semantic_verification_accepts_correct_model_accuracy():
+    from sara.extraction import verify_semantic_support
+
+    question = "What accuracy did the CNN achieve?"
+    quote = "The CNN achieved an accuracy of 95%."
+
+    result = verify_semantic_support(question, quote)
+
+    assert result["status"] == "SUPPORTED"
+def test_semantic_verification_does_not_confuse_train_test_accuracy():
+    from sara.extraction import verify_semantic_support
+
+    question = "What test accuracy did the CNN achieve?"
+    quote = "The CNN achieved a training accuracy of 95%."
+
+    result = verify_semantic_support(question, quote)
+
+    assert result["status"] != "SUPPORTED"

@@ -676,3 +676,233 @@ def test_semantic_screening_rejects_empty_reason():
     result = validate_semantic_screening(response)
 
     assert result["valid"] is False
+def test_json_question_without_quote_is_not_counted(monkeypatch):
+    import json
+
+    question = "What accuracy was achieved?"
+    abstract = "The CNN achieved 95% accuracy."
+
+    class FakeModelClient:
+        def generate(self, prompt, **kwargs):
+            if "research planning component" in prompt:
+                return (
+                    "OBJECTIVE:\nEvaluate CNN performance.\n"
+                    f"SUBQUESTIONS:\n- {question}\n"
+                    "KEYWORDS:\n- CNN accuracy\n"
+                )
+
+            if "Papers (JSON):" in prompt:
+                return json.dumps({
+                    "results": [{
+                        "paper_id": "W123",
+                        "decision": "INCLUDE",
+                        "reason": "Relevant study",
+                    }]
+                })
+
+            return json.dumps({
+                "objective": "Evaluate CNN performance",
+                "methodology": "CNN",
+                "dataset_sample": "100 images",
+                "findings": "95% accuracy",
+                "limitations": "",
+                "supported_subquestions": [question],
+                "supporting_evidence": [abstract],
+                "question_evidence": {},
+            })
+
+    def fake_execute_tool(tool_name, arguments):
+        return {
+            "status": "COMPLETED",
+            "result": [{
+                "id": "W123",
+                "title": "CNN Performance",
+                "year": 2025,
+                "abstract": abstract,
+            }],
+        }
+
+    monkeypatch.setenv("SARA_JSON_EXTRACTION", "1")
+    monkeypatch.delenv("SARA_BATCH_EXTRACTION", raising=False)
+
+    monkeypatch.setattr(
+        agent_module, "OllamaModelClient", FakeModelClient
+    )
+    monkeypatch.setattr(
+        agent_module, "execute_tool", fake_execute_tool
+    )
+
+    result = agent_module.run_agent(question, max_turns=1)
+
+    assert all(
+        question not in record["supported_subquestions"]
+        for record in result["evidence"]
+    )
+    extraction_events = [
+        event
+        for event in result["trace"]
+        if event["action"] == "validate_evidence_extraction"
+    ]
+
+    assert len(extraction_events) == 1
+    assert extraction_events[0]["status"] == "VALID"
+def test_json_question_with_verified_quote_is_counted(monkeypatch):
+    import json
+
+    question = "What accuracy was achieved?"
+    abstract = "The CNN achieved 95% accuracy."
+
+    class FakeModelClient:
+        def generate(self, prompt, **kwargs):
+            if "research planning component" in prompt:
+                return (
+                    "OBJECTIVE:\nEvaluate CNN performance.\n"
+                    f"SUBQUESTIONS:\n- {question}\n"
+                    "KEYWORDS:\n- CNN accuracy\n"
+                )
+
+            if "Papers (JSON):" in prompt:
+                return json.dumps({
+                    "results": [{
+                        "paper_id": "W123",
+                        "decision": "INCLUDE",
+                        "reason": "Relevant study",
+                    }]
+                })
+
+            return json.dumps({
+                "objective": "Evaluate CNN performance",
+                "methodology": "CNN",
+                "dataset_sample": "100 images",
+                "findings": "95% accuracy",
+                "limitations": "",
+                "supported_subquestions": [question],
+                "supporting_evidence": [abstract],
+                "question_evidence": {
+                    question: "The CNN achieved 95% accuracy."
+                },
+            })
+
+    def fake_execute_tool(tool_name, arguments):
+        return {
+            "status": "COMPLETED",
+            "result": [{
+                "id": "W123",
+                "title": "CNN Performance",
+                "year": 2025,
+                "abstract": abstract,
+            }],
+        }
+
+    monkeypatch.setenv("SARA_JSON_EXTRACTION", "1")
+    monkeypatch.delenv("SARA_BATCH_EXTRACTION", raising=False)
+
+    monkeypatch.setattr(
+        agent_module, "OllamaModelClient", FakeModelClient
+    )
+    monkeypatch.setattr(
+        agent_module, "execute_tool", fake_execute_tool
+    )
+
+    result = agent_module.run_agent(question, max_turns=1)
+
+    extraction_events = [
+        event
+        for event in result["trace"]
+        if event["action"] == "validate_evidence_extraction"
+    ]
+
+    assert len(extraction_events) == 1
+    assert extraction_events[0]["status"] == "VALID"
+
+    assert any(
+        question in record["supported_subquestions"]
+        and record["claim_support_status"] == "supported"
+        for record in result["evidence"]
+    )
+
+def test_opt_in_semantic_verification_blocks_unsupported_question(monkeypatch):
+    import json
+    question = 'What test accuracy did the CNN achieve?'
+    abstract = 'The CNN achieved training accuracy of 95%.'
+
+    class FakeModelClient:
+        def generate(self, prompt, **kwargs):
+            if 'research planning component' in prompt:
+                return ('OBJECTIVE:\nEvaluate CNN performance.\n'
+                        f'SUBQUESTIONS:\n- {question}\n'
+                        'KEYWORDS:\n- CNN accuracy\n')
+            if 'Papers (JSON):' in prompt:
+                return json.dumps({'results': [{
+                    'paper_id': 'W123', 'decision': 'INCLUDE', 'reason': 'Relevant'
+                }]})
+            if 'Pairs (JSON):' in prompt:
+                return json.dumps({'results': [
+                    {'question': question, 'verdict': 'UNSUPPORTED'}
+                ]})
+            return json.dumps({
+                'objective': 'Evaluate CNN performance',
+                'methodology': 'CNN', 'dataset_sample': '100 images',
+                'findings': '95% training accuracy', 'limitations': '',
+                'supported_subquestions': [question],
+                'supporting_evidence': [abstract],
+                'question_evidence': {question: abstract},
+            })
+
+    monkeypatch.setenv('SARA_JSON_EXTRACTION', '1')
+    monkeypatch.setenv('SARA_SEMANTIC_VERIFICATION', '1')
+    monkeypatch.delenv('SARA_BATCH_EXTRACTION', raising=False)
+    monkeypatch.setattr(agent_module, 'OllamaModelClient', FakeModelClient)
+    monkeypatch.setattr(agent_module, 'execute_tool', lambda *_: {
+        'status': 'COMPLETED', 'result': [{
+            'id': 'W123', 'title': 'CNN Performance',
+            'year': 2025, 'abstract': abstract,
+        }]
+    })
+    result = agent_module.run_agent(question, max_turns=1)
+    assert all(question not in record['supported_subquestions']
+               for record in result['evidence'])
+    events = [event for event in result['trace']
+              if event['action'] == 'verify_semantic_evidence']
+    assert len(events) == 1
+    assert events[0]['details']['verdicts'][question] == 'UNSUPPORTED'
+
+
+def test_json_valid_question_quote_survives_unrelated_bad_quote(monkeypatch):
+    import json
+    question = 'What accuracy was achieved?'
+    abstract = 'The CNN achieved 95% accuracy.'
+
+    class FakeModelClient:
+        def generate(self, prompt, **kwargs):
+            if 'research planning component' in prompt:
+                return ('OBJECTIVE:\nEvaluate CNN performance.\n'
+                        f'SUBQUESTIONS:\n- {question}\n'
+                        'KEYWORDS:\n- CNN accuracy\n')
+            if 'Papers (JSON):' in prompt:
+                return json.dumps({'results': [{
+                    'paper_id': 'W123', 'decision': 'INCLUDE', 'reason': 'Relevant'
+                }]})
+            return json.dumps({
+                'objective': 'Evaluate CNN performance',
+                'methodology': 'CNN', 'dataset_sample': '100 images',
+                'findings': '95% accuracy', 'limitations': '',
+                'supported_subquestions': [question],
+                'supporting_evidence': [abstract, 'Invented result 99%.'],
+                'question_evidence': {question: abstract},
+            })
+
+    monkeypatch.setenv('SARA_JSON_EXTRACTION', '1')
+    monkeypatch.delenv('SARA_BATCH_EXTRACTION', raising=False)
+    monkeypatch.delenv('SARA_SEMANTIC_VERIFICATION', raising=False)
+    monkeypatch.setattr(agent_module, 'OllamaModelClient', FakeModelClient)
+    monkeypatch.setattr(agent_module, 'execute_tool', lambda name, args: {
+        'status': 'COMPLETED', 'result': [{
+            'id': 'W123', 'title': 'CNN Performance', 'year': 2025,
+            'abstract': abstract,
+        }],
+    })
+    result = agent_module.run_agent(question, max_turns=1)
+    assert any(question in record['supported_subquestions']
+               and record['claim_support_status'] == 'supported'
+               for record in result['evidence'])

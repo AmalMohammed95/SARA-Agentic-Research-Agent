@@ -45,8 +45,8 @@ def test_missing_status_rejected(tmp_path):
 
 def test_real_recorded_case_has_consistent_counts():
     result = summarize(
-        ROOT / "evaluation" / "research_questions.csv",
-        ROOT / "evaluation" / "comparison_results_batch_v1.json"
+        ROOT / "tests" / "fixtures" / "stage3_evaluation" / "research_questions.csv",
+        ROOT / "tests" / "fixtures" / "stage3_evaluation" / "comparison_results_batch_v1.json"
     )
 
     assert result["total_cases"] == 5

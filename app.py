@@ -20,6 +20,13 @@ st.set_page_config(
 
 st.title("SARA - Smart Academic Research Agent")
 st.caption("Evidence-grounded academic research with human oversight")
+import os
+_json_enabled = os.environ.get("SARA_JSON_EXTRACTION", "0") == "1"
+_semantic_enabled = os.environ.get("SARA_SEMANTIC_VERIFICATION", "0") == "1"
+st.caption(f"Runtime: JSON extraction={'ON' if _json_enabled else 'OFF'} | Semantic verification={'ON' if _semantic_enabled else 'OFF'}")
+if not _json_enabled or not _semantic_enabled:
+    st.warning("Evidence verification is not fully enabled. Start Streamlit from the same terminal after setting SARA_JSON_EXTRACTION=1 and SARA_SEMANTIC_VERIFICATION=1.")
+
 
 if "result" not in st.session_state:
     st.session_state.result = None
