@@ -674,7 +674,14 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
             state.extraction_attempts)
 
         pending_count = len(papers_with_abstract)
-        papers_with_abstract = papers_with_abstract[:max(1, min(30, int(os.getenv("SARA_MAX_EXTRACTIONS", str(MAX_EXTRACTIONS_PER_TURN)))))]
+        # Extractive mode reads source sentences locally; model verification
+        # retains its separate inference-call budget.
+        default_extract_limit = 20 if os.getenv("SARA_EXTRACTIVE_MODE", "0") == "1" else MAX_EXTRACTIONS_PER_TURN
+        try:
+            extract_limit = max(1, min(30, int(os.getenv("SARA_MAX_EXTRACTIONS", str(default_extract_limit)))))
+        except ValueError:
+            extract_limit = default_extract_limit
+        papers_with_abstract = papers_with_abstract[:extract_limit]
         trace.append(create_trace_event(
             run_id=run_id, turn=turn, action="extraction_queue",
             status="SCHEDULED", details={"pending": pending_count,
@@ -1151,13 +1158,7 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                     action="verify_supporting_evidence",
 
                     status=(
-
-                        "VERIFIED"
-
-                        if grounding_result["verified"]
-
-                        else "UNVERIFIED"
-
+                        "VERIFIED" if verified_spans else "UNVERIFIED"
                     ),
 
                     details={
@@ -1177,6 +1178,8 @@ def run_agent(research_question: str, max_turns: int = 3) -> dict:
                         ),
 
                         "grounding": grounding_result,
+                        "source_first_verified_quote_count": len(verified_spans),
+                        "supported_subquestion_count": len(validated_subquestions),
 
                     },
 

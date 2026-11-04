@@ -27,7 +27,10 @@ _INTENT_CUES = {
 def abstract_sentences(abstract: str) -> list[str]:
     if not isinstance(abstract, str) or not abstract.strip():
         return []
-    return [s.strip() for s in re.split(r'(?<=[.!?])\s+(?=[A-Z0-9"“])', abstract.strip()) if len(s.strip()) >= 35]
+    # Scholarly metadata can remove whitespace between sentences ("...methods.We").
+    # Keep the original character spans for exact source verification.
+    parts = re.split(r'(?<=[.!?])\s+(?=[A-Z0-9"“])|(?<=[.!?])(?=[A-Z][a-z])', abstract.strip())
+    return [s.strip() for s in parts if len(s.strip()) >= 35]
 
 
 def _tokens(value: str) -> set[str]:

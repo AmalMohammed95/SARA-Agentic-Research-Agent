@@ -11,6 +11,12 @@ PATTERNS = {
     'limitations': r'\b(limitations?|challenges?|critical gaps?|(?:we|this (?:paper|study)) (?:identify|highlight|discuss) (?:important |critical )?(?:gaps?|challenges?|limitations?)|future work|weakness(?:es)?|constraints?|shortcomings?|failure modes?|bias(?:es)?)\b',
 }
 
+_EXPLICIT_SAMPLE = re.compile(
+    r'\b(?:[0-9][0-9,]*\s+(?:human[- ]annotated\s+)?(?:tasks?|cases?|examples?|episodes?|trials?|participants?|conversations?|queries?|images?|trajector(?:y|ies)|apps?|papers?|studies?|records?|samples?|benchmarks?|datasets?)|\b(?:dataset|corpus|sample)\s+(?:compris(?:e|es)|consist(?:s)? of|contain(?:s)?|with)\s+[0-9]|\b(?:using|on|from|with)\s+(?:the\s+)?[A-Z][\w-]+(?:\s+[A-Z][\w-]+){0,3}\s+(?:dataset|corpus))\b',
+    re.I,
+)
+
+
 def extract_abstract_json(abstract: str) -> str:
     """Return verbatim abstract sentences only; missing fields remain empty.
 
@@ -20,6 +26,9 @@ def extract_abstract_json(abstract: str) -> str:
     result = {}
     for field, pattern in PATTERNS.items():
         matches = [s for s in sentences if re.search(pattern, s, re.I)]
+        if field == 'dataset_sample':
+            # A generic discussion of datasets does not report a real sample.
+            matches = [s for s in matches if _EXPLICIT_SAMPLE.search(s)]
         result[field] = ' '.join(matches[:2]) if matches else ''
     result.update(supported_subquestions=[], supporting_evidence=[], question_evidence={})
     return json.dumps(result, ensure_ascii=False)
