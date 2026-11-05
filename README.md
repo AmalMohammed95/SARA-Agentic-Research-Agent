@@ -43,7 +43,7 @@ The system will later be evaluated using multiple dimensions, including task suc
 - Academic research questions and sub-questions.
 - Public scholarly metadata and abstracts.
 - Scholarly search services such as OpenAlex and, where available, Semantic Scholar.
-- Local Large Language Model served through Ollama.
+- Language model provided through Ollama (default) or Google Gemini (configured provider).
 - Local application state, research memory, logs, and evaluation data.
 
 ### Actuators
@@ -88,6 +88,13 @@ The system is organized into the following components:
 | Screening | `screening.py` | Supports relevance screening of retrieved papers. |
 | Evidence Extraction | `extraction.py` | Processes evidence extracted from scholarly sources. |
 | Evidence Evaluation | `evidence.py` | Evaluates evidence sufficiency, provenance, and identified gaps. |
+| Search Strategy | `search_strategy.py` | Supports research-query selection and search diversification. |
+| Source-First Processing | `source_first.py` | Supports evidence processing grounded in available source material. |
+| Source Enrichment | `source_enrichment.py` | Retrieves additional accessible scholarly text where available. |
+| Deterministic Evidence | `deterministic_evidence.py` | Extracts source-grounded evidence using deterministic processing. |
+| Evidence Orchestration | `evidence_orchestrator.py` | Coordinates evidence-processing operations. |
+| Research Report | `research_report.py` | Builds structured research and evidence-audit output. |
+| Topic Guard | `topic_guard.py` | Supports preservation of research-topic scope. |
 | Replanning | `replanning.py` | Supports revision of research plans when necessary. |
 | Research State | `state.py` | Maintains information about the current research workflow. |
 | Synthesis | `synthesis.py` | Organizes research findings into a structured output. |
@@ -121,8 +128,8 @@ The implementation defines the following execution controls:
 |---|---|---|
 | Default maximum agent turns | 3 | Limits the number of research iterations. |
 | Maximum replanning attempts | 2 | Prevents unlimited research-plan revisions. |
-| Maximum extractions per turn | 5 | Restricts the number of evidence extraction operations within a turn. |
-| Search results per request | 10 | Limits the number of results requested in the identified search call. |
+| Evidence extraction limit | 5 by default; 20 in extractive mode; configurable up to 30 | Controls the bounded number of evidence extractions. V3 evaluation used 24. |
+| Search results per query | 10 by default; maximum 10 | Limits retrieved results per query. V3 evaluation used 8. |
 
 The main execution loop uses the condition `while turn < max_turns`, ensuring that the number of iterations does not exceed the configured turn limit.
 
