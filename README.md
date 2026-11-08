@@ -338,7 +338,7 @@ an `.env.example` file documenting the supported key name.
 Clone the SARA repository from GitHub:
 
 ```powershell
-git clone https://github.com/AmalMohammed95/SARA-Agentic-Research-Agent.git
+git clone --branch v2 --single-branch https://github.com/AmalMohammed95/SARA-Agentic-Research-Agent.git
 cd SARA-Agentic-Research-Agent
 ```
 
@@ -377,22 +377,48 @@ If no key is provided, SARA attempts Semantic Scholar requests
 without authentication. Requests may be rate-limited, and
 OpenAlex remains available as an alternative source.
 
-### Run the Application
+### Run the Application (SARA V3)
+
+Ensure Ollama is running and the `qwen2.5:7b` model is installed.
+
+From the project root, run:
 
 ```powershell
-streamlit run app.py
+.\RUN_SARA_V3.ps1 -Provider ollama
 ```
 
-In the Streamlit interface, enter a research question, select the maximum number of agent turns (1–3), and click **Run Research Agent**.
+The V3 launcher configures the model provider, evidence extraction,
+verification settings, and PYTHONPATH automatically.
 
-### Run Automated Tests
+The Streamlit interface should open at:
+
+http://localhost:8501
+
+Enter a research question, choose the maximum number of agent
+turns (1–3), and click **Run Research Agent**.
+
+For the optional Gemini provider, configure GEMINI_API_KEY
+securely in the PowerShell session and run:
+
+```powershell
+.\RUN_SARA_V3.ps1 -Provider gemini
+```
+
+If PowerShell blocks the launcher, the execution policy can be
+adjusted for the current session only:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+Never commit API keys or the local .env file to GitHub.### Run Automated Tests
 
 ```powershell
 $env:PYTHONPATH = "src"
 python -m pytest tests -q
 ```
 
-The latest local test run completed successfully: **132 passed**. This verifies the automated test suite, not the scientific sufficiency of every research result.
+The latest local test run completed successfully: **247 passed**. This verifies the automated test suite, not the scientific sufficiency of every research result.
 ## Evaluation and Limitations
 
 ### Evaluation Design
@@ -436,7 +462,7 @@ The substantial runtime difference reflects the computational cost of SARA's loc
 
 ### Testing and Reproducibility
 
-The latest complete automated test run reported **132 passing tests**.
+The latest complete automated test run reported **247 passing tests**.
 
 To run the automated tests:
 
